@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import AppRouter from "./router";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "../firebase";
 
 function App() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(auth.currentUser);
 
   return (
     <div>

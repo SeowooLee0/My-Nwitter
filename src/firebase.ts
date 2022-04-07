@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,4 +16,5 @@ const firebaseConfig = {
 // Initialize Firebase
 //Firebase 앱은 일반적인 구성을 저장하고 Firebase 서비스 간에 인증을 공유하는 컨테이너와 유사한 객체입니다.
 //코드에서 Firebase 앱 객체를 초기화한 후 Firebase 서비스를 추가하고 사용할 수 있습니다.
-export const app = initializeApp(firebaseConfig);
+export const firebase = initializeApp(firebaseConfig);
+export const auth = getAuth();

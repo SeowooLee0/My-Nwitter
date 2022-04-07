@@ -11,7 +11,7 @@ function AppRouter({ isLogin }: any) {
         {isLogin ? (
           <Route path="/" element={<Home />} />
         ) : (
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/" element={<Auth />} />
         )}
       </Routes>
     </BrowserRouter>
