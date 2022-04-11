@@ -4,8 +4,6 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   GithubAuthProvider,
-  EmailAuthProvider,
-  onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { firebase } from "../firebase";
@@ -28,6 +26,7 @@ const github = () => {
 function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const onChange = (event: any) => {
     if (event.target.name === "email") {
@@ -44,7 +43,8 @@ function Auth() {
     } else {
       createUserWithEmailAndPassword(auth, email, password).catch(
         (error: any) => {
-          console.log(error.message);
+          console.log(error);
+          setError(error.code);
         }
       );
     }
@@ -69,8 +69,24 @@ function Auth() {
             value={password}
             onChange={onChange}
           />
-          <button type="submit">{signIn ? "Login" : "Create ID"}</button>
+          <button
+            type="submit"
+            onClick={() => {
+              setSignIn(true);
+            }}
+          >
+            Login
+          </button>
+          <button
+            type="submit"
+            onClick={() => {
+              setSignIn(false);
+            }}
+          >
+            Create ID
+          </button>
         </form>
+        {error}
       </div>
       <button onClick={google}>Google</button>
       <button onClick={github}>Github</button>
