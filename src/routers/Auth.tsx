@@ -29,17 +29,21 @@ function Auth() {
   const [error, setError] = useState("");
 
   const onChange = (event: any) => {
-    if (event.target.name === "email") {
-      setEmail(event.target.value);
-    } else if (event.target.name === "password") {
-      setPassword(event.target.value);
+    const { name, value } = event.target;
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "password") {
+      setPassword(value);
     }
   };
 
   const onSubmit = (event: any) => {
     event.preventDefault();
     if (signIn) {
-      signInWithEmailAndPassword(auth, email, password);
+      signInWithEmailAndPassword(auth, email, password).catch((error: any) => {
+        console.log(error);
+        setError(error.code);
+      });
     } else {
       createUserWithEmailAndPassword(auth, email, password).catch(
         (error: any) => {
@@ -86,7 +90,7 @@ function Auth() {
             Create ID
           </button>
         </form>
-        {error}
+        <div>{error}</div>
       </div>
       <button onClick={google}>Google</button>
       <button onClick={github}>Github</button>
