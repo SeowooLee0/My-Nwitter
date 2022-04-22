@@ -1,17 +1,15 @@
 import { signOut } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../firebase";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
-import { db } from "../firebase";
-import { text } from "stream/consumers";
-import { getValue, isDisabled } from "@testing-library/user-event/dist/utils";
+import "./Home.css";
+import // addDoc,
+// collection,
+// doc,
+// getDoc,
+// getDocs,
+// setDoc,
+"firebase/firestore";
+// import { db } from "../firebase";
 
 function Home() {
   const onLogout = () => {
@@ -27,7 +25,7 @@ function Home() {
   const onClick = (event: any) => {
     const { value } = event.target;
     newData();
-    console.log(event.target.value);
+    console.log(value);
   };
   function newData() {
     var newArray = [...data];
@@ -37,31 +35,42 @@ function Home() {
 
   const onChange = (event: any) => {
     const { value } = event.target;
-    setTweet(value);
     console.log(value.length);
-    if (value.length >= 6) {
+    setTweet(value);
+    if (value.length >= 11) {
       console.log(value.length);
-      alert("글자수는 5자리로 제한되어있습니다");
+      alert("글자수는 10자리로 제한되어있습니다");
 
-      const text = value.substr(0, 5);
+      const text = value.substr(0, 10);
       setTweet(text);
     }
   };
+
+  // <button onClick={onLogout}>Logout</button>
+  //     <div>Home</div>
+
   return (
     <>
-      <button onClick={onLogout}>Logout</button>
-      <div>Home</div>
-      <form onSubmit={onSubmit}>
+      <form className="form" onSubmit={onSubmit}>
         <input
-          placeholder="how are you today"
+          className="text"
+          placeholder="트윗 입력란"
           value={tweet}
           onChange={onChange}
-          maxLength={5}
+          // maxLength={5}
         />
-        <button onClick={onClick}>Send</button>
-        {data.map((t, i) => {
-          return <div key={i}>{t}</div>;
-        })}
+        <button className="inputBtn" onClick={onClick}>
+          업로드
+        </button>
+        <div className="tweetBox">
+          {data.map((t, i) => {
+            return (
+              <div className="tweet" key={i}>
+                {t}
+              </div>
+            );
+          })}
+        </div>
       </form>
     </>
   );

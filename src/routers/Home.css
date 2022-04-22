@@ -1,0 +1,43 @@
+.tweet {
+  margin: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: skyblue;
+  color: white;
+  width: 400px;
+  height: 55px;
+  padding: 10px;
+  border-radius: 10px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.tweetBox {
+  display: grid;
+  justify-content: center;
+}
+
+.form {
+  text-align: center;
+  margin: 100px;
+}
+
+.text {
+  width: 300px;
+  height: 50px;
+  border-radius: 10px;
+  border-color: beige;
+  border: 3px solid powderblue;
+  text-align: center;
+  margin: 5px;
+}
+
+.inputBtn {
+  border: 3px solid white;
+  background-color: skyblue;
+  border-radius: 8px;
+  margin-left: 10px;
+  width: 80px;
+  height: 30px;
+  color: white;
+}

@@ -9,7 +9,7 @@ import Nevigation from "../routers/Nevigation";
 function AppRouter({ isLogin }: any) {
   return (
     <BrowserRouter>
-      {isLogin && <Nevigation />}
+      {/* {isLogin && <Nevigation />} */}
       <Routes>
         {isLogin ? (
           <>
