@@ -28,7 +28,7 @@ function Home() {
     console.log(value);
   };
   function newData() {
-    var newArray = [...data];
+    const newArray = [...data];
     newArray.push(tweet);
     setData(newArray);
   }
@@ -37,11 +37,11 @@ function Home() {
     const { value } = event.target;
     console.log(value.length);
     setTweet(value);
-    if (value.length >= 11) {
+    if (value.length >= 5) {
       console.log(value.length);
-      alert("글자수는 10자리로 제한되어있습니다");
+      alert("글자수는 5자리로 제한되어있습니다");
 
-      const text = value.substr(0, 10);
+      const text = value.slice(0, 5);
       setTweet(text);
     }
   };
