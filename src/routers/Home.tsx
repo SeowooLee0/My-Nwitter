@@ -37,7 +37,7 @@ function Home() {
     const { value } = event.target;
     console.log(value.length);
     setTweet(value);
-    if (value.length >= 5) {
+    if (value.length >= 6) {
       console.log(value.length);
       alert("글자수는 5자리로 제한되어있습니다");
 
