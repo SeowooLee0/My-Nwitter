@@ -28,14 +28,20 @@ function Home() {
     });
   };
 
+  const saveTweets = async () => {
+    axios
+      .post("http://localhost:1234/saveTweets", {
+        content: tweet,
+      })
+      .then((res) => {});
+  };
+
   const [tweet, setTweet] = useState("");
 
   const [data, setData] = useState<Tweet[]>([]);
 
   const onClick = (event: any) => {
-    // const newArray = [...data];
-    // newArray.push(tweet);
-    // setData(newArray);
+    saveTweets();
   };
 
   const onChange = (event: any) => {
@@ -67,7 +73,7 @@ function Home() {
         <div className="tweetBox">
           {data.map((t) => {
             return (
-              <div className="tweet" key={t.id}>
+              <div className="tweet" key={t.number}>
                 {t.content}
               </div>
             );
