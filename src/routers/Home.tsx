@@ -36,7 +36,7 @@ function Home() {
       .then((res) => {});
   };
 
-  const [tweet, setTweet] = useState("");
+  const [tweet, setTweet] = useState([]);
 
   const [data, setData] = useState<Tweet[]>([]);
 
@@ -65,7 +65,6 @@ function Home() {
           placeholder="트윗 입력란"
           value={tweet}
           onChange={onChange}
-          // maxLength={5}
         />
         <button className="inputBtn" onClick={onClick}>
           업로드
@@ -74,6 +73,7 @@ function Home() {
           {data.map((t) => {
             return (
               <div className="tweet" key={t.number}>
+                {t.write_date}
                 {t.content}
               </div>
             );
