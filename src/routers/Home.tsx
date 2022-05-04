@@ -4,10 +4,6 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 
 function Home() {
-  const onSubmit = (event: any) => {
-    event.preventDefault();
-  };
-
   useEffect(() => {
     getTweets();
   });
@@ -59,7 +55,7 @@ function Home() {
 
   return (
     <>
-      <form className="form" onSubmit={onSubmit}>
+      <form className="form">
         <input
           className="text"
           placeholder="트윗 입력란"
