@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import AppRouter from "./router";
-import { auth } from "../firebase";
-import { onAuthStateChanged } from "firebase/auth";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
