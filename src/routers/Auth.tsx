@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import axios from "axios";
 
 function Auth() {
@@ -52,7 +53,8 @@ function Auth() {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;
-        console.log(response);
+        alert("로그인 성공");
+        window.location.reload();
         // accessToken을 localStorage, cookie 등에 저장하지 않는다!
       })
       .catch((error) => {

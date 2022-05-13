@@ -41,6 +41,18 @@ function Home() {
   };
 
   const onChange = (event: any) => {
+    axios
+      .get("http://localhost:1234/refreshTokenRequest")
+      .then((res) => {
+        if (res.data.data === null) {
+          alert("로그인이 만료되었습니다");
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        // 로그인 페이지로 이동
+        // ... 에러 처리
+      });
     const { value } = event.target;
     setTweet(value);
     if (value.length >= 6) {

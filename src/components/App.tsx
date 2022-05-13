@@ -1,18 +1,31 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import React, { Component, useEffect, useState } from "react";
 import AppRouter from "./router";
 
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    axios
+      .get("http://localhost:1234/refreshTokenRequest")
+      .then((res) => {
+        const { accessToken } = res.data;
+        // accessToken 설정
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
 
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setIsLogin(true);
-  //     } else {
-  //       setIsLogin(false);
-  //     }
-  //   });
-  // });
+        console.log(res);
+        setIsLogin(true);
+        if (res.data.data === null) {
+          setIsLogin(false);
+        }
+      })
+      .catch((error) => {
+        // 로그인 페이지로 이동
+        // ... 에러 처리
+      });
+  }, []);
+
+  const [isLogin, setIsLogin] = useState(true);
 
   return (
     <div>
