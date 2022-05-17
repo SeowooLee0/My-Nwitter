@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppRouter from "./router";
 
 function App() {
@@ -13,7 +13,6 @@ function App() {
           "Authorization"
         ] = `Bearer ${accessToken}`;
 
-        console.log(res);
         setIsLogin(true);
         if (res.data.data === null) {
           setIsLogin(false);

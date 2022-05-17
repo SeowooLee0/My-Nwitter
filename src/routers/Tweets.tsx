@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import "./Home.css";
+import "./Tweets.css";
 
-function Home() {
+function Tweets() {
   useEffect(() => {
     getTweets();
   });
@@ -22,14 +22,26 @@ function Home() {
     }).then((res) => {
       setData(res.data);
     });
+    // });
   };
 
+  // const onSubmit = (e: any) => {
+  //   e.preventDefault();
+  // };
   const saveTweets = async () => {
     axios
       .post("http://localhost:1234/saveTweets", {
         content: tweet,
       })
-      .then((res) => {});
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
+  const onLogout = () => {
+    axios.get("http://localhost:1234/logout");
+    alert("로그아웃 되었습니다");
+    window.location.reload();
   };
 
   const [tweet, setTweet] = useState([]);
@@ -41,18 +53,18 @@ function Home() {
   };
 
   const onChange = (event: any) => {
-    axios
-      .get("http://localhost:1234/refreshTokenRequest")
-      .then((res) => {
-        if (res.data.data === null) {
-          alert("로그인이 만료되었습니다");
-          window.location.reload();
-        }
-      })
-      .catch((error) => {
-        // 로그인 페이지로 이동
-        // ... 에러 처리
-      });
+    // axios
+    //   .get("http://localhost:1234/refreshTokenRequest")
+    //   .then((res) => {
+    //     if (res.data.data === null) {
+    //       alert("로그인이 만료되었습니다");
+    //       window.location.reload();
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     // 로그인 페이지로 이동
+    //     // ... 에러 처리
+    //   });
     const { value } = event.target;
     setTweet(value);
     if (value.length >= 6) {
@@ -67,6 +79,9 @@ function Home() {
 
   return (
     <>
+      <div className="logout">
+        <button onClick={onLogout}>로그아웃</button>
+      </div>
       <form className="form">
         <input
           className="text"
@@ -92,4 +107,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Tweets;

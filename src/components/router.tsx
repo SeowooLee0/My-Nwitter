@@ -2,7 +2,7 @@ import React from "react";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "../routers/Auth";
-import Home from "../routers/Home";
+import Tweets from "../routers/Tweets";
 import Profile from "../routers/Profile";
 
 function AppRouter({ isLogin }: any) {
@@ -11,7 +11,7 @@ function AppRouter({ isLogin }: any) {
       <Routes>
         {isLogin ? (
           <>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Tweets />} />
             <Route path="/profile" element={<Profile />} />
           </>
         ) : (
