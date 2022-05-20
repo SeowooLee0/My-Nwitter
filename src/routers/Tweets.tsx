@@ -5,7 +5,12 @@ import "./Tweets.css";
 
 function Tweets() {
   useEffect(() => {
-    getTweets();
+    axios({
+      method: "get",
+      url: "http://localhost:1234/getTweets",
+    }).then((res) => {
+      setData(res.data);
+    });
   });
 
   interface Tweet {
@@ -14,16 +19,6 @@ function Tweets() {
     content: string;
     write_date: string;
   }
-
-  const getTweets = async () => {
-    axios({
-      method: "get",
-      url: "http://localhost:1234/getTweets",
-    }).then((res) => {
-      setData(res.data);
-    });
-    // });
-  };
 
   // const onSubmit = (e: any) => {
   //   e.preventDefault();
@@ -34,7 +29,14 @@ function Tweets() {
         content: tweet,
       })
       .then((res) => {
-        console.log(res);
+        if (res.data === "login again") {
+          alert("로그인이 만료되었습니다");
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        alert("로그인이 만료되었습니다");
+        window.location.reload();
       });
   };
 
@@ -46,6 +48,7 @@ function Tweets() {
 
   const [tweet, setTweet] = useState([]);
 
+  const [login, setLogin] = useState(true);
   const [data, setData] = useState<Tweet[]>([]);
 
   const onClick = (event: any) => {
@@ -53,18 +56,6 @@ function Tweets() {
   };
 
   const onChange = (event: any) => {
-    // axios
-    //   .get("http://localhost:1234/refreshTokenRequest")
-    //   .then((res) => {
-    //     if (res.data.data === null) {
-    //       alert("로그인이 만료되었습니다");
-    //       window.location.reload();
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     // 로그인 페이지로 이동
-    //     // ... 에러 처리
-    //   });
     const { value } = event.target;
     setTweet(value);
     if (value.length >= 6) {
@@ -74,8 +65,19 @@ function Tweets() {
     }
   };
 
-  // <button onClick={onLogout}>Logout</button>
-  //     <div>Home</div>
+  const onLogin = () => {
+    axios
+      .get("http://localhost:1234/refreshTokenRequest")
+      .then((res) => {
+        if (res.data.data === null) {
+          setLogin(false);
+          alert("로그인이 만료되었습니다");
+          window.location.reload();
+        }
+        console.log(res);
+      })
+      .catch((err) => {});
+  };
 
   return (
     <>
@@ -87,7 +89,9 @@ function Tweets() {
           className="text"
           placeholder="트윗 입력란"
           value={tweet}
+          onClick={onLogin}
           onChange={onChange}
+          disabled={login ? false : true}
         />
         <button className="inputBtn" onClick={onClick}>
           업로드
