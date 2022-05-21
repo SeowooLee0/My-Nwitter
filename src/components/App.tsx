@@ -8,7 +8,7 @@ function App() {
       .get("http://localhost:1234/refreshTokenRequest")
       .then((res) => {
         const { accessToken } = res.data;
-        // accessToken 설정
+
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;

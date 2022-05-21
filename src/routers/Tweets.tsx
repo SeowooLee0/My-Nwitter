@@ -9,20 +9,21 @@ function Tweets() {
       method: "get",
       url: "http://localhost:1234/getTweets",
     }).then((res) => {
-      setData(res.data);
+      setData(res.data.data);
+      setId(res.data.email);
     });
   });
 
   interface Tweet {
-    id: number;
+    email: string;
     number: string;
     content: string;
     write_date: string;
   }
 
-  // const onSubmit = (e: any) => {
-  //   e.preventDefault();
-  // };
+  const onSubmit = (e: any) => {
+    e.preventDefault();
+  };
   const saveTweets = async () => {
     axios
       .post("http://localhost:1234/saveTweets", {
@@ -33,10 +34,6 @@ function Tweets() {
           alert("로그인이 만료되었습니다");
           window.location.reload();
         }
-      })
-      .catch((err) => {
-        alert("로그인이 만료되었습니다");
-        window.location.reload();
       });
   };
 
@@ -69,14 +66,26 @@ function Tweets() {
     axios
       .get("http://localhost:1234/refreshTokenRequest")
       .then((res) => {
+        setId(res.data.email);
         if (res.data.data === null) {
-          setLogin(false);
           alert("로그인이 만료되었습니다");
           window.location.reload();
         }
-        console.log(res);
       })
       .catch((err) => {});
+  };
+
+  const [id, setId] = useState("");
+  const [check, setCheck] = useState(false);
+  const checkData = data.filter((data) => data.email === id);
+
+  const onCheck = (e: any) => {
+    console.log(e.target.checked);
+    if (e.target.checked === true) {
+      setCheck(true);
+    } else if (e.target.checked === false) {
+      setCheck(false);
+    }
   };
 
   return (
@@ -96,15 +105,25 @@ function Tweets() {
         <button className="inputBtn" onClick={onClick}>
           업로드
         </button>
+        <input type="checkbox" value={id} onChange={onCheck} />
         <div className="tweetBox">
-          {data.map((t) => {
-            return (
-              <div className="tweet" key={t.number}>
-                {t.write_date}
-                {t.content}
-              </div>
-            );
-          })}
+          {check
+            ? checkData.map((t) => {
+                return (
+                  <div className="tweet" key={t.number}>
+                    <p>작성자 : {t.email}</p>
+                    <p>{t.content}</p>
+                  </div>
+                );
+              })
+            : data.map((t) => {
+                return (
+                  <div className="tweet" key={t.number}>
+                    <p>작성자 : {t.email}</p>
+                    <p>{t.content}</p>
+                  </div>
+                );
+              })}
         </div>
       </form>
     </>
