@@ -1,6 +1,7 @@
 import axios from "axios";
+
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import "./Tweets.css";
 
@@ -19,18 +20,18 @@ function Tweets() {
     email: string;
     number: string;
     content: string;
-    tag: any;
+    tag: Array<string>;
     write_date: string;
   }
 
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-  };
+  // const onSubmit = (e: any) => {
+  //   e.preventDefault();
+  // };
   const saveTweets = async () => {
     axios
       .post("http://localhost:1234/saveTweets", {
         content: tweet,
-        tag: save,
+        tag: saveTag,
       })
       .then((res) => {
         console.log(res.data);
@@ -47,7 +48,7 @@ function Tweets() {
   };
 
   const [tweet, setTweet] = useState([]);
-  const [save, setSave] = useState([]);
+  const [saveTag, setSaveTag] = useState([]);
   const [tag, setTag] = useState([]);
   const [login, setLogin] = useState(true);
   const [data, setData] = useState<Tweet[]>([]);
@@ -70,7 +71,7 @@ function Tweets() {
   const onTag = (event: any) => {
     const { value } = event.target;
     setTag(value);
-    setSave(value.match(/(#[^\s#]+)/g));
+    setSaveTag(value.match(/(#[^\s#]+)/g));
   };
 
   const onLogin = () => {
@@ -97,6 +98,20 @@ function Tweets() {
     } else if (e.target.checked === false) {
       setCheck(false);
     }
+  };
+  const location = useLocation();
+  const [tagData, setTagData] = useState([]);
+  const onTagClick = () => {
+    let tag = location.state;
+
+    axios
+      .get(`http://localhost:1234/tag/${tag}`, { params: { tag } })
+      .then((res) => {
+        setTagData(res.data);
+      })
+      .catch((error) => console.log("Network Error : ", error));
+
+    console.log(tagData);
   };
 
   return (
@@ -127,12 +142,33 @@ function Tweets() {
         <div className="tweetBox">
           {check
             ? checkData.map((t) => {
-                return (
-                  <div className="tweet" key={t.number}>
-                    <p>작성자 : {t.email}</p>
-                    <p>{t.content}</p>
-                  </div>
-                );
+                if (t.tag === null) {
+                  return (
+                    <>
+                      <div className="tweet" key={t.number}>
+                        <p>작성자 : {t.email}</p>
+                        <p>{t.content}</p>
+                        {t.tag}
+                      </div>
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <div className="tweet" key={t.number}>
+                        <p>작성자 : {t.email}</p>
+                        <p>{t.content}</p>
+                        {t.tag.map((tagId: any, i: any) => {
+                          return (
+                            <Link to={"/tag"} key={i}>
+                              {tagId}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </>
+                  );
+                }
               })
             : data.map((t) => {
                 if (t.tag === null) {
@@ -152,10 +188,15 @@ function Tweets() {
                       <div className="tweet" key={t.number}>
                         <p>작성자 : {t.email}</p>
                         <p>{t.content}</p>
-                        {t.tag.map((v: any, i: any) => {
+                        {t.tag.map((tagId: any, i: any) => {
                           return (
-                            <Link to={`/tag/${v}`} key={i}>
-                              {v}
+                            <Link
+                              to={`/tag/${tagId}`}
+                              key={i}
+                              state={`${tagId}`}
+                              onClick={onTagClick}
+                            >
+                              {tagId}
                             </Link>
                           );
                         })}
