@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import "./Tweets.css";
 
@@ -18,6 +19,7 @@ function Tweets() {
     email: string;
     number: string;
     content: string;
+    tag: Array<string>;
     write_date: string;
   }
 
@@ -27,12 +29,13 @@ function Tweets() {
   const saveTweets = async () => {
     axios
       .post("http://localhost:1234/saveTweets", {
-        content: tweet,
+        content: save,
+        tag: tag,
       })
       .then((res) => {
+        console.log(res.data);
         if (res.data === "login again") {
           alert("로그인이 만료되었습니다");
-          window.location.reload();
         }
       });
   };
@@ -44,7 +47,8 @@ function Tweets() {
   };
 
   const [tweet, setTweet] = useState([]);
-
+  const [save, setSave] = useState([]);
+  const [tag, setTag] = useState<Tweet[]>([]);
   const [login, setLogin] = useState(true);
   const [data, setData] = useState<Tweet[]>([]);
 
@@ -54,10 +58,17 @@ function Tweets() {
 
   const onChange = (event: any) => {
     const { value } = event.target;
+    const content = value.replace(/(#[^\s#]+)/g);
+    const SaveContent = content.replace("undefined", "");
+    //input value에서 태그내용 제외하고 tweet저장
+    setSave(SaveContent);
+    // 태그만 따로 저장
+    setTag(value.match(/(#[^\s#]+)/g));
+    //input value
     setTweet(value);
-    if (value.length >= 6) {
-      alert("글자수는 5자리로 제한되어있습니다");
-      const text = value.slice(0, 5);
+    if (value.length >= 101) {
+      alert("글자수는 10자리로 제한되어있습니다");
+      const text = value.slice(0, 100);
       setTweet(text);
     }
   };
@@ -102,6 +113,7 @@ function Tweets() {
           onChange={onChange}
           disabled={login ? false : true}
         />
+        <input className="text" placeholder="태그 입력란" />
         <button className="inputBtn" onClick={onClick}>
           업로드
         </button>
