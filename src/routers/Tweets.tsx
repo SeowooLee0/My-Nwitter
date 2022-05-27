@@ -19,7 +19,7 @@ function Tweets() {
     email: string;
     number: string;
     content: string;
-    tag: Array<string>;
+    tag: any;
     write_date: string;
   }
 
@@ -29,8 +29,8 @@ function Tweets() {
   const saveTweets = async () => {
     axios
       .post("http://localhost:1234/saveTweets", {
-        content: save,
-        tag: tag,
+        content: tweet,
+        tag: save,
       })
       .then((res) => {
         console.log(res.data);
@@ -48,7 +48,7 @@ function Tweets() {
 
   const [tweet, setTweet] = useState([]);
   const [save, setSave] = useState([]);
-  const [tag, setTag] = useState<Tweet[]>([]);
+  const [tag, setTag] = useState([]);
   const [login, setLogin] = useState(true);
   const [data, setData] = useState<Tweet[]>([]);
 
@@ -58,19 +58,19 @@ function Tweets() {
 
   const onChange = (event: any) => {
     const { value } = event.target;
-    const content = value.replace(/(#[^\s#]+)/g);
-    const SaveContent = content.replace("undefined", "");
-    //input value에서 태그내용 제외하고 tweet저장
-    setSave(SaveContent);
-    // 태그만 따로 저장
-    setTag(value.match(/(#[^\s#]+)/g));
-    //input value
+
     setTweet(value);
     if (value.length >= 101) {
       alert("글자수는 10자리로 제한되어있습니다");
       const text = value.slice(0, 100);
       setTweet(text);
     }
+  };
+
+  const onTag = (event: any) => {
+    const { value } = event.target;
+    setTag(value);
+    setSave(value.match(/(#[^\s#]+)/g));
   };
 
   const onLogin = () => {
@@ -113,7 +113,13 @@ function Tweets() {
           onChange={onChange}
           disabled={login ? false : true}
         />
-        <input className="text" placeholder="태그 입력란" />
+        <input
+          className="text"
+          placeholder="태그 입력란"
+          value={tag}
+          onClick={onLogin}
+          onChange={onTag}
+        />
         <button className="inputBtn" onClick={onClick}>
           업로드
         </button>
@@ -129,12 +135,34 @@ function Tweets() {
                 );
               })
             : data.map((t) => {
-                return (
-                  <div className="tweet" key={t.number}>
-                    <p>작성자 : {t.email}</p>
-                    <p>{t.content}</p>
-                  </div>
-                );
+                if (t.tag === null) {
+                  return (
+                    <>
+                      <div className="tweet" key={t.number}>
+                        <p>작성자 : {t.email}</p>
+                        <p>{t.content}</p>
+                        {t.tag}
+                      </div>
+                    </>
+                  );
+                } else {
+                  // console.log(t.tag);
+                  return (
+                    <>
+                      <div className="tweet" key={t.number}>
+                        <p>작성자 : {t.email}</p>
+                        <p>{t.content}</p>
+                        {t.tag.map((v: any, i: any) => {
+                          return (
+                            <Link to={`/tag/${v}`} key={i}>
+                              {v}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </>
+                  );
+                }
               })}
         </div>
       </form>
