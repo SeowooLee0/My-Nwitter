@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, useParams } from "react-router-dom";
-import Tweets from "./Tweets";
+import { useLocation } from "react-router-dom";
+import "./Tweets.css";
 
-const Tag = ({ match }: any) => {
+const Tag = () => {
   interface Tweet {
     email: string;
     number: string;
@@ -22,20 +22,19 @@ const Tag = ({ match }: any) => {
       })
       .then((res) => {
         setTagData(res.data.data);
-        console.log(res.data.data);
       })
       .catch((error) => console.log("Network Error : ", error));
   });
 
   return (
     <div>
-      {tagData.map((t, i) => {
+      {tagData.map((t) => {
         return (
           <>
             <div className="tweet" key={t.number}>
               <p>작성자 : {t.email}</p>
               <p>{t.content}</p>
-              {t.tag}
+              <p>{t.tag}</p>
             </div>
           </>
         );

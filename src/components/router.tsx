@@ -7,7 +7,6 @@ import Profile from "../routers/Profile";
 import Tag from "../routers/Tag";
 
 function AppRouter({ isLogin }: any, location: any) {
-  console.log(location);
   return (
     <BrowserRouter>
       <Routes>

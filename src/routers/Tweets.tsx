@@ -49,7 +49,7 @@ function Tweets() {
 
   const [tweet, setTweet] = useState([]);
   const [saveTag, setSaveTag] = useState([]);
-  const [tag, setTag] = useState([]);
+  // const [tag, setTag] = useState([]);
   const [login, setLogin] = useState(true);
   const [data, setData] = useState<Tweet[]>([]);
 
@@ -70,7 +70,6 @@ function Tweets() {
 
   const onTag = (event: any) => {
     const { value } = event.target;
-    setTag(value);
     setSaveTag(value.match(/(#[^\s#]+)/g));
   };
 
@@ -99,20 +98,6 @@ function Tweets() {
       setCheck(false);
     }
   };
-  const location = useLocation();
-  const [tagData, setTagData] = useState([]);
-  const onTagClick = () => {
-    let tag = location.state;
-
-    axios
-      .get(`http://localhost:1234/tag/${tag}`, { params: { tag } })
-      .then((res) => {
-        setTagData(res.data);
-      })
-      .catch((error) => console.log("Network Error : ", error));
-
-    console.log(tagData);
-  };
 
   return (
     <>
@@ -131,7 +116,6 @@ function Tweets() {
         <input
           className="text"
           placeholder="태그 입력란"
-          value={tag}
           onClick={onLogin}
           onChange={onTag}
         />
@@ -148,7 +132,6 @@ function Tweets() {
                       <div className="tweet" key={t.number}>
                         <p>작성자 : {t.email}</p>
                         <p>{t.content}</p>
-                        {t.tag}
                       </div>
                     </>
                   );
@@ -160,7 +143,11 @@ function Tweets() {
                         <p>{t.content}</p>
                         {t.tag.map((tagId: any, i: any) => {
                           return (
-                            <Link to={"/tag"} key={i}>
+                            <Link
+                              to={`/tag/${tagId}`}
+                              key={i}
+                              state={`${tagId}`}
+                            >
                               {tagId}
                             </Link>
                           );
@@ -177,12 +164,10 @@ function Tweets() {
                       <div className="tweet" key={t.number}>
                         <p>작성자 : {t.email}</p>
                         <p>{t.content}</p>
-                        {t.tag}
                       </div>
                     </>
                   );
                 } else {
-                  // console.log(t.tag);
                   return (
                     <>
                       <div className="tweet" key={t.number}>
@@ -194,7 +179,6 @@ function Tweets() {
                               to={`/tag/${tagId}`}
                               key={i}
                               state={`${tagId}`}
-                              onClick={onTagClick}
                             >
                               {tagId}
                             </Link>
