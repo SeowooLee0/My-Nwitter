@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import "./Tweets.css";
+import { connectFirestoreEmulator } from "firebase/firestore";
 
 const Tag = () => {
   interface Tweet {
@@ -12,13 +13,15 @@ const Tag = () => {
     write_date: string;
   }
   const location = useLocation();
+
+  const { tagId } = useParams();
+  // console.log(tagId);
+
   const [tagData, setTagData] = useState<Tweet[]>([]);
   useEffect(() => {
-    let tag = location.state;
-
     axios
-      .get(`http://localhost:1234/tag/${tag}`, {
-        params: { tag },
+      .get(`http://localhost:1234/tag/${tagId}`, {
+        params: { tagId },
       })
       .then((res) => {
         setTagData(res.data.data);
@@ -39,6 +42,7 @@ const Tag = () => {
           </>
         );
       })}
+      {/* {tagId} 페이지 입니다. */}
     </div>
   );
 };

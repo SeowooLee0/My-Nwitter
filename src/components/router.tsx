@@ -13,8 +13,9 @@ function AppRouter({ isLogin }: any, location: any) {
         {isLogin ? (
           <>
             <Route path="/" element={<Tweets />} />
+            <Route path="tag/:tagId" element={<Tag />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/tag" element={<Tag />} />
+            <Route path="tag" element={<Tag />} />
           </>
         ) : (
           <Route path="/" element={<Auth />} />

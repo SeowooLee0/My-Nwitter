@@ -2,6 +2,7 @@ import axios from "axios";
 
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Tag from "./Tag";
 
 import "./Tweets.css";
 
@@ -49,6 +50,7 @@ function Tweets() {
 
   const [tweet, setTweet] = useState([]);
   const [saveTag, setSaveTag] = useState([]);
+
   // const [tag, setTag] = useState([]);
   const [login, setLogin] = useState(true);
   const [data, setData] = useState<Tweet[]>([]);
@@ -174,11 +176,12 @@ function Tweets() {
                         <p>작성자 : {t.email}</p>
                         <p>{t.content}</p>
                         {t.tag.map((tagId: any, i: any) => {
+                          const tagName = tagId.replace(/#/g, "");
                           return (
                             <Link
-                              to={`/tag/${tagId}`}
+                              to={`/tag/${tagName}`}
                               key={i}
-                              state={`${tagId}`}
+                              state={`${tagName}`}
                             >
                               {tagId}
                             </Link>
