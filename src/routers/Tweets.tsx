@@ -126,56 +126,16 @@ function Tweets() {
         </button>
         <input type="checkbox" value={id} onChange={onCheck} />
         <div className="tweetBox">
-          {check
-            ? checkData.map((t) => {
-                if (t.tag === null) {
-                  return (
-                    <>
-                      <div className="tweet" key={t.number}>
-                        <p>작성자 : {t.email}</p>
-                        <p>{t.content}</p>
-                      </div>
-                    </>
-                  );
-                } else {
-                  return (
-                    <>
-                      <div className="tweet" key={t.number}>
-                        <p>작성자 : {t.email}</p>
-                        <p>{t.content}</p>
-                        {t.tag.map((tagId: any, i: any) => {
-                          return (
-                            <Link
-                              to={`/tag/${tagId}`}
-                              key={i}
-                              state={`${tagId}`}
-                            >
-                              {tagId}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </>
-                  );
-                }
-              })
-            : data.map((t) => {
-                if (t.tag === null) {
-                  return (
-                    <>
-                      <div className="tweet" key={t.number}>
-                        <p>작성자 : {t.email}</p>
-                        <p>{t.content}</p>
-                      </div>
-                    </>
-                  );
-                } else {
-                  return (
-                    <>
-                      <div className="tweet" key={t.number}>
-                        <p>작성자 : {t.email}</p>
-                        <p>{t.content}</p>
-                        {t.tag.map((tagId: any, i: any) => {
+          {(check ? checkData : data).map((t) => {
+            return (
+              <>
+                <div className="tweet" key={t.number}>
+                  <p>작성자 : {t.email}</p>
+                  <p>{t.content}</p>
+                  <p>
+                    {t.tag === null
+                      ? ""
+                      : t.tag.map((tagId: any, i: any) => {
                           const tagName = tagId.replace(/#/g, "");
                           return (
                             <Link
@@ -187,11 +147,12 @@ function Tweets() {
                             </Link>
                           );
                         })}
-                      </div>
-                    </>
-                  );
-                }
-              })}
+                  </p>
+                </div>
+              </>
+            );
+            // }
+          })}
         </div>
       </form>
     </>
