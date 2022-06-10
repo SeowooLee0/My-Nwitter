@@ -1,8 +1,7 @@
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import Tag from "./Tag";
+import { Link } from "react-router-dom";
 
 import "./Tweets.css";
 
@@ -105,7 +104,11 @@ function Tweets() {
     <>
       <div className="logout">
         <button onClick={onLogout}>로그아웃</button>
+        <button>
+          <Link to={"/profile"}>내 프로필</Link>
+        </button>
       </div>
+
       <form className="form">
         <input
           className="text"
@@ -138,13 +141,12 @@ function Tweets() {
                       : t.tag.map((tagId: any, i: any) => {
                           const tagName = tagId.replace(/#/g, "");
                           return (
-                            <Link
-                              to={`/tag/${tagName}`}
-                              key={i}
-                              state={`${tagName}`}
-                            >
-                              {tagId}
-                            </Link>
+                            <>
+                              <span>#</span>
+                              <Link to={`/tag/${tagName}`} key={i}>
+                                {tagName}
+                              </Link>
+                            </>
                           );
                         })}
                   </p>

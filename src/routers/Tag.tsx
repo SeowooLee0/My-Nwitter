@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
 import "./Tweets.css";
-import { connectFirestoreEmulator } from "firebase/firestore";
 
 const Tag = () => {
   interface Tweet {
@@ -12,10 +11,8 @@ const Tag = () => {
     tag: Array<string>;
     write_date: string;
   }
-  const location = useLocation();
 
   const { tagId } = useParams();
-  // console.log(tagId);
 
   const [tagData, setTagData] = useState<Tweet[]>([]);
   useEffect(() => {
@@ -42,7 +39,6 @@ const Tag = () => {
           </>
         );
       })}
-      {/* {tagId} 페이지 입니다. */}
     </div>
   );
 };

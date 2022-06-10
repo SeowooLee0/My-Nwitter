@@ -1,50 +1,40 @@
 import React, { useState } from "react";
-
+import { useForm } from "react-hook-form";
 import axios from "axios";
+import "./Auth.css";
 
 function Auth() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({ mode: "onSubmit" });
 
-  const onChange = (event: any) => {
-    const { name, value } = event.target;
-
-    if (name === "email") {
-      setEmail(value);
-    } else if (name === "password") {
-      setPassword(value);
-    }
-  };
-
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-  };
-
-  const onSignIn = () => {
+  const onSignIn = (data: any) => {
     axios
       .post(
         "http://localhost:1234/register",
         {
-          email: email,
-          password: password,
+          email: data.email,
+          password: data.password,
         },
         { withCredentials: true }
       )
       .then((res) => {
         alert("회원가입 성공");
       })
-      .catch((res) => {
-        if (res.response.status === 400) {
-          alert(res.response.data.message);
-        }
+      .catch((error: any) => {
+        alert("형식을 확인해주세요");
+        console.dir(error);
       });
   };
 
   const onLogin = () => {
     axios
       .post("http://localhost:1234/login", {
-        email: email,
-        password: password,
+        email: watch().email,
+        password: watch().password,
       })
       .then((response) => {
         const { accessToken } = response.data;
@@ -62,23 +52,49 @@ function Auth() {
         // ... 에러 처리
       });
   };
+
   return (
     <>
       <div>Auth</div>
-      <form onSubmit={onSubmit}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
         <input
+          {...register("email", {
+            required: "이메일은 필수 값입니다.",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i,
+              message: "올바른 이메일 형식으로 작성해주세요",
+            },
+          })}
           placeholder="EMAIL"
-          name="email"
-          value={email}
-          onChange={onChange}
+          // name="email"
+          // value={email}
+          // onChange={onChange}
         />
+        <div className="errorMessage">
+          {errors.email?.type === "required" &&
+            "이메일을 필수 조건으로 입력하시길 바랍니다."}
+          {errors.email?.type === "pattern" && errors.email.message}
+        </div>
         <input
+          {...register("password", {
+            required: "비밀번호는 필수 값입니다.",
+            minLength: {
+              value: 4,
+              message: "비밀번호는 4글자 이상이어야합니다",
+            },
+          })}
           placeholder="PW"
-          name="password"
-          value={password}
-          onChange={onChange}
         />
-        <button onClick={onSignIn}>SignIn</button>
+        <div className="errorMessage">
+          {errors.password?.type === "required" &&
+            "비밀번호를 필수 조건으로 입력하시길 바랍니다."}
+          {errors.password?.type === "minLength" && errors.password.message}
+        </div>
+        <button onClick={handleSubmit(onSignIn)}>SignIn</button>
         <button onClick={onLogin}>Login</button>
       </form>
     </>
