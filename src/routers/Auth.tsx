@@ -30,11 +30,11 @@ function Auth() {
       });
   };
 
-  const onLogin = () => {
+  const onLogin = (data: any) => {
     axios
       .post("http://localhost:1234/login", {
-        email: watch().email,
-        password: watch().password,
+        email: data.email,
+        password: data.password,
       })
       .then((response) => {
         const { accessToken } = response.data;
@@ -52,15 +52,17 @@ function Auth() {
         // ... 에러 처리
       });
   };
-
+  console.log(errors);
   return (
     <>
-      <div>Auth</div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
         }}
+        className="form"
       >
+        <h1>회원가입&로그인</h1>
+        <div>이메일</div>
         <input
           {...register("email", {
             required: "이메일은 필수 값입니다.",
@@ -79,6 +81,7 @@ function Auth() {
             "이메일을 필수 조건으로 입력하시길 바랍니다."}
           {errors.email?.type === "pattern" && errors.email.message}
         </div>
+        <div>비밀번호</div>
         <input
           {...register("password", {
             required: "비밀번호는 필수 값입니다.",
@@ -95,7 +98,7 @@ function Auth() {
           {errors.password?.type === "minLength" && errors.password.message}
         </div>
         <button onClick={handleSubmit(onSignIn)}>SignIn</button>
-        <button onClick={onLogin}>Login</button>
+        <button onClick={handleSubmit(onLogin)}>Login</button>
       </form>
     </>
   );
