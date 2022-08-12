@@ -92,7 +92,6 @@ function Tweets() {
   const checkData = data.filter((data) => data.email === id);
 
   const onCheck = (e: any) => {
-    console.log(e.target.checked);
     if (e.target.checked === true) {
       setCheck(true);
     } else if (e.target.checked === false) {
