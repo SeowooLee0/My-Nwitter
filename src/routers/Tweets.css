@@ -46,3 +46,32 @@
   height: 30px;
   color: white;
 }
+
+.comment_input {
+  border-radius: 6px;
+  padding: 5px;
+}
+.comment_inputBox {
+  padding: 40px;
+}
+
+.comment_button {
+  margin: 20px;
+}
+
+.commentBox {
+  margin: 7px;
+}
+
+.comment_title {
+  background-color: rgb(185, 232, 253);
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 1000;
+  color: darkblue;
+}
+
+.comment {
+  padding: 15px;
+  background-color: aliceblue;
+}

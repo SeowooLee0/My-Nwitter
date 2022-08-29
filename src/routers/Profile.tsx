@@ -12,14 +12,13 @@ interface UserInfo {
 function Profile() {
   const [email, setEmail] = useState("");
   useEffect(() => {
-    axios({
-      method: "get",
-      url: "http://localhost:1234/getUsers",
-    }).then((res) => {
-      console.log(res.data.data.profile);
-      setUserInfo(res.data.data.profile);
-      setEmail(res.data.email);
-    });
+    // axios({
+    //   method: "get",
+    //   url: "http://localhost:1234/getUsers",
+    // }).then((res) => {
+    //   setUserInfo(res.data.data.profile);
+    //   setEmail(res.data.email);
+    // });
   });
   //파일 미리볼 url을 저장해줄 state
   const [fileImage, setFileImage] = useState("");
@@ -42,26 +41,16 @@ function Profile() {
 
     formData.append("profile_img", fileImage);
     formData.append("id", email);
-    // const config = {
-    //   headers: { "Content-Type": "multipart/form-data" },
-    // };
-    console.log(formData);
     axios
       .post("http://localhost:1234/upload", formData, {
         headers: {
           "content-type": "multipart/form-data",
         },
       })
-      //
-      .then(
-        (res) => {
-          console.log({ res });
-        }
-        //handle success
-      )
+      .then((res) => {
+        console.log({ res });
+      })
       .catch((res) => {
-        //handle error
-
         console.log(res);
       });
   };
@@ -70,6 +59,7 @@ function Profile() {
   //   URL.revokeObjectURL(fileImage);
   //   setFileImage("");
   // };
+  console.log(`http://localhost:1234/static/${userInfo}`);
 
   return (
     <div>
@@ -80,32 +70,22 @@ function Profile() {
         <div>
           <h1>프로필</h1>
           {userInfo}
-          {/* <div>
+          <div>
             <img
-              alt={`http://localhost:1234/${userInfo}`}
-              src={`http://localhost:1234/${userInfo}`}
+              alt={`http://localhost:1234/static/${userInfo}`}
+              src={`http://localhost:1234/static/${userInfo}`}
             />
-          </div> */}
+          </div>
           <h3>사용자 아이디 {email}</h3>
-
           <h2>이미지 업로드</h2>
         </div>
-        {/* <h1>프로필</h1>
-
-        <h2>이미지 업로드</h2>
-        <div>
-          <img alt="" src={fileImage} style={{ margin: "auto", width: 200 }} />
-        </div> */}
-
         <input
           name="profile_img"
           type="file"
-          accept="image/*"
+          accept="image/*, jpeg"
           onChange={onChange}
           placeholder="업로드"
         />
-
-        {/* <button onClick={() => deleteFileImage()}>삭제</button> */}
         <button type="submit" onClick={onUpload}>
           업로드
         </button>

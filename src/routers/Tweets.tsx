@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./Tweets.css";
@@ -11,17 +11,43 @@ function Tweets() {
       method: "get",
       url: "http://localhost:1234/getTweets",
     }).then((res) => {
+      // console.log(res.data.data);
       setData(res.data.data);
       setId(res.data.email);
     });
+
+    // axios.get("http://localhost:1234/getTweets/select").then((res) => {
+    //   // console.log(res.data.selectComments);
+    //   if (res.data === "login again") {
+    //     alert("로그인이 만료되었습니다");
+    //   }
+    // });
   });
+
+  // const selectTweets = async () => {
+  //   axios.get("http://localhost:1234/getTweets/select").then((res) => {
+  //     // console.log(res.data);
+  //     if (res.data === "login again") {
+  //       alert("로그인이 만료되었습니다");
+  //     }
+  //   });
+  // };
 
   interface Tweet {
     email: string;
-    number: string;
+    tweet_id: number;
     content: string;
     tag: Array<string>;
     write_date: string;
+    comment: Array<Comment>;
+  }
+
+  interface Comment {
+    tweet_id: number;
+    comment: string;
+    id: number;
+    write_date: string;
+    email: string;
   }
 
   // const onSubmit = (e: any) => {
@@ -48,7 +74,9 @@ function Tweets() {
   };
 
   const [tweet, setTweet] = useState([]);
-  const [saveTag, setSaveTag] = useState([]);
+  const [comment, setComment] = useState("");
+  const [tweetId, setTweetId] = useState("");
+  const [saveTag, setSaveTag] = useState("");
 
   // const [tag, setTag] = useState([]);
   const [login, setLogin] = useState(true);
@@ -91,6 +119,27 @@ function Tweets() {
   const [check, setCheck] = useState(false);
   const checkData = data.filter((data) => data.email === id);
 
+  const onComment = (event: any) => {
+    setComment(event.target.value);
+    setTweetId(event.target.id);
+    console.log(comment);
+  };
+
+  const saveComment = (event: any) => {
+    event.preventDefault();
+    axios
+      .post("http://localhost:1234/saveComments", {
+        comment: comment,
+        tweet_id: tweetId,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data === "login again") {
+          alert("로그인이 만료되었습니다");
+        }
+      });
+  };
+
   const onCheck = (e: any) => {
     if (e.target.checked === true) {
       setCheck(true);
@@ -131,7 +180,7 @@ function Tweets() {
           {(check ? checkData : data).map((t) => {
             return (
               <>
-                <div className="tweet" key={t.number}>
+                <div className="tweet" key={t.tweet_id}>
                   <p>작성자 : {t.email}</p>
                   <p>{t.content}</p>
                   <p>
@@ -149,6 +198,33 @@ function Tweets() {
                           );
                         })}
                   </p>
+                  {/* {t.comments.map.comments} */}
+                  <div className="comment_inputBox">
+                    <input
+                      className="comment_input"
+                      id={`${t.tweet_id}`}
+                      type="text"
+                      placeholder="댓글달기..."
+                      onChange={onComment}
+                      // value={comment}
+                    />
+                    <button className="comment_button" onClick={saveComment}>
+                      게시
+                    </button>
+                  </div>
+                </div>
+
+                <div className="commentBox">
+                  <div className="comment_title">Comments</div>
+                  {t.comment.map((t) => {
+                    return (
+                      <>
+                        <div key={t.id} className="comment">
+                          {`작성자 : ${t.email} ${t.comment}`}
+                        </div>
+                      </>
+                    );
+                  })}
                 </div>
               </>
             );
