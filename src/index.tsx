@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
+import "../src/index.css";
 
 import App from "./components/App";
 

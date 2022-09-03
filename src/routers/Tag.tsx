@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
-import "./Tweets.css";
+// import "./Tweets.scss";
 
 const Tag = () => {
   interface Tweet {
