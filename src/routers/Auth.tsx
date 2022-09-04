@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import "./Auth.css";
 
 function Auth() {
   const {
@@ -54,15 +53,26 @@ function Auth() {
   };
   console.log(errors);
   return (
-    <>
+    <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <form
         onSubmit={(e) => {
           e.preventDefault();
         }}
-        className="form"
+        className="mt-8 space-y-6 "
       >
-        <h1>회원가입&로그인</h1>
-        <div>이메일</div>
+        <div className="w-full max-w-md space-y-8">
+          <div>
+            <img
+              className="mx-auto h-12 w-auto"
+              src="/assets/twitter.png"
+              alt="Your Company"
+            />
+            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+              Sign in to your account
+            </h2>
+          </div>
+        </div>
+
         <input
           {...register("email", {
             required: "이메일은 필수 값입니다.",
@@ -81,7 +91,7 @@ function Auth() {
             "이메일을 필수 조건으로 입력하시길 바랍니다."}
           {errors.email?.type === "pattern" && errors.email.message}
         </div>
-        <div>비밀번호</div>
+        {/* <div>비밀번호</div> */}
         <input
           {...register("password", {
             required: "비밀번호는 필수 값입니다.",
@@ -97,10 +107,20 @@ function Auth() {
             "비밀번호를 필수 조건으로 입력하시길 바랍니다."}
           {errors.password?.type === "minLength" && errors.password.message}
         </div>
-        <button onClick={handleSubmit(onSignIn)}>SignIn</button>
-        <button onClick={handleSubmit(onLogin)}>Login</button>
+        <button
+          className="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-400 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          onClick={handleSubmit(onSignIn)}
+        >
+          SignIn
+        </button>
+        <button
+          className="group relative flex w-full justify-center rounded-md border border-transparent  bg-blue-400 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          onClick={handleSubmit(onLogin)}
+        >
+          Login
+        </button>
       </form>
-    </>
+    </div>
   );
 }
 

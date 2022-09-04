@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import Components from "../components/component";
 import Paginations from "../components/Pagination";
 import Pagination from "../components/Pagination";
-import Example from "../components/slide";
+import Header from "../components/Header";
 import TweetBox from "../components/TweetBox";
 import "./Tweets.scss";
 
@@ -57,12 +57,6 @@ function Tweets() {
     });
   }, []);
 
-  interface pagination {
-    postsPerPage: any;
-    totalPosts: any;
-    paginate: any;
-  }
-
   // const selectTweets = async () => {
   //   axios.get("http://localhost:1234/getTweets/select").then((res) => {
   //     // console.log(res.data);
@@ -94,7 +88,7 @@ function Tweets() {
 
   return (
     <>
-      <Example />
+      <Header />
       {/* <Components /> */}
 
       <TweetBox data={currentPosts} id={id}></TweetBox>
