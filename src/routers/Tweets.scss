@@ -1,0 +1,77 @@
+.logout {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tweet {
+  margin: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: skyblue;
+  color: white;
+  width: 400px;
+
+  padding: 10px;
+  border-radius: 10px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.tweetBox {
+  display: grid;
+  justify-content: center;
+}
+
+.form {
+  text-align: center;
+  margin: 100px;
+}
+
+.text {
+  width: 300px;
+  height: 50px;
+  border-radius: 10px;
+  border-color: beige;
+  border: 3px solid powderblue;
+  text-align: center;
+  margin: 5px;
+}
+
+.inputBtn {
+  border: 3px solid white;
+  background-color: skyblue;
+  border-radius: 8px;
+  margin-left: 10px;
+  width: 80px;
+  height: 30px;
+  color: white;
+}
+
+.comment_input {
+  border-radius: 6px;
+  padding: 5px;
+}
+.comment_inputBox {
+  padding: 40px;
+}
+
+.comment_button {
+  margin: 20px;
+}
+
+.commentBox {
+  margin: 7px;
+}
+
+.comment_title {
+  background-color: rgb(185, 232, 253);
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 1000;
+  color: darkblue;
+}
+
+.comment {
+  padding: 15px;
+  background-color: aliceblue;
+}
