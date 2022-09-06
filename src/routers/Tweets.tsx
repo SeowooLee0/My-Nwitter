@@ -74,15 +74,27 @@ function Tweets() {
     email: string;
   }
 
+  const [currentPosts, setCurrentPosts] = useState<Tweet[]>([]);
   const [data, setData] = useState<Tweet[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
 
   const indexOfLast = currentPage * postsPerPage;
   const indexOfFirst = indexOfLast - postsPerPage;
-  const currentPosts = data.slice(indexOfFirst, indexOfLast);
+  const currentPost = data.slice(indexOfFirst, indexOfLast);
   const paginate = (pageNum: number) => {
     setCurrentPage(pageNum);
+    console.log(currentPage);
+    //axios 요청 나눠서 들고오기
+    axios
+      .get("http://localhost:1234/getTweets/select", {
+        params: { currentPage },
+      })
+      .then((result: any) => {
+        console.log(result.data.data);
+        setCurrentPosts(result.data.data);
+        console.log(currentPost);
+      });
   };
   const [id, setId] = useState("");
 
@@ -91,7 +103,7 @@ function Tweets() {
       <Header />
       {/* <Components /> */}
 
-      <TweetBox data={currentPosts} id={id}></TweetBox>
+      <TweetBox data={currentPost} id={id}></TweetBox>
 
       <Pagination
         postsPerPage={postsPerPage}
