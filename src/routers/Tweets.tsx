@@ -47,13 +47,12 @@ function Tweets() {
   useEffect(() => {
     axios({
       method: "get",
-      url: "http://localhost:1234/getTweets",
+      url: "http://localhost:1234/getTweets/select",
     }).then((res) => {
-      // console.log(res.data.data);
       setData(res.data.data);
-      console.log(res.data.data);
       setId(res.data.email);
-      console.log(id);
+      setCurrentPosts(res.data.data);
+      setDataLength(res.data.dataLength);
     });
   }, []);
 
@@ -74,26 +73,30 @@ function Tweets() {
     email: string;
   }
 
-  const [currentPosts, setCurrentPosts] = useState<Tweet[]>([]);
   const [data, setData] = useState<Tweet[]>([]);
+  const [dataLength, setDataLength] = useState(Number);
+  // const currentPost = data.slice(0, 10);
+
+  const [currentPosts, setCurrentPosts] = useState<Tweet[]>([]);
+  console.log(data, currentPosts);
   const [currentPage, setCurrentPage] = useState(1);
+  console.log(currentPage);
   const [postsPerPage] = useState(10);
 
-  const indexOfLast = currentPage * postsPerPage;
-  const indexOfFirst = indexOfLast - postsPerPage;
-  const currentPost = data.slice(indexOfFirst, indexOfLast);
+  // const indexOfLast = currentPage * postsPerPage;
+  // const indexOfFirst = indexOfLast - postsPerPage;
+
   const paginate = (pageNum: number) => {
     setCurrentPage(pageNum);
     console.log(currentPage);
     //axios 요청 나눠서 들고오기
+
     axios
       .get("http://localhost:1234/getTweets/select", {
         params: { currentPage },
       })
       .then((result: any) => {
-        console.log(result.data.data);
         setCurrentPosts(result.data.data);
-        console.log(currentPost);
       });
   };
   const [id, setId] = useState("");
@@ -103,11 +106,11 @@ function Tweets() {
       <Header />
       {/* <Components /> */}
 
-      <TweetBox data={currentPost} id={id}></TweetBox>
+      <TweetBox data={currentPosts} id={id}></TweetBox>
 
       <Pagination
         postsPerPage={postsPerPage}
-        totalPosts={data.length}
+        totalPosts={dataLength}
         paginate={paginate}
       />
     </>
