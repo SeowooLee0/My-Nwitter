@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataProps, Tweet } from "../routers/Tweets";
-import { HeartIcon } from "@heroicons/react/24/outline";
+import HeartButton from "./Heartbutton";
 
 const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
   const saveTweets = async () => {
@@ -75,7 +75,7 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
   };
 
   const saveComment = (event: any) => {
-    event.preventDefault();
+    // event.preventDefault();
     axios
       .post("http://localhost:1234/saveComments", {
         comment: comment,
@@ -95,7 +95,6 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
       setCheck(false);
     }
   };
-
   const onHeartButton = () => {
     setLike((prev) => !prev);
   };
@@ -163,12 +162,7 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
                   </div>
                 </div>
                 <div className="  flex">
-                  <img
-                    className="w-5 h-5 "
-                    alt="#"
-                    src={like ? "/assets/heart.png" : "/assets/EmptyHeart.png"}
-                    onClick={onHeartButton}
-                  />
+                  <HeartButton like={like} onHeartButton={onHeartButton} />
                   <img
                     className="w-5 h-5"
                     alt="#"

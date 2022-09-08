@@ -80,7 +80,7 @@ function Tweets() {
   const [currentPosts, setCurrentPosts] = useState<Tweet[]>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(currentPage);
+  // console.log(currentPage);
 
   const [postsPerPage] = useState(10);
 
