@@ -6,8 +6,6 @@ import { DataProps, Tweet } from "../routers/Tweets";
 import { HeartIcon } from "@heroicons/react/24/outline";
 
 const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
-  console.log(id);
-
   const saveTweets = async () => {
     axios
       .post("http://localhost:1234/saveTweets", {
@@ -15,7 +13,6 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
         tag: saveTag,
       })
       .then((res) => {
-        console.log(data);
         if (res.data === "login again") {
           alert("로그인이 만료되었습니다");
         }
@@ -75,7 +72,6 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
   const onComment = (event: any) => {
     setComment(event.target.value);
     setTweetId(event.target.id);
-    console.log(comment);
   };
 
   const saveComment = (event: any) => {
@@ -86,7 +82,6 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
         tweet_id: tweetId,
       })
       .then((res) => {
-        console.log(res.data);
         if (res.data === "login again") {
           alert("로그인이 만료되었습니다");
         }
@@ -106,7 +101,7 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
   };
 
   const checkData = data.filter((data) => data.email === id);
-  console.log(like);
+  // console.log(like);
   return (
     <>
       <form className="form">

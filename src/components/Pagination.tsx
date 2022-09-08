@@ -4,7 +4,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import React, { useState } from "react";
 
 const Pagination = ({ postsPerPage, totalPosts, paginate }: any) => {
-  console.log(postsPerPage, totalPosts, paginate);
   const pageNumber = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {

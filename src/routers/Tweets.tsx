@@ -78,19 +78,31 @@ function Tweets() {
   // const currentPost = data.slice(0, 10);
 
   const [currentPosts, setCurrentPosts] = useState<Tweet[]>([]);
-  console.log(data, currentPosts);
+
   const [currentPage, setCurrentPage] = useState(1);
   console.log(currentPage);
+
   const [postsPerPage] = useState(10);
 
   // const indexOfLast = currentPage * postsPerPage;
   // const indexOfFirst = indexOfLast - postsPerPage;
 
-  const paginate = (pageNum: number) => {
+  function paginate(pageNum: number) {
     setCurrentPage(pageNum);
-    console.log(currentPage);
-    //axios 요청 나눠서 들고오기
 
+    //axios 요청 나눠서 들고오기
+    // console.log(currentPage);
+    // axios
+    //   .get("http://localhost:1234/getTweets/select", {
+    //     params: { currentPage },
+    //   })
+    //   .then((result: any) => {
+    //     setCurrentPosts(result.data.data);
+    //   });
+  }
+
+  useEffect(() => {
+    console.log(currentPage);
     axios
       .get("http://localhost:1234/getTweets/select", {
         params: { currentPage },
@@ -98,7 +110,8 @@ function Tweets() {
       .then((result: any) => {
         setCurrentPosts(result.data.data);
       });
-  };
+  }, [currentPage]);
+
   const [id, setId] = useState("");
 
   return (
