@@ -1,11 +1,44 @@
+import { type } from "@testing-library/user-event/dist/type";
 import axios from "axios";
 
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { DataProps, Tweet } from "../routers/Tweets";
+import { DataProps, Like, Tweet } from "../routers/Tweets";
 import HeartButton from "./Heartbutton";
-
+export interface likeButton {
+  tweet_id: number;
+  likes: boolean;
+}
 const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
+  type likeUser = Array<string>;
+
+  const [like, setLike] = useState<likeButton[]>([]);
+
+  const [openComment, setOpenComment] = useState(false);
+
+  useEffect(() => {
+    data.map(async (d) => {
+      d.like.map((u) => {
+        if (u.user_id !== null) {
+          if (u.user_id === id) {
+            setLike((like) => [...like, { tweet_id: d.tweet_id, likes: true }]);
+          } else {
+            setLike((like) => [
+              ...like,
+              { tweet_id: d.tweet_id, likes: false },
+            ]);
+          }
+        }
+        if (u.user_id === null) {
+          // console.log("작동");
+
+          setLike((like) => [...like, { tweet_id: d.tweet_id, likes: false }]);
+        }
+        // console.log(like);
+      });
+    });
+  }, [data]);
+
   const saveTweets = async () => {
     axios
       .post("http://localhost:1234/saveTweets", {
@@ -19,17 +52,11 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
       });
   };
 
-  // const onLogout = () => {
-  //   axios.get("http://localhost:1234/logout");
-  //   alert("로그아웃 되었습니다");
-  //   window.location.reload();
-  // };
-
   const [tweet, setTweet] = useState([]);
   const [comment, setComment] = useState("");
   const [tweetId, setTweetId] = useState("");
   const [saveTag, setSaveTag] = useState("");
-  const [like, setLike] = useState(false);
+
   const [login, setLogin] = useState(true);
 
   const onClick = (event: any) => {
@@ -67,7 +94,7 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
 
   const [getid, setGetId] = useState("");
   const [check, setCheck] = useState(false);
-  //   const checkData = data.filter((data: Tweet) => data.email === id);
+  // const checkData = data.filter((data: Tweet) => data.email === id);
 
   const onComment = (event: any) => {
     setComment(event.target.value);
@@ -95,12 +122,37 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
       setCheck(false);
     }
   };
-  const onHeartButton = () => {
-    setLike((prev) => !prev);
+
+  const onChangeId = (e: any) => {
+    setTweetId(e.target.id);
+    console.log(e.target);
+  };
+
+  // const toggleLike = async (e) => {
+  //   const res = await axios.post(...) // [POST] 사용자가 좋아요를 누름 -> DB 갱신
+  //   setLike(!like)
+  // }
+
+  const onHeartButton = async (e: any) => {
+    // await axios.post("http://localhost:1234/saveTweets/like", {
+    //   // data: likeUsers,
+    //   tweetId: tweetId,
+    // });
+
+    let newLike = [...like];
+    newLike[Number(e.target.id) - 1].likes =
+      !newLike[Number(e.target.id) - 1].likes;
+    console.log(newLike);
+    setLike(newLike);
+  };
+
+  const viewComments = (e: any) => {
+    setOpenComment((prev) => !prev);
   };
 
   const checkData = data.filter((data) => data.email === id);
-  // console.log(like);
+  console.log(like);
+
   return (
     <>
       <form className="form">
@@ -123,10 +175,10 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
         </button>
         <input type="checkbox" value={id} onChange={onCheck} />
         <div className="tweetBox">
-          {(check ? checkData : data).map((t: any) => {
+          {(check ? checkData : data).map((t: any, i: number) => {
             return (
               <>
-                <div className="tweet" key={t.tweet_id}>
+                <div className="tweet" key={t.tweet_id} id={`${t.tweet_id}`}>
                   <p>작성자 : {t.email}</p>
                   <p>{t.content}</p>
                   <p>
@@ -147,7 +199,7 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
 
                   {/* {t.comments.map.comments} */}
 
-                  <div className="comment_inputBox">
+                  <div className="comment_inputBox" id={`${t.tweet_id}`}>
                     <input
                       className="comment_input"
                       id={`${t.tweet_id}`}
@@ -161,27 +213,39 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
                     </button>
                   </div>
                 </div>
+
                 <div className="  flex">
-                  <HeartButton like={like} onHeartButton={onHeartButton} />
+                  <img
+                    className="w-5 h-5 "
+                    alt="#"
+                    src={like ? "/assets/heart.png" : "/assets/EmptyHeart.png"}
+                    id={t.tweet_id}
+                    onClick={onHeartButton}
+                  />
                   <img
                     className="w-5 h-5"
                     alt="#"
                     src={"/assets/messenger.png"}
-                    // onClick={onHeartButton}
+                    onClick={viewComments}
                   />
                 </div>
-                <div className="commentBox">
-                  <div className="comment_title">Comments</div>
-                  {t.comment.map((t: any) => {
-                    return (
-                      <>
-                        <div key={t.id} className="comment">
-                          {`작성자 : ${t.email} ${t.comment}`}
-                        </div>
-                      </>
-                    );
-                  })}
-                </div>
+
+                {openComment ? (
+                  <div className="commentBox" key={t.comment.id}>
+                    <div className="comment_title">Comments</div>
+                    {t.comment.map((t: any) => {
+                      return (
+                        <>
+                          <div key={t.id} className="comment">
+                            {`작성자 : ${t.email} ${t.comment}`}
+                          </div>
+                        </>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  ""
+                )}
               </>
             );
             // }

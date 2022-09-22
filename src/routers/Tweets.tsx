@@ -27,7 +27,7 @@ export interface Tweet {
   tag: Array<string>;
   write_date: string;
   comment: Array<Comment>;
-  likes: Array<Like>;
+  like: Array<Like>;
 }
 
 interface Comment {
@@ -38,9 +38,9 @@ interface Comment {
   email: string;
 }
 
-interface Like {
-  likeUsers: Array<string>;
-  likeCount: number;
+export interface Like {
+  user_id: any;
+  tweet_id: number;
 }
 
 function Tweets() {
@@ -49,7 +49,8 @@ function Tweets() {
       method: "get",
       url: "http://localhost:1234/getTweets/select",
     }).then((res) => {
-      setData(res.data.data);
+      // console.log(res.data.data);
+      // setData(res.data.data);
       setId(res.data.email);
       setCurrentPosts(res.data.data);
       setDataLength(res.data.dataLength);
@@ -73,7 +74,7 @@ function Tweets() {
     email: string;
   }
 
-  const [data, setData] = useState<Tweet[]>([]);
+  // const [data, setData] = useState<Tweet[]>([]);
   const [dataLength, setDataLength] = useState(Number);
   // const currentPost = data.slice(0, 10);
 
@@ -91,18 +92,10 @@ function Tweets() {
     setCurrentPage(pageNum);
 
     //axios 요청 나눠서 들고오기
-    // console.log(currentPage);
-    // axios
-    //   .get("http://localhost:1234/getTweets/select", {
-    //     params: { currentPage },
-    //   })
-    //   .then((result: any) => {
-    //     setCurrentPosts(result.data.data);
-    //   });
   }
 
   useEffect(() => {
-    console.log(currentPage);
+    // console.log(currentPage);
     axios
       .get("http://localhost:1234/getTweets/select", {
         params: { currentPage },
