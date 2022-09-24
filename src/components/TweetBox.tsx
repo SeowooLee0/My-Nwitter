@@ -1,43 +1,29 @@
 import { type } from "@testing-library/user-event/dist/type";
 import axios from "axios";
 
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { DataProps, Like, Tweet } from "../routers/Tweets";
+import { DataProps, is_like, Like, Tweet } from "../routers/Tweets";
 import HeartButton from "./Heartbutton";
 export interface likeButton {
   tweet_id: number;
   likes: boolean;
 }
-const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
+const TweetBox = ({
+  data,
+  id,
+  likeData,
+}: {
+  data: Array<Tweet>;
+  id: any;
+  likeData: Array<is_like>;
+}) => {
   type likeUser = Array<string>;
+  console.log(data);
 
-  const [like, setLike] = useState<likeButton[]>([]);
+  const [like, setLike] = useState(false);
 
   const [openComment, setOpenComment] = useState(false);
-
-  useEffect(() => {
-    data.map(async (d) => {
-      d.like.map((u) => {
-        if (u.user_id !== null) {
-          if (u.user_id === id) {
-            setLike((like) => [...like, { tweet_id: d.tweet_id, likes: true }]);
-          } else {
-            setLike((like) => [
-              ...like,
-              { tweet_id: d.tweet_id, likes: false },
-            ]);
-          }
-        }
-        if (u.user_id === null) {
-          // console.log("작동");
-
-          setLike((like) => [...like, { tweet_id: d.tweet_id, likes: false }]);
-        }
-        // console.log(like);
-      });
-    });
-  }, [data]);
 
   const saveTweets = async () => {
     axios
@@ -53,6 +39,8 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
   };
 
   const [tweet, setTweet] = useState([]);
+
+  const [getComments, setGetComments] = useState([]);
   const [comment, setComment] = useState("");
   const [tweetId, setTweetId] = useState("");
   const [saveTag, setSaveTag] = useState("");
@@ -128,30 +116,34 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
     console.log(e.target);
   };
 
+  const onHeartButton = (e: any) => {
+    console.log(
+      data.find((d: any) => {
+        return (d.tweet_id = e.target.id);
+      })
+    );
+  };
+
   // const toggleLike = async (e) => {
   //   const res = await axios.post(...) // [POST] 사용자가 좋아요를 누름 -> DB 갱신
   //   setLike(!like)
   // }
 
-  const onHeartButton = async (e: any) => {
-    // await axios.post("http://localhost:1234/saveTweets/like", {
-    //   // data: likeUsers,
-    //   tweetId: tweetId,
-    // });
-
-    let newLike = [...like];
-    newLike[Number(e.target.id) - 1].likes =
-      !newLike[Number(e.target.id) - 1].likes;
-    console.log(newLike);
-    setLike(newLike);
-  };
+  //
 
   const viewComments = (e: any) => {
-    setOpenComment((prev) => !prev);
+    console.log(e.target.id);
+    axios
+      .post("http://localhost:1234/getComments", {
+        tweet_id: e.target.id,
+      })
+      .then((res) => {
+        setGetComments(res.data.data);
+      });
   };
 
   const checkData = data.filter((data) => data.email === id);
-  console.log(like);
+  // console.log(like);
 
   return (
     <>
@@ -218,34 +210,80 @@ const TweetBox = ({ data, id }: { data: Array<Tweet>; id: any }) => {
                   <img
                     className="w-5 h-5 "
                     alt="#"
-                    src={like ? "/assets/heart.png" : "/assets/EmptyHeart.png"}
+                    src={
+                      t.is_like ? "/assets/heart.png" : "/assets/EmptyHeart.png"
+                    }
                     id={t.tweet_id}
-                    onClick={onHeartButton}
+                    onClick={() => {
+                      if (t.is_like === true) {
+                        axios
+                          .post("http://localhost:1234/saveLike/delete", {
+                            tweet_id: t.tweet_id,
+                          })
+                          .then((res) => {
+                            if (res.data === "login again") {
+                              alert("로그인이 만료되었습니다");
+                            }
+                            window.location.reload();
+                          });
+                      }
+
+                      if (t.is_like === false) {
+                        axios
+                          .post("http://localhost:1234/saveLike", {
+                            tweet_id: t.tweet_id,
+                          })
+                          .then((res) => {
+                            if (res.data === "login again") {
+                              alert("로그인이 만료되었습니다");
+                            }
+                            window.location.reload();
+                          });
+                      }
+                    }}
                   />
                   <img
                     className="w-5 h-5"
                     alt="#"
                     src={"/assets/messenger.png"}
-                    onClick={viewComments}
-                  />
-                </div>
+                    onClick={(e: any) => {
+                      // console.log(t.is_opened);
 
-                {openComment ? (
+                      if (t.is_opened === false) {
+                        // t.is_opened = !t.is_opened;
+                        axios
+                          .post("http://localhost:1234/getComments", {
+                            tweet_id: e.target.id,
+                          })
+                          .then((res) => {
+                            t.is_opened = res.data.is_opened;
+                            setGetComments(res.data.data);
+                            console.log(t.is_opened);
+                          });
+                      }
+                      if (t.is_opened === true) {
+                        t.is_opened = false;
+                        setGetComments([]);
+                      }
+                    }}
+                    id={t.tweet_id}
+                  />
+
                   <div className="commentBox" key={t.comment.id}>
-                    <div className="comment_title">Comments</div>
-                    {t.comment.map((t: any) => {
-                      return (
-                        <>
-                          <div key={t.id} className="comment">
-                            {`작성자 : ${t.email} ${t.comment}`}
-                          </div>
-                        </>
-                      );
-                    })}
+                    {t.is_opened
+                      ? getComments.map((t: any) => {
+                          return (
+                            <>
+                              <div className="comment_title">Comments</div>
+                              <div key={t.id} className="comment">
+                                {`작성자 : ${t.email} ${t.comment}`}
+                              </div>
+                            </>
+                          );
+                        })
+                      : ""}
                   </div>
-                ) : (
-                  ""
-                )}
+                </div>
               </>
             );
             // }

@@ -43,17 +43,22 @@ export interface Like {
   tweet_id: number;
 }
 
+export interface is_like {
+  is_like: boolean;
+  tweet_id: number;
+}
+
 function Tweets() {
   useEffect(() => {
     axios({
       method: "get",
       url: "http://localhost:1234/getTweets/select",
     }).then((res) => {
-      // console.log(res.data.data);
+      console.log(res.data.data);
       // setData(res.data.data);
       setId(res.data.email);
       setCurrentPosts(res.data.data);
-      setDataLength(res.data.dataLength);
+      setDataLength(res.data.data.length);
     });
   }, []);
 
@@ -79,6 +84,7 @@ function Tweets() {
   // const currentPost = data.slice(0, 10);
 
   const [currentPosts, setCurrentPosts] = useState<Tweet[]>([]);
+  const [likeData, setLikeData] = useState<is_like[]>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   // console.log(currentPage);
@@ -112,7 +118,7 @@ function Tweets() {
       <Header />
       {/* <Components /> */}
 
-      <TweetBox data={currentPosts} id={id}></TweetBox>
+      <TweetBox data={currentPosts} id={id} likeData={likeData}></TweetBox>
 
       <Pagination
         postsPerPage={postsPerPage}

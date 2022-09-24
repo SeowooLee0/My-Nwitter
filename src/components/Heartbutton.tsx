@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { likeButton } from "./TweetBox";
 
 const HeartButton = ({ like, onHeartButton, id }: any) => {
-  useEffect(() => {
-    console.log(like.likes);
-  }, []);
+  useEffect(() => {}, []);
 
   // let data = like.filter((like.tweet_id = id));
   // const [check, setCheck] = useState();
