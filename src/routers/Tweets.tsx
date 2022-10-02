@@ -14,6 +14,7 @@ import Pagination from "../components/Pagination";
 import Header from "../components/Header";
 import TweetBox from "../components/TweetBox";
 import "./Tweets.scss";
+import CommentsList from "../components/commentList";
 
 export interface DataProps {
   data: Array<Tweet>;
@@ -30,7 +31,7 @@ export interface Tweet {
   like: Array<Like>;
 }
 
-interface Comment {
+export interface Comment {
   tweet_id: number;
   comment: string;
   id: number;
@@ -116,7 +117,6 @@ function Tweets() {
   return (
     <>
       <Header />
-      {/* <Components /> */}
 
       <TweetBox data={currentPosts} id={id} likeData={likeData}></TweetBox>
 

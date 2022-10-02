@@ -90,7 +90,6 @@ const TweetBox = ({
   };
 
   const saveComment = (event: any) => {
-    // event.preventDefault();
     axios
       .post("http://localhost:1234/saveComments", {
         comment: comment,
@@ -191,9 +190,9 @@ const TweetBox = ({
 
                   {/* {t.comments.map.comments} */}
 
-                  <div className="comment_inputBox" id={`${t.tweet_id}`}>
+                  <div className="comment_inputBox " id={`${t.tweet_id}`}>
                     <input
-                      className="comment_input"
+                      className="comment_input placeholder-gray-500"
                       id={`${t.tweet_id}`}
                       type="text"
                       placeholder="댓글달기..."
@@ -258,7 +257,6 @@ const TweetBox = ({
                           .then((res) => {
                             t.is_opened = res.data.is_opened;
                             setGetComments(res.data.data);
-                            console.log(t.is_opened);
                           });
                       }
                       if (t.is_opened === true) {
@@ -269,7 +267,7 @@ const TweetBox = ({
                     id={t.tweet_id}
                   />
 
-                  <div className="commentBox" key={t.comment.id}>
+                  <div className="commentBox font-black" key={t.comment.id}>
                     {t.is_opened
                       ? getComments.map((t: any) => {
                           return (

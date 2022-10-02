@@ -1,0 +1,52 @@
+.messageBtn {
+}
+
+.commentModal {
+  top: 50%;
+  left: 50%;
+
+  overflow: hidden auto;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+
+  top: 0;
+  left: 0;
+}
+
+.list {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden auto;
+  width: 300px;
+  height: 500px;
+  padding: 10px;
+  font-size: 10%;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+}
+
+.subList {
+  display: flex;
+  padding: 10px;
+}
+.profile {
+  display: flex;
+  justify-content: center;
+  padding: 3px;
+
+  width: 70px;
+  height: 45px;
+}
+
+.profileImg {
+  border-radius: 20px;
+}
+
+.listContent {
+  padding: 3px;
+}
