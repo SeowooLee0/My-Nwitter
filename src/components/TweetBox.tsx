@@ -2,7 +2,8 @@ import { type } from "@testing-library/user-event/dist/type";
 import axios from "axios";
 
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { DataProps, is_like, Like, Tweet } from "../routers/Tweets";
 import HeartButton from "./Heartbutton";
 export interface likeButton {
@@ -19,8 +20,8 @@ const TweetBox = ({
   likeData: Array<is_like>;
 }) => {
   type likeUser = Array<string>;
-  console.log(data);
 
+  const naviagte = useNavigate();
   const [like, setLike] = useState(false);
 
   const [openComment, setOpenComment] = useState(false);
@@ -74,7 +75,7 @@ const TweetBox = ({
         setGetId(res.data.email);
         if (res.data.data === null) {
           alert("로그인이 만료되었습니다");
-          window.location.reload();
+          naviagte("/auth");
         }
       })
       .catch((err) => {});
@@ -223,7 +224,6 @@ const TweetBox = ({
                             if (res.data === "login again") {
                               alert("로그인이 만료되었습니다");
                             }
-                            window.location.reload();
                           });
                       }
 
@@ -236,7 +236,6 @@ const TweetBox = ({
                             if (res.data === "login again") {
                               alert("로그인이 만료되었습니다");
                             }
-                            window.location.reload();
                           });
                       }
                     }}

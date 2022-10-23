@@ -4,14 +4,17 @@ import axios from "axios";
 import "../src/index.css";
 
 import App from "./components/App";
+import { BrowserRouter } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:1234";
 axios.defaults.withCredentials = true;
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <BrowserRouter>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

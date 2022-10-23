@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 function Auth() {
+  const naviagte = useNavigate();
   const {
     register,
     handleSubmit,
@@ -44,7 +46,7 @@ function Auth() {
         ] = `Bearer ${accessToken}`;
         alert("로그인 성공");
         // console.log(Headers);
-        window.location.reload();
+        naviagte("/");
         // accessToken을 localStorage, cookie 등에 저장하지 않는다!
       })
       .catch((error) => {
