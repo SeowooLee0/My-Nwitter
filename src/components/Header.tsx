@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
+
 import {
   ArrowPathIcon,
   Bars3Icon,
@@ -15,89 +16,93 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CommentsList from "./commentList";
-
-const onLogout = () => {
-  axios.get("http://localhost:1234/logout");
-  alert("로그아웃 되었습니다");
-  window.location.reload();
-};
-
-const solutions = [
-  {
-    name: "Analytics",
-    description:
-      "Get a better understanding of where your traffic is coming from.",
-    href: "#",
-    icon: ChartBarIcon,
-  },
-  {
-    name: "Engagement",
-    description: "Speak directly to your customers in a more meaningful way.",
-    href: "#",
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: "Security",
-    description: "Your customers' data will be safe and secure.",
-    href: "#",
-    icon: ShieldCheckIcon,
-  },
-  {
-    name: "Integrations",
-    description: "Connect with third-party tools that you're already using.",
-    href: "#",
-    icon: Squares2X2Icon,
-  },
-  {
-    name: "Automations",
-    description:
-      "Build strategic funnels that will drive your customers to convert",
-    href: "#",
-    icon: ArrowPathIcon,
-  },
-];
-const callsToAction = [
-  { name: "Watch Demo", href: "#", icon: PlayIcon },
-  { name: "Contact Sales", href: "#", icon: PhoneIcon },
-];
-const resources = [
-  {
-    name: "Help Center",
-    description:
-      "Get all of your questions answered in our forums or contact support.",
-    href: "#",
-    icon: LifebuoyIcon,
-  },
-  {
-    name: "Guides",
-    description:
-      "Learn how to maximize our platform to get the most out of it.",
-    href: "#",
-    icon: BookmarkSquareIcon,
-  },
-  {
-    name: "Events",
-    description:
-      "See what meet-ups and other events we might be planning near you.",
-    href: "#",
-    icon: CalendarIcon,
-  },
-  {
-    name: "Security",
-    description: "Understand how we take your privacy seriously.",
-    href: "#",
-    icon: ShieldCheckIcon,
-  },
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
+import { useContext } from "react";
 
 export default function Header() {
+  const naviagte = useNavigate();
+
+  const onLogout = () => {
+    axios.get("http://localhost:1234/logout");
+    alert("로그아웃 되었습니다");
+    window.location.reload();
+    naviagte("/");
+  };
+
+  const solutions = [
+    {
+      name: "Analytics",
+      description:
+        "Get a better understanding of where your traffic is coming from.",
+      href: "#",
+      icon: ChartBarIcon,
+    },
+    {
+      name: "Engagement",
+      description: "Speak directly to your customers in a more meaningful way.",
+      href: "#",
+      icon: CursorArrowRaysIcon,
+    },
+    {
+      name: "Security",
+      description: "Your customers' data will be safe and secure.",
+      href: "#",
+      icon: ShieldCheckIcon,
+    },
+    {
+      name: "Integrations",
+      description: "Connect with third-party tools that you're already using.",
+      href: "#",
+      icon: Squares2X2Icon,
+    },
+    {
+      name: "Automations",
+      description:
+        "Build strategic funnels that will drive your customers to convert",
+      href: "#",
+      icon: ArrowPathIcon,
+    },
+  ];
+  const callsToAction = [
+    { name: "Watch Demo", href: "#", icon: PlayIcon },
+    { name: "Contact Sales", href: "#", icon: PhoneIcon },
+  ];
+  const resources = [
+    {
+      name: "Help Center",
+      description:
+        "Get all of your questions answered in our forums or contact support.",
+      href: "#",
+      icon: LifebuoyIcon,
+    },
+    {
+      name: "Guides",
+      description:
+        "Learn how to maximize our platform to get the most out of it.",
+      href: "#",
+      icon: BookmarkSquareIcon,
+    },
+    {
+      name: "Events",
+      description:
+        "See what meet-ups and other events we might be planning near you.",
+      href: "#",
+      icon: CalendarIcon,
+    },
+    {
+      name: "Security",
+      description: "Understand how we take your privacy seriously.",
+      href: "#",
+      icon: ShieldCheckIcon,
+    },
+  ];
+
+  function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(" ");
+  }
+
   return (
     <Popover className="relative bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">

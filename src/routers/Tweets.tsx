@@ -1,8 +1,10 @@
 import axios from "axios";
+import { SocketContext, SOCKET_EVENT } from "../socketio";
 
 import React, {
   Component,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -50,18 +52,39 @@ export interface is_like {
 }
 
 function Tweets() {
+  const socket = useContext(SocketContext);
   useEffect(() => {
     axios({
       method: "get",
       url: "http://localhost:1234/getTweets/select",
     }).then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
       // setData(res.data.data);
       setId(res.data.email);
       setCurrentPosts(res.data.data);
-      setDataLength(res.data.data.length);
+      setDataLength(res.data.count);
     });
   }, []);
+
+  useEffect(() => {
+    socket.on("RECEIVE_MESSAGE", (data: any) => {
+      window.alert("새로운 코멘트가 추가되었습니다");
+    });
+
+    // return () => {
+    //   socket.off("RECEIVE_MESSAGE", (data: any) => {
+    //     console.log(data);
+    //     window.alert("새로운 코멘트가 추가되었습니다");
+    //   });
+    // };
+  }, [socket]);
+
+  // 이벤트 리스너 설치
+
+  //   return () => {
+  //     socket.off(SOCKET_EVENT.RECEIVE_MESSAGE, commentAlarm); // 이벤트 리스너 해제
+  //   };
+  // }, [socket]);
 
   // const selectTweets = async () => {
   //   axios.get("http://localhost:1234/getTweets/select").then((res) => {

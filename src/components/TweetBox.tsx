@@ -1,15 +1,25 @@
 import { type } from "@testing-library/user-event/dist/type";
 import axios from "axios";
+import { io } from "socket.io-client";
 
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { DataProps, is_like, Like, Tweet } from "../routers/Tweets";
 import HeartButton from "./Heartbutton";
+import { socket, SocketContext, SOCKET_EVENT } from "../socketio";
 export interface likeButton {
   tweet_id: number;
   likes: boolean;
 }
+
 const TweetBox = ({
   data,
   id,
@@ -20,6 +30,10 @@ const TweetBox = ({
   likeData: Array<is_like>;
 }) => {
   type likeUser = Array<string>;
+  interface chat {
+    tweetId: Number;
+    comment: String;
+  }
 
   const naviagte = useNavigate();
   const [like, setLike] = useState(false);
@@ -50,6 +64,8 @@ const TweetBox = ({
 
   const onClick = (event: any) => {
     saveTweets();
+    event.preventDefault();
+    console.log(axios.defaults.headers);
   };
 
   const onChange = (event: any) => {
@@ -91,6 +107,7 @@ const TweetBox = ({
   };
 
   const saveComment = (event: any) => {
+    event.preventDefault();
     axios
       .post("http://localhost:1234/saveComments", {
         comment: comment,
@@ -100,6 +117,7 @@ const TweetBox = ({
         if (res.data === "login again") {
           alert("로그인이 만료되었습니다");
         }
+        socket.emit(SOCKET_EVENT.SEND_MESSAGE, { comment, tweetId, id });
       });
   };
 

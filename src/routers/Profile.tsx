@@ -64,7 +64,7 @@ function Profile() {
   return (
     <div>
       <button>
-        <Link to={"/"}>홈</Link>
+        <Link to={"/home"}>홈</Link>
       </button>
       <form>
         <div>

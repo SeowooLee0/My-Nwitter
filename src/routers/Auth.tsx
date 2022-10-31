@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { socket } from "../socketio";
+import { useContext } from "react";
 
 function Auth() {
   const naviagte = useNavigate();
@@ -37,18 +39,20 @@ function Auth() {
         email: data.email,
         password: data.password,
       })
-      .then((response) => {
+      .then(async (response) => {
         const { accessToken } = response.data;
-        console.log(accessToken);
+
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;
         alert("로그인 성공");
-        // console.log(Headers);
-        naviagte("/");
-        // accessToken을 localStorage, cookie 등에 저장하지 않는다!
+
+        socket.emit("login", { email: data.email, socketID: socket.id });
+
+        window.location.reload();
       })
+
       .catch((error) => {
         // ... 에러 처리
       });
