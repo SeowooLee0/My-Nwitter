@@ -4,6 +4,9 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { socket } from "../socketio";
 import { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { changeState } from "../redux/createSlice/handleIsLogin";
 
 function Auth() {
   const naviagte = useNavigate();
@@ -13,6 +16,10 @@ function Auth() {
     watch,
     formState: { errors },
   } = useForm({ mode: "onSubmit" });
+
+  const isLogin = useSelector((state: RootState) => state.change.isLogin);
+
+  const dispatch = useDispatch();
 
   const onSignIn = (data: any) => {
     axios
@@ -47,10 +54,8 @@ function Auth() {
           "Authorization"
         ] = `Bearer ${accessToken}`;
         alert("로그인 성공");
-
+        dispatch(changeState(true));
         socket.emit("login", { email: data.email, socketID: socket.id });
-
-        window.location.reload();
       })
 
       .catch((error) => {

@@ -65,7 +65,6 @@ const TweetBox = ({
   const onClick = (event: any) => {
     saveTweets();
     event.preventDefault();
-    console.log(axios.defaults.headers);
   };
 
   const onChange = (event: any) => {

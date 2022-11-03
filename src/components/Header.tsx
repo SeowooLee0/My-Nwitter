@@ -20,15 +20,21 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CommentsList from "./commentList";
 import { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { changeState } from "../redux/createSlice/handleIsLogin";
+import { RootState } from "../redux/store";
 
 export default function Header() {
   const naviagte = useNavigate();
 
+  const isLogin = useSelector((state: RootState) => state.change.isLogin);
+
+  const dispatch = useDispatch();
   const onLogout = () => {
     axios.get("http://localhost:1234/logout");
     alert("로그아웃 되었습니다");
-    window.location.reload();
-    naviagte("/");
+
+    dispatch(changeState(false));
   };
 
   const solutions = [

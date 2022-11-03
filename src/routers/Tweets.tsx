@@ -68,7 +68,8 @@ function Tweets() {
 
   useEffect(() => {
     socket.on("RECEIVE_MESSAGE", (data: any) => {
-      window.alert("새로운 코멘트가 추가되었습니다");
+      console.log(data);
+      // window.alert("새로운 코멘트가 추가되었습니다");
     });
 
     // return () => {

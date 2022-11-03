@@ -1,10 +1,14 @@
 import axios from "axios";
-import { createContext } from "react";
-import React, { useEffect, useState } from "react";
+
+import React, { useCallback, useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import AppRouter from "./router";
+import { useSelector, useDispatch } from "react-redux";
 
 import { socket, SocketContext } from "../socketio";
+
+import store, { RootState } from "../redux/store";
+import { changeState } from "../redux/createSlice/handleIsLogin";
 
 function App() {
   // useEffect(() => {
@@ -12,8 +16,14 @@ function App() {
   //     socket.disconnect();
   //   };
   // }, []);
+  console.log(store.getState());
+
+  const isLogin = useSelector((state: RootState) => state.change.isLogin);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log(isLogin);
     axios
       .get("http://localhost:1234/refreshTokenRequest")
       .then((res) => {
@@ -21,10 +31,9 @@ function App() {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;
-
-        setIsLogin(true);
+        dispatch(changeState(true));
         if (res.data.data === null) {
-          setIsLogin(false);
+          dispatch(changeState(false));
         }
         if (res.data.email) {
           socket.emit("login", { email: res.data.email, socketID: socket.id });
@@ -35,7 +44,7 @@ function App() {
         // ... 에러 처리
       });
   }, []);
-  const [isLogin, setIsLogin] = useState(true);
+  // const [isLogin, setIsLogin] = useState(true);
   return (
     <>
       <SocketContext.Provider value={socket}>

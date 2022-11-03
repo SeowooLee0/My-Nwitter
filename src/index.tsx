@@ -5,6 +5,9 @@ import "../src/index.css";
 
 import App from "./components/App";
 import { BrowserRouter } from "react-router-dom";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 axios.defaults.baseURL = "http://localhost:1234";
 axios.defaults.withCredentials = true;
@@ -12,7 +15,9 @@ axios.defaults.withCredentials = true;
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </React.StrictMode>
   </BrowserRouter>,
   document.getElementById("root")
