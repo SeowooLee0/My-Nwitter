@@ -12,49 +12,37 @@ import React, {
 } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { DataProps, is_like, Like, Tweet } from "../routers/Tweets";
+import { DataProps, isLike, Like, Tweet } from "../routers/Tweets";
 import HeartButton from "./Heartbutton";
 import { socket, SocketContext, SOCKET_EVENT } from "../socketio";
+import customAxios from "../CommonAxios";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { changeIsOpened } from "../redux/createSlice/GetDataSlice";
 export interface likeButton {
   tweet_id: number;
   likes: boolean;
 }
 
-const TweetBox = ({
-  data,
-  id,
-  likeData,
-}: {
-  data: Array<Tweet>;
-  id: any;
-  likeData: Array<is_like>;
-}) => {
-  type likeUser = Array<string>;
-  interface chat {
-    tweetId: Number;
-    comment: String;
-  }
-
+const TweetBox = ({ likeData }: { likeData: Array<isLike> }) => {
+  const data = useSelector((state: RootState) => state.getData.currentPosts);
+  const id = useSelector((state: RootState) => state.getData.id);
+  const dispatch = useDispatch();
   const naviagte = useNavigate();
   const [like, setLike] = useState(false);
 
   const [openComment, setOpenComment] = useState(false);
 
   const saveTweets = async () => {
-    axios
-      .post("http://localhost:1234/saveTweets", {
+    customAxios
+      .post("/saveTweets", {
         content: tweet,
         tag: saveTag,
       })
-      .then((res) => {
-        if (res.data === "login again") {
-          alert("로그인이 만료되었습니다");
-        }
-      });
+      .then((res) => {});
   };
 
   const [tweet, setTweet] = useState([]);
-
   const [getComments, setGetComments] = useState([]);
   const [comment, setComment] = useState("");
   const [tweetId, setTweetId] = useState("");
@@ -84,19 +72,16 @@ const TweetBox = ({
   };
 
   const onLogin = () => {
-    axios
-      .get("http://localhost:1234/refreshTokenRequest")
+    customAxios
+      .get("/refreshTokenRequest")
       .then((res) => {
-        setGetId(res.data.email);
-        if (res.data.data === null) {
-          alert("로그인이 만료되었습니다");
-          naviagte("/auth");
-        }
+        // if (res.data.data === null) {
+        //   alert("로그인이 만료되었습니다");
+        // }
       })
       .catch((err) => {});
   };
 
-  const [getid, setGetId] = useState("");
   const [check, setCheck] = useState(false);
   // const checkData = data.filter((data: Tweet) => data.email === id);
 
@@ -107,15 +92,17 @@ const TweetBox = ({
 
   const saveComment = (event: any) => {
     event.preventDefault();
-    axios
-      .post("http://localhost:1234/saveComments", {
+
+    customAxios
+      .post("/saveComments", {
         comment: comment,
         tweet_id: tweetId,
       })
       .then((res) => {
-        if (res.data === "login again") {
-          alert("로그인이 만료되었습니다");
-        }
+        console.log(res.headers);
+        // if (res.data === "login again") {
+        //   alert("로그인이 만료되었습니다");
+        // }
         socket.emit(SOCKET_EVENT.SEND_MESSAGE, { comment, tweetId, id });
       });
   };
@@ -141,17 +128,15 @@ const TweetBox = ({
     );
   };
 
-  // const toggleLike = async (e) => {
-  //   const res = await axios.post(...) // [POST] 사용자가 좋아요를 누름 -> DB 갱신
-  //   setLike(!like)
-  // }
-
-  //
+  const toggleLike = async (e: any) => {
+    // [POST] 사용자가 좋아요를 누름 -> DB 갱신
+    setLike(!like);
+  };
 
   const viewComments = (e: any) => {
     console.log(e.target.id);
-    axios
-      .post("http://localhost:1234/getComments", {
+    customAxios
+      .post("/getComments", {
         tweet_id: e.target.id,
       })
       .then((res) => {
@@ -159,7 +144,7 @@ const TweetBox = ({
       });
   };
 
-  const checkData = data.filter((data) => data.email === id);
+  const checkData = data.filter((data: { email: string }) => data.email === id);
   // console.log(like);
 
   return (
@@ -237,23 +222,15 @@ const TweetBox = ({
                           .post("http://localhost:1234/saveLike/delete", {
                             tweet_id: t.tweet_id,
                           })
-                          .then((res) => {
-                            if (res.data === "login again") {
-                              alert("로그인이 만료되었습니다");
-                            }
-                          });
+                          .then((res) => {});
                       }
 
                       if (t.is_like === false) {
-                        axios
-                          .post("http://localhost:1234/saveLike", {
+                        customAxios
+                          .post("/saveLike", {
                             tweet_id: t.tweet_id,
                           })
-                          .then((res) => {
-                            if (res.data === "login again") {
-                              alert("로그인이 만료되었습니다");
-                            }
-                          });
+                          .then((res) => {});
                       }
                     }}
                   />
@@ -266,17 +243,18 @@ const TweetBox = ({
 
                       if (t.is_opened === false) {
                         // t.is_opened = !t.is_opened;
-                        axios
-                          .post("http://localhost:1234/getComments", {
+                        customAxios
+                          .post("/getComments", {
                             tweet_id: e.target.id,
                           })
-                          .then((res) => {
-                            t.is_opened = res.data.is_opened;
-                            setGetComments(res.data.data);
+                          .then((response) => {
+                            dispatch(changeIsOpened(response.data.is_opened));
+                            // t.is_opened = response.data.is_opened;
+                            setGetComments(response.data.data);
                           });
                       }
                       if (t.is_opened === true) {
-                        t.is_opened = false;
+                        dispatch(changeIsOpened(false));
                         setGetComments([]);
                       }
                     }}

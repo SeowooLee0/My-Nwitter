@@ -17,6 +17,14 @@ import Header from "../components/Header";
 import TweetBox from "../components/TweetBox";
 import "./Tweets.scss";
 import CommentsList from "../components/commentList";
+import customAxios from "../CommonAxios";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import {
+  changeCurentPage,
+  changeCurrentPosts,
+  changGetDataState,
+} from "../redux/createSlice/GetDataSlice";
 
 export interface DataProps {
   data: Array<Tweet>;
@@ -32,6 +40,19 @@ export interface Tweet {
   comment: Array<Comment>;
   like: Array<Like>;
 }
+export interface Data {
+  id: string;
+  email: string;
+  tweet_id: number;
+  content: string;
+  tag: Array<string>;
+  write_date: string;
+  comment: Array<Comment>;
+  like: Array<Like>;
+  is_opened: boolean;
+  user_id: number;
+  is_like: Array<isLike>;
+}
 
 export interface Comment {
   tweet_id: number;
@@ -46,30 +67,62 @@ export interface Like {
   tweet_id: number;
 }
 
-export interface is_like {
+export interface isLike {
   is_like: boolean;
   tweet_id: number;
 }
+export interface Comment {
+  tweet_id: number;
+  comment: string;
+  id: number;
+  write_date: string;
+  email: string;
+}
 
 function Tweets() {
+  const getDataLength = useSelector(
+    (state: RootState) => state.getData.dataLength
+  );
+  const getCurrentPosts = useSelector(
+    (state: RootState) => state.getData.currentPosts
+  );
+  // const getLikeData = useSelector((state: RootState) => state.getData.likeData);
+  const getCurrentPage = useSelector(
+    (state: RootState) => state.getData.currentPage
+  );
+  const getPostPerPage = useSelector(
+    (state: RootState) => state.getData.postPerPage
+  );
+  const getId = useSelector((state: RootState) => state.getData.id);
+  const dispatch = useDispatch();
+
   const socket = useContext(SocketContext);
   useEffect(() => {
-    axios({
-      method: "get",
-      url: "http://localhost:1234/getTweets/select",
-    }).then((res) => {
-      // console.log(res.data.data);
-      // setData(res.data.data);
-      setId(res.data.email);
-      setCurrentPosts(res.data.data);
-      setDataLength(res.data.count);
+    customAxios.get("/getTweets/select").then((res) => {
+      dispatch(
+        changGetDataState({
+          dataLength: res.data.count,
+          currentPosts: res.data.data,
+          id: res.data.email,
+          currentPage: 1,
+          postPerPage: 10,
+        })
+      );
     });
+
+    customAxios
+      .get("/getTweets/select", {
+        params: { getCurrentPage },
+      })
+      .then((result: any) => {
+        dispatch(changeCurrentPosts(result.data.data));
+      });
   }, []);
 
   useEffect(() => {
     socket.on("RECEIVE_MESSAGE", (data: any) => {
       console.log(data);
-      // window.alert("새로운 코멘트가 추가되었습니다");
+      window.alert("새로운 코멘트가 추가되었습니다");
     });
 
     // return () => {
@@ -80,73 +133,27 @@ function Tweets() {
     // };
   }, [socket]);
 
-  // 이벤트 리스너 설치
-
-  //   return () => {
-  //     socket.off(SOCKET_EVENT.RECEIVE_MESSAGE, commentAlarm); // 이벤트 리스너 해제
-  //   };
-  // }, [socket]);
-
-  // const selectTweets = async () => {
-  //   axios.get("http://localhost:1234/getTweets/select").then((res) => {
-  //     // console.log(res.data);
-  //     if (res.data === "login again") {
-  //       alert("로그인이 만료되었습니다");
-  //     }
-  //   });
-  // };
-
-  interface Comment {
-    tweet_id: number;
-    comment: string;
-    id: number;
-    write_date: string;
-    email: string;
-  }
-
   // const [data, setData] = useState<Tweet[]>([]);
-  const [dataLength, setDataLength] = useState(Number);
+
   // const currentPost = data.slice(0, 10);
 
-  const [currentPosts, setCurrentPosts] = useState<Tweet[]>([]);
-  const [likeData, setLikeData] = useState<is_like[]>([]);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  // console.log(currentPage);
-
-  const [postsPerPage] = useState(10);
-
-  // const indexOfLast = currentPage * postsPerPage;
-  // const indexOfFirst = indexOfLast - postsPerPage;
+  const [likeData, setLikeData] = useState<isLike[]>([]);
 
   function paginate(pageNum: number) {
-    setCurrentPage(pageNum);
+    dispatch(changeCurentPage(pageNum));
 
     //axios 요청 나눠서 들고오기
   }
-
-  useEffect(() => {
-    // console.log(currentPage);
-    axios
-      .get("http://localhost:1234/getTweets/select", {
-        params: { currentPage },
-      })
-      .then((result: any) => {
-        setCurrentPosts(result.data.data);
-      });
-  }, [currentPage]);
-
-  const [id, setId] = useState("");
 
   return (
     <>
       <Header />
 
-      <TweetBox data={currentPosts} id={id} likeData={likeData}></TweetBox>
+      <TweetBox likeData={likeData}></TweetBox>
 
       <Pagination
-        postsPerPage={postsPerPage}
-        totalPosts={dataLength}
+        postsPerPage={getPostPerPage}
+        totalPosts={getDataLength}
         paginate={paginate}
       />
     </>

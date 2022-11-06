@@ -6,7 +6,9 @@ import { socket } from "../socketio";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { changeState } from "../redux/createSlice/handleIsLogin";
+import { changeState } from "../redux/createSlice/IsLoginSlice";
+import customAxios from "../CommonAxios";
+import { changeAccessState } from "../redux/createSlice/GetAccessToken";
 
 function Auth() {
   const naviagte = useNavigate();
@@ -17,20 +19,21 @@ function Auth() {
     formState: { errors },
   } = useForm({ mode: "onSubmit" });
 
-  const isLogin = useSelector((state: RootState) => state.change.isLogin);
+  const isLogin = useSelector(
+    (state: RootState) => state.changeIsLogin.isLogin
+  );
 
+  const token = useSelector(
+    (state: RootState) => state.getAccessToken.accessToken
+  );
   const dispatch = useDispatch();
 
   const onSignIn = (data: any) => {
-    axios
-      .post(
-        "http://localhost:1234/register",
-        {
-          email: data.email,
-          password: data.password,
-        },
-        { withCredentials: true }
-      )
+    customAxios
+      .post("/register", {
+        email: data.email,
+        password: data.password,
+      })
       .then((res) => {
         alert("회원가입 성공");
       })
@@ -41,18 +44,22 @@ function Auth() {
   };
 
   const onLogin = (data: any) => {
-    axios
-      .post("http://localhost:1234/login", {
+    customAxios
+      .post("/login", {
         email: data.email,
         password: data.password,
       })
       .then(async (response) => {
         const { accessToken } = response.data;
-
+        console.log(accessToken);
+        // dispatch(changeAccessState(response);
+        // console.log(token);
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-        axios.defaults.headers.common[
+        //엑세스토큰 -> 쿠키값으로 담기, http-only -> 쿠키값 접근안됨
+        customAxios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;
+
         alert("로그인 성공");
         dispatch(changeState(true));
         socket.emit("login", { email: data.email, socketID: socket.id });

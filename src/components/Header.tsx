@@ -21,19 +21,20 @@ import axios from "axios";
 import CommentsList from "./commentList";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeState } from "../redux/createSlice/handleIsLogin";
+import { changeState } from "../redux/createSlice/IsLoginSlice";
 import { RootState } from "../redux/store";
 
 export default function Header() {
   const naviagte = useNavigate();
 
-  const isLogin = useSelector((state: RootState) => state.change.isLogin);
+  const isLogin = useSelector(
+    (state: RootState) => state.changeIsLogin.isLogin
+  );
 
   const dispatch = useDispatch();
   const onLogout = () => {
     axios.get("http://localhost:1234/logout");
     alert("로그아웃 되었습니다");
-
     dispatch(changeState(false));
   };
 
@@ -71,43 +72,6 @@ export default function Header() {
       icon: ArrowPathIcon,
     },
   ];
-  const callsToAction = [
-    { name: "Watch Demo", href: "#", icon: PlayIcon },
-    { name: "Contact Sales", href: "#", icon: PhoneIcon },
-  ];
-  const resources = [
-    {
-      name: "Help Center",
-      description:
-        "Get all of your questions answered in our forums or contact support.",
-      href: "#",
-      icon: LifebuoyIcon,
-    },
-    {
-      name: "Guides",
-      description:
-        "Learn how to maximize our platform to get the most out of it.",
-      href: "#",
-      icon: BookmarkSquareIcon,
-    },
-    {
-      name: "Events",
-      description:
-        "See what meet-ups and other events we might be planning near you.",
-      href: "#",
-      icon: CalendarIcon,
-    },
-    {
-      name: "Security",
-      description: "Understand how we take your privacy seriously.",
-      href: "#",
-      icon: ShieldCheckIcon,
-    },
-  ];
-
-  function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ");
-  }
 
   return (
     <Popover className="relative bg-white">
@@ -231,15 +195,6 @@ export default function Header() {
                 >
                   Docs
                 </a>
-                {resources.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="text-base font-medium text-gray-900 hover:text-gray-700"
-                  >
-                    {item.name}
-                  </a>
-                ))}
               </div>
               <div>
                 <a

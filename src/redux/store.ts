@@ -1,13 +1,16 @@
 import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
-import handleIsLogin from "./createSlice/handleIsLogin";
+import GetAccessToken from "./createSlice/GetAccessToken";
+import GetDataSlice, { changGetDataState } from "./createSlice/GetDataSlice";
+import IsLoginSlice from "./createSlice/IsLoginSlice";
+import handleIsLogin, { isLoginSlice } from "./createSlice/IsLoginSlice";
 
 export const store = configureStore({
   reducer: {
-    change: handleIsLogin,
+    changeIsLogin: IsLoginSlice,
+    getData: GetDataSlice,
+    getAccessToken: GetAccessToken,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
-
-// export const stateisLogin = (state: any) => state.cn.isLogin;
 
 export default store;
