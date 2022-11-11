@@ -1,21 +1,23 @@
 import axios, { AxiosInstance } from "axios";
+import cookie from "react-cookies";
 import { useDispatch, useSelector } from "react-redux";
 import router from "./components/router";
 import { changeState } from "./redux/createSlice/IsLoginSlice";
 import store, { RootState } from "./redux/store";
 
-const {
-  getAccessToken: { accessToken },
-} = store.getState();
+axios.defaults.withCredentials = true;
 
+let accessToken = cookie.load("accessToken");
+
+console.log(accessToken);
 const customAxios = axios.create({
   baseURL: "http://localhost:1234/",
-  // headers: {
-  //   Authorization: `Bearer ${accessToken}`,
-  // },
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    Authorization: `Bearer ${accessToken}`,
+  },
+  // headers: { "Content-Type": "application/json" },
   withCredentials: true,
-  timeout: 1000,
+  timeout: 10000,
 });
 
 console.log(accessToken);
@@ -37,6 +39,7 @@ customAxios.interceptors.request.use(
 
 customAxios.interceptors.response.use(
   function (response) {
+    console.log(response);
     if (
       // 번호값으로 체크, 문자열 체크는 버그가 발생할 , 코드번호부여
       response.data.message === "invalid refresh token, please log in again"
@@ -49,7 +52,7 @@ customAxios.interceptors.response.use(
   },
 
   function (error) {
-    console.log(error.response);
+    console.log(error);
     if (error.response.staus === 200) {
       console.log("성공");
     }

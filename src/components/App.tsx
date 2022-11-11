@@ -21,26 +21,17 @@ function App() {
 
   useEffect(() => {
     console.log(isLogin);
-    customAxios
-      .get("/refreshTokenRequest")
-      .then((res) => {
-        const { accessToken } = res.data;
-        customAxios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-        dispatch(changeAccessState(accessToken));
-        dispatch(changeState(true));
-        if (res.data.data === null) {
-          dispatch(changeState(false));
-        }
-        if (res.data.email) {
-          socket.emit("login", { email: res.data.email, socketID: socket.id });
-        }
-      })
-      .catch((error) => {
-        // 로그인 페이지로 이동
-        // ... 에러 처리
-      });
+    // customAxios
+    //   .get("/refreshTokenRequest")
+    //   .then((res) => {
+    //     if (res.data.email) {
+    //       socket.emit("login", { email: res.data.email, socketID: socket.id });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     // 로그인 페이지로 이동
+    //     // ... 에러 처리
+    //   });
   }, []);
   // const [isLogin, setIsLogin] = useState(true);
   return (
