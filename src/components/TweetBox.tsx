@@ -12,7 +12,7 @@ import React, {
 } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { DataProps, isLike, Like, Tweet } from "../routers/Tweets";
+import { DataProps, isLike, Like, Tweet } from "../routers/Home";
 import HeartButton from "./Heartbutton";
 import { socket, SocketContext, SOCKET_EVENT } from "../socketio";
 import customAxios from "../CommonAxios";
@@ -26,6 +26,7 @@ export interface likeButton {
 
 const TweetBox = ({ likeData }: { likeData: Array<isLike> }) => {
   const data = useSelector((state: RootState) => state.getData.currentPosts);
+  console.log(data);
   const id = useSelector((state: RootState) => state.getData.id);
   const dispatch = useDispatch();
   const naviagte = useNavigate();
@@ -39,7 +40,9 @@ const TweetBox = ({ likeData }: { likeData: Array<isLike> }) => {
         content: tweet,
         tag: saveTag,
       })
-      .then((res) => {});
+      .then((res) => {
+        console.log(res);
+      });
   };
 
   const [tweet, setTweet] = useState([]);
@@ -149,7 +152,7 @@ const TweetBox = ({ likeData }: { likeData: Array<isLike> }) => {
 
   return (
     <>
-      <form className="form">
+      <form className="form grow">
         <input
           className="text"
           placeholder="트윗 입력란"

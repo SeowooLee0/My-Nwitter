@@ -9,10 +9,11 @@ import {
 } from "react-router-dom";
 
 import Auth from "../routers/Auth";
-import Tweets from "../routers/Tweets";
+import Tweets from "../routers/Home";
 import Profile from "../routers/Profile";
 import Tag from "../routers/Tag";
 import axios from "axios";
+import Explore from "../routers/Explore";
 
 function AppRouter({ isLogin }: any) {
   return (
@@ -20,6 +21,7 @@ function AppRouter({ isLogin }: any) {
       {isLogin ? (
         <>
           <Route path="/" element={<Tweets />} />
+          <Route path="/explore" element={<Explore />} />
           <Route path="tag/:tagId" element={<Tag />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="tag" element={<Tag />} />

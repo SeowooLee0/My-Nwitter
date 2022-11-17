@@ -25,6 +25,7 @@ import {
   changeCurrentPosts,
   changGetDataState,
 } from "../redux/createSlice/GetDataSlice";
+import Sidebar from "../components/Sidebar";
 
 export interface DataProps {
   data: Array<Tweet>;
@@ -149,8 +150,15 @@ function Tweets() {
     <>
       <Header />
 
-      <TweetBox likeData={likeData}></TweetBox>
+      <div className="flex">
+        <Sidebar />
+        <div className=" flex-col">
+          <div className="text-3xl">Trend</div>
 
+          <TweetBox likeData={likeData}></TweetBox>
+        </div>
+        <Sidebar />
+      </div>
       <Pagination
         postsPerPage={getPostPerPage}
         totalPosts={getDataLength}
