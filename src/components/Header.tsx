@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
+import "./Header.scss";
 
 import {
   ArrowPathIcon,
@@ -38,52 +39,16 @@ export default function Header() {
     dispatch(changeState(false));
   };
 
-  const solutions = [
-    {
-      name: "Analytics",
-      description:
-        "Get a better understanding of where your traffic is coming from.",
-      href: "#",
-      icon: ChartBarIcon,
-    },
-    {
-      name: "Engagement",
-      description: "Speak directly to your customers in a more meaningful way.",
-      href: "#",
-      icon: CursorArrowRaysIcon,
-    },
-    {
-      name: "Security",
-      description: "Your customers' data will be safe and secure.",
-      href: "#",
-      icon: ShieldCheckIcon,
-    },
-    {
-      name: "Integrations",
-      description: "Connect with third-party tools that you're already using.",
-      href: "#",
-      icon: Squares2X2Icon,
-    },
-    {
-      name: "Automations",
-      description:
-        "Build strategic funnels that will drive your customers to convert",
-      href: "#",
-      icon: ArrowPathIcon,
-    },
-  ];
-
   return (
-    <Popover className="relative bg-white">
+    <Popover className="relative">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex items-center justify-between  py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
-            <a href="1">
-              <span className="sr-only">Workflow</span>
+            <a href="/">
               <img
                 className="h-8 w-auto sm:h-10"
                 src="/assets/twitter.png"
-                alt=""
+                alt="/"
               />
             </a>
           </div>
@@ -97,7 +62,7 @@ export default function Header() {
             as="nav"
             className="hidden space-x-10 md:flex"
           ></Popover.Group>
-          <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
+          <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0 logout">
             <button
               onClick={onLogout}
               className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
@@ -161,23 +126,7 @@ export default function Header() {
                 </div>
               </div>
               <div className="mt-6">
-                <nav className="grid gap-y-8">
-                  {solutions.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
-                    >
-                      <item.icon
-                        className="h-6 w-6 flex-shrink-0 text-indigo-600"
-                        aria-hidden="true"
-                      />
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        {item.name}
-                      </span>
-                    </a>
-                  ))}
-                </nav>
+                <nav className="grid gap-y-8"></nav>
               </div>
             </div>
             <div className="space-y-6 py-6 px-5">

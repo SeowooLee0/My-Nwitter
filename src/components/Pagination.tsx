@@ -11,8 +11,8 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }: any) => {
   }
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-      <div className="flex flex-1 justify-between">
+    <div className="flex justify-items-center border-t border-gray-200 bg-white  ">
+      <div className="flex flex-1 w-full justify-center ">
         <nav
           className="isolate inline-flex -space-x-px rounded-md shadow-sm"
           aria-label="Pagination"

@@ -6,16 +6,23 @@ import {
   Navigate,
   Route,
   Routes,
+  useNavigate,
 } from "react-router-dom";
 
 import Auth from "../routers/Auth";
-import Tweets from "../routers/Home";
+import Tweets from "../routers/Tweets";
 import Profile from "../routers/Profile";
 import Tag from "../routers/Tag";
 import axios from "axios";
 import Explore from "../routers/Explore";
+import { is } from "immer/dist/internal";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
-function AppRouter({ isLogin }: any) {
+function AppRouter() {
+  const isLogin = useSelector(
+    (state: RootState) => state.changeIsLogin.isLogin
+  );
   return (
     <Routes>
       {isLogin ? (
@@ -29,6 +36,10 @@ function AppRouter({ isLogin }: any) {
       ) : (
         <>
           <Route path="/" element={<Auth />} />
+          <Route path="/explore" element={<Navigate to={"/"} />} />
+          <Route path="tag/:tagId" element={<Navigate to={"/"} />} />
+          <Route path="/profile" element={<Navigate to={"/"} />} />
+          <Route path="tag" element={<Navigate to={"/"} />} />
         </>
       )}
     </Routes>

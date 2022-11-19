@@ -1,6 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import { Data, isLike, Like, Tweet } from "../../routers/Home";
+import { Data, isLike, Like, Tweet } from "../../routers/Tweets";
 
 interface getDataState {
   dataLength: number;

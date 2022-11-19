@@ -1,10 +1,10 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 interface isLoginState {
-  isLogin: boolean;
+  isLogin: any;
 }
 
-const initialState = { isLogin: false } as isLoginState;
+const initialState = { isLogin: " " } as isLoginState;
 export const isLoginSlice = createSlice({
   name: "setIsLogin",
   initialState,

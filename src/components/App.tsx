@@ -1,4 +1,5 @@
 import axios from "axios";
+// import "../components/App.scss";
 
 import React, { useCallback, useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -20,7 +21,6 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(isLogin);
     customAxios
       .get("/refreshTokenRequest")
       .then((res) => {
@@ -36,11 +36,11 @@ function App() {
   }, []);
   // const [isLogin, setIsLogin] = useState(true);
   return (
-    <>
+    <div>
       <SocketContext.Provider value={socket}>
-        <AppRouter isLogin={isLogin} />
+        <AppRouter />
       </SocketContext.Provider>
-    </>
+    </div>
   );
 }
 

@@ -87,6 +87,7 @@ function Auth() {
         </div>
 
         <input
+          className=" outline-none"
           {...register("email", {
             required: "이메일은 필수 값입니다.",
             pattern: {
@@ -106,6 +107,7 @@ function Auth() {
         </div>
         {/* <div>비밀번호</div> */}
         <input
+          className=" outline-none"
           {...register("password", {
             required: "비밀번호는 필수 값입니다.",
             minLength: {

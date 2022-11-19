@@ -1,6 +1,8 @@
 import axios, { AxiosInstance } from "axios";
+import { request } from "http";
 import cookie from "react-cookies";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import router from "./components/router";
 import { changeState } from "./redux/createSlice/IsLoginSlice";
 import store, { RootState } from "./redux/store";
@@ -9,7 +11,6 @@ axios.defaults.withCredentials = true;
 
 let accessToken = cookie.load("accessToken");
 
-console.log(accessToken);
 const customAxios = axios.create({
   baseURL: "http://localhost:1234/",
   headers: {
@@ -20,7 +21,6 @@ const customAxios = axios.create({
   timeout: 10000,
 });
 
-console.log(accessToken);
 const { dispatch } = store;
 
 customAxios.interceptors.request.use(
@@ -39,12 +39,12 @@ customAxios.interceptors.request.use(
 
 customAxios.interceptors.response.use(
   function (response) {
-    console.log(response);
     if (
       // 번호값으로 체크, 문자열 체크는 버그가 발생할 , 코드번호부여
       response.data.message === "invalid refresh token, please log in again"
     ) {
       alert("로그인이 만료되었습니다");
+      console.log("반응");
       dispatch(changeState(false));
     }
 
@@ -55,6 +55,10 @@ customAxios.interceptors.response.use(
     console.log(error);
     if (error.response.staus === 200) {
       console.log("성공");
+    }
+    if (error.response.staus === 500) {
+      const navigate = useNavigate();
+      navigate("/");
     }
     // if (error.data === "login again") {
     //   const dispatch = useDispatch();

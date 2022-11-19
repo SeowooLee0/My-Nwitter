@@ -15,7 +15,7 @@ import Paginations from "../components/Pagination";
 import Pagination from "../components/Pagination";
 import Header from "../components/Header";
 import TweetBox from "../components/TweetBox";
-import "./Tweets.scss";
+
 import CommentsList from "../components/commentList";
 import customAxios from "../CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,6 +26,10 @@ import {
   changGetDataState,
 } from "../redux/createSlice/GetDataSlice";
 import Sidebar from "../components/Sidebar";
+import { latest } from "immer/dist/internal";
+import Searchbar from "../components/Searchbar";
+import "./Tweets.scss";
+import SidebarRight from "../components/SidebarRight";
 
 export interface DataProps {
   data: Array<Tweet>;
@@ -120,9 +124,9 @@ function Tweets() {
       });
   }, []);
 
+  console.log(getCurrentPosts);
   useEffect(() => {
     socket.on("RECEIVE_MESSAGE", (data: any) => {
-      console.log(data);
       window.alert("새로운 코멘트가 추가되었습니다");
     });
 
@@ -137,6 +141,48 @@ function Tweets() {
   // const [data, setData] = useState<Tweet[]>([]);
 
   // const currentPost = data.slice(0, 10);
+  const [tweet, setTweet] = useState([]);
+  const [saveTag, setSaveTag] = useState("");
+  const saveTweets = async () => {
+    customAxios
+      .post("/saveTweets", {
+        content: tweet,
+        tag: saveTag,
+      })
+      .then((res) => {});
+  };
+
+  const onClick = (event: any) => {
+    saveTweets();
+    event.preventDefault();
+  };
+
+  const onChange = (event: any) => {
+    const { value } = event.target;
+
+    setTweet(value);
+    if (value.length >= 101) {
+      alert("글자수는 10자리로 제한되어있습니다");
+      const text = value.slice(0, 100);
+      setTweet(text);
+    }
+  };
+
+  const onTag = (event: any) => {
+    const { value } = event.target;
+    setSaveTag(value.match(/(#[^\s#]+)/g));
+  };
+
+  const onLogin = () => {
+    customAxios
+      .get("/refreshTokenRequest")
+      .then((res) => {
+        // if (res.data.data === null) {
+        //   alert("로그인이 만료되었습니다");
+        // }
+      })
+      .catch((err) => {});
+  };
 
   const [likeData, setLikeData] = useState<isLike[]>([]);
 
@@ -148,16 +194,44 @@ function Tweets() {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
 
       <div className="flex">
         <Sidebar />
-        <div className=" flex-col">
-          <div className="text-3xl">Trend</div>
-
-          <TweetBox likeData={likeData}></TweetBox>
+        <div className="middleBox flex-col grow">
+          <form>
+            <div className="tweetTop">
+              <div className="title">Home</div>
+              <div className="flex p-5 tweetWritingBox ">
+                <img
+                  className="w-8 h-8 pt-0 m-1"
+                  alt="#"
+                  src={"/assets/user(1).png"}
+                />
+                <div className="w-full">
+                  <input
+                    className="input"
+                    placeholder="What's happening?"
+                    value={tweet}
+                    onClick={onLogin}
+                    onChange={onChange}
+                  />
+                  <input
+                    className="input"
+                    placeholder="#태그"
+                    onClick={onLogin}
+                    onChange={onTag}
+                  />
+                  <div className="inputBtn">
+                    <button onClick={onClick}>업로드</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <TweetBox />
+          </form>
         </div>
-        <Sidebar />
+        <SidebarRight />
       </div>
       <Pagination
         postsPerPage={getPostPerPage}
