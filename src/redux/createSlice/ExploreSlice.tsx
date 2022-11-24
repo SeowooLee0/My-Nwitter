@@ -20,7 +20,7 @@ export const exploreSlice = createSlice({
   name: "setExploreData",
   initialState: initialState,
   reducers: {
-    changExploreState(state, action: PayloadAction<data>) {
+    changeExploreState(state, action: PayloadAction<data>) {
       state.top = action.payload.top;
       state.latest = action.payload.latest;
       state.people = action.payload.people;
@@ -29,7 +29,7 @@ export const exploreSlice = createSlice({
   },
 });
 
-export const { changExploreState } = exploreSlice.actions;
+export const { changeExploreState } = exploreSlice.actions;
 
 // export const { changeIsOpened } = getIsOpenedSlice.actions;
 

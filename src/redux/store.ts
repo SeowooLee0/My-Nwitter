@@ -1,7 +1,8 @@
 import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
-import ExploreSlice, { changExploreState } from "./createSlice/ExploreSlice";
+import ExploreSlice, { changeExploreState } from "./createSlice/ExploreSlice";
 import GetAccessToken from "./createSlice/GetAccessToken";
 import GetDataSlice, { changGetDataState } from "./createSlice/GetDataSlice";
+import PeopleDataSlice from "./createSlice/PeopleDataSlice";
 import IsLoginSlice from "./createSlice/IsLoginSlice";
 import handleIsLogin, { isLoginSlice } from "./createSlice/IsLoginSlice";
 import SearchSlice from "./createSlice/SearchSlice";
@@ -11,8 +12,9 @@ export const store = configureStore({
     changeIsLogin: IsLoginSlice,
     getData: GetDataSlice,
     getAccessToken: GetAccessToken,
-    changExploreState: ExploreSlice,
+    changeExploreState: ExploreSlice,
     changeSearchState: SearchSlice,
+    changePeopleState: PeopleDataSlice,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

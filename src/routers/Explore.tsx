@@ -27,9 +27,11 @@ import {
 } from "../redux/createSlice/GetDataSlice";
 import Sidebar from "../components/Sidebar";
 import "./Explore.scss";
+import "./People.scss";
 import { Like, Comment, Data } from "./Tweets";
-import { changExploreState } from "../redux/createSlice/ExploreSlice";
+import { changeExploreState } from "../redux/createSlice/ExploreSlice";
 import Searchbar from "../components/Searchbar";
+import { changePeopleState } from "../redux/createSlice/PeopleDataSlice";
 
 export interface ExploreData {
   id: string;
@@ -53,21 +55,23 @@ function Explore() {
   }, [socket]);
 
   const dispatch = useDispatch();
-  const isTop = useSelector((state: RootState) => state.changExploreState.top);
+  const isTop = useSelector((state: RootState) => state.changeExploreState.top);
   const isLatest = useSelector(
-    (state: RootState) => state.changExploreState.latest
+    (state: RootState) => state.changeExploreState.latest
   );
   const getCurrentPosts = useSelector(
     (state: RootState) => state.getData.currentPosts
   );
   const isPeople = useSelector(
-    (state: RootState) => state.changExploreState.people
+    (state: RootState) => state.changeExploreState.people
   );
 
   const search = useSelector(
     (state: RootState) => state.changeSearchState.search
   );
-  const getId = useSelector((state: RootState) => state.getData.id);
+  const peopleData = useSelector(
+    (state: RootState) => state.changePeopleState.userData
+  );
   // const getLikeData = useSelector((state: RootState) => state.getData.likeData);
 
   useEffect(() => {
@@ -79,7 +83,7 @@ function Explore() {
         dispatch(changeCurrentPosts(res.data.data));
       });
     dispatch(
-      changExploreState({
+      changeExploreState({
         top: true,
         latest: false,
         people: false,
@@ -106,7 +110,7 @@ function Explore() {
                 console.log(search === "");
                 customAxios
                   .get("/getTweets/top", {
-                    params: search === "" ? { search: "" } : { search },
+                    params: { search },
                   })
                   .then((res) => {
                     let data = res.data.data.sort(
@@ -115,7 +119,7 @@ function Explore() {
                     dispatch(changeCurrentPosts(data));
                   });
                 dispatch(
-                  changExploreState({
+                  changeExploreState({
                     top: true,
                     latest: false,
                     people: false,
@@ -141,7 +145,7 @@ function Explore() {
                     dispatch(changeCurrentPosts(res.data.data));
                   });
                 dispatch(
-                  changExploreState({
+                  changeExploreState({
                     top: false,
                     latest: true,
                     people: false,
@@ -161,13 +165,17 @@ function Explore() {
               onClick={() => {
                 customAxios
                   .get("/getTweets/people", {
-                    params: search === "" ? { search: "" } : { search },
+                    params: { search },
                   })
                   .then((res) => {
-                    console.log(res.data.data);
+                    dispatch(
+                      changePeopleState({
+                        userData: res.data.data,
+                      })
+                    );
                   });
                 dispatch(
-                  changExploreState({
+                  changeExploreState({
                     top: false,
                     latest: false,
                     people: true,
@@ -179,7 +187,30 @@ function Explore() {
               People
             </button>
           </div>
-          {isPeople ? <></> : <TweetBox />}
+          {isPeople ? (
+            <>
+              {peopleData.map((t: any, i: number) => {
+                return (
+                  <div className="peopleBox" key={t.user_id}>
+                    <img
+                      className="w-8 h-8 pt-0 m-1"
+                      alt="#"
+                      src={"/assets/user(1).png"}
+                    />
+
+                    <div className="info">
+                      <div className="userInfo">
+                        <p className="font-bold pt-1">{t.email}</p>
+                        {/* <div>{t.profile}</div> */}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          ) : (
+            <TweetBox />
+          )}
         </div>
 
         {/* <Sidebar /> */}

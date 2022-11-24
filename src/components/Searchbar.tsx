@@ -15,7 +15,7 @@ const Searchbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const focus = useSelector(
-    (state: RootState) => state.changExploreState.focus
+    (state: RootState) => state.changeExploreState.focus
   );
   const searchData = useSelector(
     (state: RootState) => state.changeSearchState.search
