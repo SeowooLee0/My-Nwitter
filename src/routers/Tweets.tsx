@@ -21,9 +21,12 @@ import customAxios from "../CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
+  addCurrentPosts,
   changeCurentPage,
   changeCurrentPosts,
+  changeIsLoaded,
   changGetDataState,
+  setPageCount,
 } from "../redux/createSlice/GetDataSlice";
 import Sidebar from "../components/Sidebar";
 import { latest } from "immer/dist/internal";
@@ -85,12 +88,14 @@ export interface Comment {
 }
 
 function Tweets() {
-  const getDataLength = useSelector(
-    (state: RootState) => state.getData.dataLength
+  const target = useRef<any>();
+  const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
+  const getTotalPosts = useSelector(
+    (state: RootState) => state.getData.totalPosts
   );
-  const getCurrentPosts = useSelector(
-    (state: RootState) => state.getData.currentPosts
-  );
+  const pageCount = useSelector((state: RootState) => state.getData.pageCount);
+  const page = useRef(pageCount);
+
   // const getLikeData = useSelector((state: RootState) => state.getData.likeData);
   const getCurrentPage = useSelector(
     (state: RootState) => state.getData.currentPage
@@ -98,33 +103,66 @@ function Tweets() {
   const getPostPerPage = useSelector(
     (state: RootState) => state.getData.postPerPage
   );
-  const getId = useSelector((state: RootState) => state.getData.id);
+  const getTotalPageNumber = useSelector(
+    (state: RootState) => state.getData.totalPageNumber
+  );
+  const postPerPage = useSelector(
+    (state: RootState) => state.getData.postPerPage
+  );
   const dispatch = useDispatch();
 
   const socket = useContext(SocketContext);
-  useEffect(() => {
-    customAxios.get("/getTweets/select").then((res) => {
-      dispatch(
-        changGetDataState({
-          dataLength: res.data.count,
-          currentPosts: res.data.data,
-          id: res.data.email,
-          currentPage: 1,
-          postPerPage: 10,
-        })
-      );
-    });
 
-    customAxios
-      .get("/getTweets/select", {
-        params: { getCurrentPage },
-      })
-      .then((result: any) => {
-        dispatch(changeCurrentPosts(result.data.data));
-      });
+  const handleObserver = useCallback(async ([entry], observer) => {
+    if (entry.isIntersecting) {
+      await dispatch(changeIsLoaded(true));
+      console.log("is InterSecting");
+
+      await dispatch(setPageCount((page.current += 1)));
+      dispatch(changeIsLoaded(false));
+
+      console.log(page.current);
+    }
   }, []);
 
-  console.log(getCurrentPosts);
+  useEffect(() => {
+    console.log(page.current);
+    customAxios
+      .get("/getTweets/select", { params: { currentPage: page.current } })
+      .then((res) => {
+        console.log(res.data);
+        dispatch(
+          changGetDataState({
+            id: res.data.email,
+            postPerPage: 10,
+            totalPosts: res.data.count,
+            totalPageNumber: res.data.totalPageNumber,
+          })
+        );
+        dispatch(addCurrentPosts(res.data.data));
+      });
+
+    // customAxios
+    //   .get("/getTweets/select", {
+    //     params: { getCurrentPage },
+    //   })
+    //   .then((result: any) => {
+    //     dispatch(changeCurrentPosts(result.data.data));
+    //   });
+  }, [pageCount, handleObserver, dispatch]);
+
+  const defaultOption = {
+    threshold: 1,
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      ...defaultOption,
+    });
+    observer.observe(target.current);
+    return () => observer && observer.disconnect();
+  }, [target, handleObserver]);
+
   useEffect(() => {
     socket.on("RECEIVE_MESSAGE", (data: any) => {
       window.alert("새로운 코멘트가 추가되었습니다");
@@ -151,6 +189,19 @@ function Tweets() {
       })
       .then((res) => {});
   };
+
+  // const callback = ([entries]: any) => {
+  //   if (entries.isIntersecting) {
+  //     console.log("fetch");
+  //     dispatch(setPageCount(page.current++));
+  //   }
+  // };
+  // const callback = ([entries]: any) => {
+  //   if (entries.isIntersecting) {
+  //     console.log("fetch");
+  //     dispatch(setPageCount(page.current++));
+  //   }
+  // };
 
   const onClick = (event: any) => {
     saveTweets();
@@ -183,8 +234,6 @@ function Tweets() {
       })
       .catch((err) => {});
   };
-
-  const [likeData, setLikeData] = useState<isLike[]>([]);
 
   function paginate(pageNum: number) {
     dispatch(changeCurentPage(pageNum));
@@ -233,11 +282,8 @@ function Tweets() {
         </div>
         <SidebarRight />
       </div>
-      <Pagination
-        postsPerPage={getPostPerPage}
-        totalPosts={getDataLength}
-        paginate={paginate}
-      />
+      <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
+      {/* <Pagination /> */}
     </>
   );
 }

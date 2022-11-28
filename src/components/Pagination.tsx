@@ -2,12 +2,24 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { changeCurentPage } from "../redux/createSlice/GetDataSlice";
+import { RootState } from "../redux/store";
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }: any) => {
+const Pagination = () => {
   const pageNumber = [];
-
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+  const dispatch = useDispatch();
+  const postPerPage = useSelector(
+    (state: RootState) => state.getData.postPerPage
+  );
+  const getTotalPosts = useSelector(
+    (state: RootState) => state.getData.totalPosts
+  );
+  console.log(getTotalPosts);
+  for (let i = 1; i <= Math.ceil(getTotalPosts / postPerPage); i++) {
     pageNumber.push(i);
+    console.log(pageNumber);
   }
 
   return (
@@ -31,7 +43,8 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }: any) => {
               className="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
               key={number}
               onClick={() => {
-                paginate(number);
+                console.log(number);
+                dispatch(changeCurentPage(number));
               }}
             >
               {number}

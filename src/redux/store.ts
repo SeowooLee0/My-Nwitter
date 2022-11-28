@@ -6,6 +6,7 @@ import PeopleDataSlice from "./createSlice/PeopleDataSlice";
 import IsLoginSlice from "./createSlice/IsLoginSlice";
 import handleIsLogin, { isLoginSlice } from "./createSlice/IsLoginSlice";
 import SearchSlice from "./createSlice/SearchSlice";
+import PageSlice from "./createSlice/PageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,8 @@ export const store = configureStore({
     changeExploreState: ExploreSlice,
     changeSearchState: SearchSlice,
     changePeopleState: PeopleDataSlice,
+    changePageState: PageSlice,
+    
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

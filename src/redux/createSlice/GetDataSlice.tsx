@@ -3,49 +3,54 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Data, isLike, Like, Tweet } from "../../routers/Tweets";
 
 interface getDataState {
-  dataLength: number;
   currentPosts: Array<Data>;
   id: string;
   currentPage: number;
   postPerPage: number;
+  totalPosts: number;
+  isLoaded: boolean;
+  pageCount: number;
+  totalPageNumber: number;
 }
 
 const initialState = {
-  dataLength: 0,
   currentPosts: [],
   id: "",
   currentPage: 1,
   postPerPage: 10,
+  totalPosts: 0,
+  isLoaded: false,
+  pageCount: 1,
+  totalPageNumber: 0,
 } as getDataState;
-
-const initialState2 = {
-  id: "",
-  email: "",
-  tweet_id: 0,
-  content: "",
-  tag: [],
-  write_date: "",
-  comment: [],
-  like: [],
-  is_opened: false,
-  user_id: 0,
-  is_like: [],
-} as Data;
 
 export const getDataSlice = createSlice({
   name: "setTweetData",
   initialState: initialState,
   reducers: {
-    changGetDataState(state, action: PayloadAction<getDataState>) {
-      state.dataLength = action.payload.dataLength;
-      state.currentPosts = action.payload.currentPosts;
+    changGetDataState(state, action: PayloadAction<any>) {
+      state.totalPosts = action.payload.totalPosts;
+      state.totalPageNumber = action.payload.totalPageNumber;
       state.id = action.payload.id;
     },
     changeCurrentPosts(state, action: PayloadAction<[]>) {
       state.currentPosts = action.payload;
     },
+    addCurrentPosts(state, action: PayloadAction<[]>) {
+      state.currentPosts.push(...action.payload);
+    },
     changeCurentPage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
+    },
+    setPageCount(state, action: PayloadAction<number>) {
+      state.pageCount = action.payload;
+    },
+
+    changeTotalPosts(state, action: PayloadAction<number>) {
+      state.totalPosts = action.payload;
+    },
+    changeIsLoaded(state, action: PayloadAction<boolean>) {
+      state.isLoaded = action.payload;
     },
     changeIsOpened(state, action: PayloadAction<boolean>) {
       state.currentPosts.map((t) => {
@@ -60,6 +65,10 @@ export const {
   changeCurentPage,
   changeCurrentPosts,
   changeIsOpened,
+  changeTotalPosts,
+  changeIsLoaded,
+  setPageCount,
+  addCurrentPosts,
 } = getDataSlice.actions;
 
 // export const { changeIsOpened } = getIsOpenedSlice.actions;

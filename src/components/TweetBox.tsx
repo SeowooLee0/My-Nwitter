@@ -177,7 +177,7 @@ const TweetBox = () => {
                         }}
                       />
                       <div className="font-light text-sm pl-2">
-                        {t.like.length}
+                        {t.like.length - 1}
                       </div>
                     </div>
                     <div className=" flex ">
@@ -186,8 +186,6 @@ const TweetBox = () => {
                         alt="#"
                         src={"/assets/messenger.png"}
                         onClick={(e: any) => {
-                          console.log(t.is_opened);
-
                           if (t.is_opened === false) {
                             // t.is_opened = !t.is_opened;
                             customAxios

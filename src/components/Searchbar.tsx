@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { changSearchState } from "../redux/createSlice/SearchSlice";
 import { useNavigate } from "react-router-dom";
+import { changePeopleState } from "../redux/createSlice/PeopleDataSlice";
 
 const Searchbar = () => {
   const [search, setSearch] = useState("");
@@ -27,14 +28,24 @@ const Searchbar = () => {
   };
 
   const onSearch = (event: any) => {
+
     dispatch(changSearchState(search));
     event.preventDefault();
+
     customAxios
       .get(`/getTweets/${focus}`, {
         params: { search },
       })
       .then((res) => {
-        dispatch(changeCurrentPosts(res.data.data));
+        if (focus === "people") {
+          dispatch(
+            changePeopleState({
+              userData: res.data.data,
+            })
+          );
+        } else {
+          dispatch(changeCurrentPosts(res.data.data));
+        }
       });
 
     navigate("/explore");

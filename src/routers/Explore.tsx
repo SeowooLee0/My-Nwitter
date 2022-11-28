@@ -23,6 +23,7 @@ import { RootState } from "../redux/store";
 import {
   changeCurentPage,
   changeCurrentPosts,
+  changeTotalPosts,
   changGetDataState,
 } from "../redux/createSlice/GetDataSlice";
 import Sidebar from "../components/Sidebar";
@@ -32,6 +33,7 @@ import { Like, Comment, Data } from "./Tweets";
 import { changeExploreState } from "../redux/createSlice/ExploreSlice";
 import Searchbar from "../components/Searchbar";
 import { changePeopleState } from "../redux/createSlice/PeopleDataSlice";
+import { current } from "@reduxjs/toolkit";
 
 export interface ExploreData {
   id: string;
@@ -49,13 +51,14 @@ function Explore() {
 
   useEffect(() => {
     socket.on("RECEIVE_MESSAGE", (data: any) => {
-      console.log(data);
       window.alert("새로운 코멘트가 추가되었습니다");
     });
   }, [socket]);
 
   const dispatch = useDispatch();
+  const data = useSelector((state: RootState) => state.getData.currentPosts);
   const isTop = useSelector((state: RootState) => state.changeExploreState.top);
+
   const isLatest = useSelector(
     (state: RootState) => state.changeExploreState.latest
   );
@@ -72,15 +75,25 @@ function Explore() {
   const peopleData = useSelector(
     (state: RootState) => state.changePeopleState.userData
   );
+
+  const focus = useSelector(
+    (state: RootState) => state.changeExploreState.focus
+  );
+
+  const currentPage = useSelector(
+    (state: RootState) => state.getData.currentPage
+  );
+
   // const getLikeData = useSelector((state: RootState) => state.getData.likeData);
 
   useEffect(() => {
     customAxios
       .get("/getTweets/top", {
-        params: { search },
+        params: { search, currentPage },
       })
       .then((res) => {
         dispatch(changeCurrentPosts(res.data.data));
+        dispatch(changeTotalPosts(res.data.count));
       });
     dispatch(
       changeExploreState({
@@ -91,6 +104,26 @@ function Explore() {
       })
     );
   }, []);
+
+  useEffect(() => {
+    customAxios
+      .get(`/getTweets/${focus}`, {
+        params: { search, currentPage },
+      })
+      .then((res) => {
+        dispatch(changeCurrentPosts(res.data.data));
+        dispatch(changeTotalPosts(res.data.count));
+      });
+    dispatch(
+      changeExploreState({
+        top: true,
+        latest: false,
+        people: false,
+        focus: "top",
+      })
+    );
+    console.log("전송");
+  }, [currentPage]);
 
   return (
     <>
@@ -107,16 +140,16 @@ function Explore() {
                 (isTop ? "border-solid border-b-4 border-blue-300" : "")
               }
               onClick={() => {
-                console.log(search === "");
                 customAxios
                   .get("/getTweets/top", {
-                    params: { search },
+                    params: { search, currentPage },
                   })
                   .then((res) => {
                     let data = res.data.data.sort(
                       (a: any, b: any) => b.like.length - a.like.length
                     );
                     dispatch(changeCurrentPosts(data));
+                    dispatch(changeTotalPosts(res.data.count));
                   });
                 dispatch(
                   changeExploreState({
@@ -136,14 +169,6 @@ function Explore() {
                 (isLatest ? "border-solid border-b-4 border-blue-300" : "")
               }
               onClick={() => {
-                customAxios
-                  .get("/getTweets/latest", {
-                    params: { search },
-                  })
-                  .then((res) => {
-                    console.log(res.data);
-                    dispatch(changeCurrentPosts(res.data.data));
-                  });
                 dispatch(
                   changeExploreState({
                     top: false,
@@ -152,7 +177,14 @@ function Explore() {
                     focus: "latest",
                   })
                 );
-                console.log(getCurrentPosts, isLatest);
+                customAxios
+                  .get("/getTweets/latest", {
+                    params: { search, currentPage },
+                  })
+                  .then((result) => {
+                    dispatch(changeCurrentPosts(result.data.data));
+                    dispatch(changeTotalPosts(result.data.count));
+                  });
               }}
             >
               Latest
@@ -165,7 +197,7 @@ function Explore() {
               onClick={() => {
                 customAxios
                   .get("/getTweets/people", {
-                    params: { search },
+                    params: { search, currentPage },
                   })
                   .then((res) => {
                     dispatch(
@@ -173,7 +205,9 @@ function Explore() {
                         userData: res.data.data,
                       })
                     );
+                    dispatch(changeTotalPosts(res.data.count));
                   });
+
                 dispatch(
                   changeExploreState({
                     top: false,
@@ -212,9 +246,8 @@ function Explore() {
             <TweetBox />
           )}
         </div>
-
-        {/* <Sidebar /> */}
       </div>
+      <Pagination />
     </>
   );
 }
