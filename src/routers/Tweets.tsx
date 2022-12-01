@@ -25,6 +25,7 @@ import {
   changeCurentPage,
   changeCurrentPosts,
   changeIsLoaded,
+  changeTotalPageNumberPosts,
   changGetDataState,
   setPageCount,
 } from "../redux/createSlice/GetDataSlice";
@@ -88,59 +89,39 @@ export interface Comment {
 }
 
 function Tweets() {
-  const target = useRef<any>();
+  const target = useRef<any>(null);
+
   const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
-  const getTotalPosts = useSelector(
-    (state: RootState) => state.getData.totalPosts
-  );
   const pageCount = useSelector((state: RootState) => state.getData.pageCount);
   const page = useRef(pageCount);
 
-  // const getLikeData = useSelector((state: RootState) => state.getData.likeData);
-  const getCurrentPage = useSelector(
-    (state: RootState) => state.getData.currentPage
-  );
-  const getPostPerPage = useSelector(
-    (state: RootState) => state.getData.postPerPage
-  );
   const getTotalPageNumber = useSelector(
     (state: RootState) => state.getData.totalPageNumber
   );
-  const postPerPage = useSelector(
-    (state: RootState) => state.getData.postPerPage
-  );
+
   const dispatch = useDispatch();
 
   const socket = useContext(SocketContext);
 
-  const handleObserver = useCallback(async ([entry], observer) => {
-    if (entry.isIntersecting) {
-      await dispatch(changeIsLoaded(true));
-      console.log("is InterSecting");
-
-      await dispatch(setPageCount((page.current += 1)));
-      dispatch(changeIsLoaded(false));
-
-      console.log(page.current);
-    }
-  }, []);
-
   useEffect(() => {
     console.log(page.current);
+    dispatch(changeIsLoaded(true));
     customAxios
       .get("/getTweets/select", { params: { currentPage: page.current } })
-      .then((res) => {
-        console.log(res.data);
-        dispatch(
+      .then(async (res) => {
+        await dispatch(changeTotalPageNumberPosts(res.data.totalPageNumber));
+        await dispatch(
           changGetDataState({
             id: res.data.email,
             postPerPage: 10,
             totalPosts: res.data.count,
-            totalPageNumber: res.data.totalPageNumber,
           })
         );
-        dispatch(addCurrentPosts(res.data.data));
+        console.log(getTotalPageNumber);
+        await dispatch(addCurrentPosts(res.data.data));
       });
+
+    dispatch(changeIsLoaded(false));
 
     // customAxios
     //   .get("/getTweets/select", {
@@ -149,19 +130,55 @@ function Tweets() {
     //   .then((result: any) => {
     //     dispatch(changeCurrentPosts(result.data.data));
     //   });
-  }, [pageCount, handleObserver, dispatch]);
+  }, [pageCount]);
 
   const defaultOption = {
     threshold: 1,
   };
 
+  // const handleObserver = useCallback(async (entry, observer) => {
+  //   if (entry[0].isIntersecting) {
+  //     await dispatch(changeIsLoaded(true));
+  //     console.log("is InterSecting");
+
+  //     await dispatch(setPageCount((page.current += 1)));
+  //     dispatch(changeIsLoaded(false));
+
+  //     console.log(page.current);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
-      ...defaultOption,
-    });
-    observer.observe(target.current);
-    return () => observer && observer.disconnect();
-  }, [target, handleObserver]);
+    console.log(getTotalPageNumber);
+    const observer = new IntersectionObserver(
+      async (entries) => {
+        if (entries[0].isIntersecting) {
+          console.log(getTotalPageNumber);
+
+          // if (getTotalPageNumber < page.current ) {
+          //   await console.log(getTotalPageNumber);
+          //   return;
+          // }
+
+          console.log("is InterSecting");
+          if (getTotalPageNumber <= page.current) {
+            await console.log(getTotalPageNumber);
+            return;
+          }
+          await dispatch(setPageCount((page.current += 1)));
+
+          console.log(page.current);
+        }
+      },
+      {
+        ...defaultOption,
+      }
+    );
+    if (target.current) observer.observe(target.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [getTotalPageNumber]);
 
   useEffect(() => {
     socket.on("RECEIVE_MESSAGE", (data: any) => {
@@ -189,19 +206,6 @@ function Tweets() {
       })
       .then((res) => {});
   };
-
-  // const callback = ([entries]: any) => {
-  //   if (entries.isIntersecting) {
-  //     console.log("fetch");
-  //     dispatch(setPageCount(page.current++));
-  //   }
-  // };
-  // const callback = ([entries]: any) => {
-  //   if (entries.isIntersecting) {
-  //     console.log("fetch");
-  //     dispatch(setPageCount(page.current++));
-  //   }
-  // };
 
   const onClick = (event: any) => {
     saveTweets();
@@ -283,7 +287,6 @@ function Tweets() {
         <SidebarRight />
       </div>
       <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
-      {/* <Pagination /> */}
     </>
   );
 }

@@ -13,7 +13,6 @@ const Sidebar = () => {
   };
   return (
     <div className=" sideBar h-5/5 ">
-
       <div>트위터</div>
       <button className="btn">
         <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/home.png"} />
@@ -26,7 +25,7 @@ const Sidebar = () => {
       </button>
       <button className="btn">
         <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/user.png"} />
-        <Link to={"/explore"}>Profile</Link>
+        <Link to={"/profile"}>Profile</Link>
       </button>
       <button className="btn">
         <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/email.png"} />

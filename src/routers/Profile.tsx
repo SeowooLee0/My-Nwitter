@@ -11,19 +11,19 @@ interface UserInfo {
 
 function Profile() {
   const [email, setEmail] = useState("");
-  useEffect(() => {
-    // axios({
-    //   method: "get",
-    //   url: "http://localhost:1234/getUsers",
-    // }).then((res) => {
-    //   setUserInfo(res.data.data.profile);
-    //   setEmail(res.data.email);
-    // });
-  });
-  //파일 미리볼 url을 저장해줄 state
   const [fileImage, setFileImage] = useState("");
   const [userInfo, setUserInfo] = useState("");
-
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "http://localhost:1234/getUsers",
+    }).then((res) => {
+      console.log(res.data.data.profile);
+      setUserInfo(res.data.data.profile);
+      setEmail(res.data.email);
+    });
+  });
+  //파일 미리볼 url을 저장해줄 state
   const onChange = (e: any) => {
     setFileImage(e.target.files[0]);
     console.log(e.target.files[0]);

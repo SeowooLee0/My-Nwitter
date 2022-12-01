@@ -30,11 +30,13 @@ export const getDataSlice = createSlice({
   reducers: {
     changGetDataState(state, action: PayloadAction<any>) {
       state.totalPosts = action.payload.totalPosts;
-      state.totalPageNumber = action.payload.totalPageNumber;
       state.id = action.payload.id;
     },
     changeCurrentPosts(state, action: PayloadAction<[]>) {
       state.currentPosts = action.payload;
+    },
+    changeTotalPageNumberPosts(state, action: PayloadAction<number>) {
+      state.totalPageNumber = action.payload;
     },
     addCurrentPosts(state, action: PayloadAction<[]>) {
       state.currentPosts.push(...action.payload);
@@ -69,6 +71,7 @@ export const {
   changeIsLoaded,
   setPageCount,
   addCurrentPosts,
+  changeTotalPageNumberPosts,
 } = getDataSlice.actions;
 
 // export const { changeIsOpened } = getIsOpenedSlice.actions;
