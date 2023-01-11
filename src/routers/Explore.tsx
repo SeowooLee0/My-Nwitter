@@ -131,13 +131,17 @@ function Explore() {
       <div className="flex h-auto">
         <Sidebar />
         <div className="grow">
-          {/* search bar */}
-          <Searchbar />
-          <div className=" font-serif w-full inline-block ">
+          <div className="p-5">
+            <Searchbar />
+          </div>
+
+          <div className=" font-serif w-full flex justify-around ">
             <button
               className={
-                " button w-1/3 p-3 hover:bg-slate-200 " +
-                (isTop ? "border-solid border-b-4 border-blue-300" : "")
+                " button w-20 p-3 ml-3 hover:bg-slate-200 " +
+                (isTop
+                  ? "border-solid border-b-4 border-blue-300"
+                  : " border-solid border-b-4 border-white")
               }
               onClick={() => {
                 customAxios
@@ -165,8 +169,10 @@ function Explore() {
             </button>
             <button
               className={
-                " button w-1/3 p-3 hover:bg-slate-200 " +
-                (isLatest ? "border-solid border-b-4 border-blue-300" : "")
+                " button w-20 p-3 ml-3 hover:bg-slate-200 " +
+                (isLatest
+                  ? "border-solid border-b-4 border-blue-300"
+                  : " border-solid border-b-4 border-white")
               }
               onClick={() => {
                 dispatch(
@@ -191,8 +197,10 @@ function Explore() {
             </button>
             <button
               className={
-                " button w-1/3 p-3 hover:bg-slate-200 " +
-                (isPeople ? "border-solid border-b-4 border-blue-300" : "")
+                " button w-20 p-3  ml-3 hover:bg-slate-200 " +
+                (isPeople
+                  ? "border-solid border-b-4 border-blue-300"
+                  : " border-solid border-b-4 border-white")
               }
               onClick={() => {
                 customAxios

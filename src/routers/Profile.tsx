@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Searchbar from "../components/Searchbar";
+import Sidebar from "../components/Sidebar";
+import SidebarRight from "../components/SidebarRight";
 
 interface UserInfo {
   email: string;
@@ -41,6 +44,7 @@ function Profile() {
 
     formData.append("profile_img", fileImage);
     formData.append("id", email);
+    console.log(formData);
     axios
       .post("http://localhost:1234/upload", formData, {
         headers: {
@@ -62,35 +66,37 @@ function Profile() {
   console.log(`http://localhost:1234/static/${userInfo}`);
 
   return (
-    <div>
-      <button>
-        <Link to={"/home"}>홈</Link>
-      </button>
-      <form>
-        <div>
-          <h1>프로필</h1>
-          {userInfo}
-          <div>
-            <img
-              alt={`http://localhost:1234/static/${userInfo}`}
-              src={`http://localhost:1234/static/${userInfo}`}
-            />
+    <>
+      <div className="flex">
+        <Sidebar />
+        <form className="w-3/5">
+          <div className=" ">
+            <h1>프로필</h1>
+
+            <div>
+              <img
+                className=" "
+                alt={`http://localhost:1234/static/${userInfo}`}
+                src={`http://localhost:1234/static/${userInfo}`}
+              />
+            </div>
+            <h3>사용자 아이디 {email}</h3>
+            <h2>이미지 업로드</h2>
           </div>
-          <h3>사용자 아이디 {email}</h3>
-          <h2>이미지 업로드</h2>
-        </div>
-        <input
-          name="profile_img"
-          type="file"
-          accept="image/*, jpeg"
-          onChange={onChange}
-          placeholder="업로드"
-        />
-        <button type="submit" onClick={onUpload}>
-          업로드
-        </button>
-      </form>
-    </div>
+          <input
+            name="profile_img"
+            type="file"
+            accept="image/*, jpeg"
+            onChange={onChange}
+            placeholder="업로드"
+          />
+          <button type="submit" onClick={onUpload}>
+            업로드
+          </button>
+        </form>
+        <SidebarRight />
+      </div>
+    </>
   );
 }
 

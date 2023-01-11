@@ -11,6 +11,7 @@ interface getDataState {
   isLoaded: boolean;
   pageCount: number;
   totalPageNumber: number;
+  uploadFile: string;
 }
 
 const initialState = {
@@ -22,6 +23,7 @@ const initialState = {
   isLoaded: false,
   pageCount: 1,
   totalPageNumber: 0,
+  uploadFile: "",
 } as getDataState;
 
 export const getDataSlice = createSlice({

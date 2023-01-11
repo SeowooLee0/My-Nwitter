@@ -1,48 +1,56 @@
 @font-face {
-  font-family: "jeju";
-  src: url("../fonts/EF_jejudoldam\(맥용_OTF\).otf");
-}
-
-@font-face {
-  font-family: "레코체";
-  src: url("../fonts//Recipekorea\ 레코체\ FONT.otf");
-}
-
-@font-face {
-    font-family: 'MapoFlowerIsland';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-  font-family: "이누체";
-  src: url("../fonts/RixInooAriDuri_Pro\ Regular.otf");
-}
-
-@font-face {
-  font-family: "bitbit";
-  src: url("//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff"),
-    url("//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2");
+  font-family: "MapoFlowerIsland";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
 
 .sideBar {
   font-family: "MapoFlowerIsland";
   font-size: 16px;
   align-items: flex-start;
-  padding: 3%;
+  padding: 2%;
   display: flex;
   width: 20%;
-
+  height: 100vh;
   flex-direction: column;
-  border: 1px solid rgba(242,242,242,1);
+  border: 1px solid rgba(242, 242, 242, 1);
+}
+
+.moreModal {
+  bottom: 0;
+  position: absolute;
+  padding: 20px;
+  width: 20vw;
+  height: 20vw;
+  border-radius: 10px;
+  background-color: white;
+  border: 3px solid whitesmoke;
+}
+
+.sideRightBar {
+  font-family: "MapoFlowerIsland";
+  font-size: 16px;
+  align-items: flex-start;
+  padding-top: 2%;
+  display: flex;
+  width: 20%;
+  height: 100vh;
+  flex-direction: column;
+  border: 1px solid rgba(242, 242, 242, 1);
 }
 
 .btn {
   display: flex;
-  padding: 20px;
+  position: relative;
+  height: 65px;
+  padding-top: 25px;
+  min-height: 40px;
 }
 
 .logout {
   font-family: "Vidaloka", serif;
   align-items: flex-end;
+  padding-top: 20px;
 }

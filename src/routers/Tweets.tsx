@@ -34,6 +34,7 @@ import { latest } from "immer/dist/internal";
 import Searchbar from "../components/Searchbar";
 import "./Tweets.scss";
 import SidebarRight from "../components/SidebarRight";
+import { save } from "react-cookies";
 
 export interface DataProps {
   data: Array<Tweet>;
@@ -48,6 +49,7 @@ export interface Tweet {
   write_date: string;
   comment: Array<Comment>;
   like: Array<Like>;
+  upload_file: string;
 }
 export interface Data {
   id: string;
@@ -56,6 +58,7 @@ export interface Data {
   content: string;
   tag: Array<string>;
   write_date: string;
+  upload_file: string;
   comment: Array<Comment>;
   like: Array<Like>;
   is_opened: boolean;
@@ -90,7 +93,7 @@ export interface Comment {
 
 function Tweets() {
   const target = useRef<any>(null);
-
+  const id = useSelector((state: RootState) => state.getData.id);
   const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
   const pageCount = useSelector((state: RootState) => state.getData.pageCount);
   const page = useRef(pageCount);
@@ -104,7 +107,6 @@ function Tweets() {
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    console.log(page.current);
     dispatch(changeIsLoaded(true));
     customAxios
       .get("/getTweets/select", { params: { currentPage: page.current } })
@@ -122,14 +124,6 @@ function Tweets() {
       });
 
     dispatch(changeIsLoaded(false));
-
-    // customAxios
-    //   .get("/getTweets/select", {
-    //     params: { getCurrentPage },
-    //   })
-    //   .then((result: any) => {
-    //     dispatch(changeCurrentPosts(result.data.data));
-    //   });
   }, [pageCount]);
 
   const defaultOption = {
@@ -152,14 +146,9 @@ function Tweets() {
     console.log(getTotalPageNumber);
     const observer = new IntersectionObserver(
       async (entries) => {
+        console.log(entries);
         if (entries[0].isIntersecting) {
           console.log(getTotalPageNumber);
-
-          // if (getTotalPageNumber < page.current ) {
-          //   await console.log(getTotalPageNumber);
-          //   return;
-          // }
-
           console.log("is InterSecting");
           if (getTotalPageNumber <= page.current) {
             await console.log(getTotalPageNumber);
@@ -174,11 +163,11 @@ function Tweets() {
         ...defaultOption,
       }
     );
-    if (target.current) observer.observe(target.current);
+    if (target) observer.observe(target.current);
     return () => {
       observer.disconnect();
     };
-  }, [getTotalPageNumber]);
+  }, [getTotalPageNumber, target]);
 
   useEffect(() => {
     socket.on("RECEIVE_MESSAGE", (data: any) => {
@@ -196,7 +185,7 @@ function Tweets() {
   // const [data, setData] = useState<Tweet[]>([]);
 
   // const currentPost = data.slice(0, 10);
-  const [tweet, setTweet] = useState([]);
+  const [tweet, setTweet] = useState("");
   const [saveTag, setSaveTag] = useState("");
   const saveTweets = async () => {
     customAxios
@@ -245,6 +234,37 @@ function Tweets() {
     //axios 요청 나눠서 들고오기
   }
 
+  const [file, setFile] = useState("");
+
+  const onFileChange = (e: any) => {
+    setFile(e.target.files[0]);
+    console.log(e.target.files[0]);
+  };
+
+  const onUpload = (e: any) => {
+    e.preventDefault();
+    const formData = new FormData();
+
+    formData.append("upload_file", file);
+    formData.append("id", id);
+    formData.append("tweet", tweet);
+    formData.append("tag", saveTag);
+
+    console.log(formData, tweet, saveTag);
+    axios
+      .post("http://localhost:1234/upload/tweets", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log({ res });
+      })
+      .catch((res) => {
+        console.log({ res });
+      });
+  };
+
   return (
     <>
       {/* <Header /> */}
@@ -264,6 +284,7 @@ function Tweets() {
                 <div className="w-full">
                   <input
                     className="input"
+                    name="tweet"
                     placeholder="What's happening?"
                     value={tweet}
                     onClick={onLogin}
@@ -271,12 +292,20 @@ function Tweets() {
                   />
                   <input
                     className="input"
+                    name="tag"
                     placeholder="#태그"
                     onClick={onLogin}
                     onChange={onTag}
                   />
+                  <input
+                    name="upload_file"
+                    type="file"
+                    accept="*"
+                    onChange={onFileChange}
+                    placeholder="업로드"
+                  />
                   <div className="inputBtn">
-                    <button onClick={onClick}>업로드</button>
+                    <button onClick={file ? onUpload : onClick}>업로드</button>
                   </div>
                 </div>
               </div>

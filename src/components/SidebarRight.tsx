@@ -13,8 +13,8 @@ const SidebarRight = () => {
     dispatch(changeState(false));
   };
   return (
-    <div className=" sideBarRight h-5/5 ">
-      <Searchbar />
+    <div className=" sideRightBar ">
+      <Searchbar  />
     </div>
   );
 };
