@@ -28,7 +28,7 @@ import {
 } from "../redux/createSlice/GetDataSlice";
 import Sidebar from "../components/Sidebar";
 import "./Explore.scss";
-import "./People.scss";
+
 import { Like, Comment, Data } from "./Tweets";
 import { changeExploreState } from "../redux/createSlice/ExploreSlice";
 import Searchbar from "../components/Searchbar";
@@ -234,17 +234,24 @@ function Explore() {
               {peopleData.map((t: any, i: number) => {
                 return (
                   <div className="peopleBox" key={t.user_id}>
-                    <img
-                      className="w-8 h-8 pt-0 m-1"
-                      alt="#"
-                      src={"/assets/user(1).png"}
-                    />
-
-                    <div className="info">
-                      <div className="userInfo">
-                        <p className="font-bold pt-1">{t.email}</p>
-                        {/* <div>{t.profile}</div> */}
+                    <div className="imgBox">
+                      <img
+                        className="profileImg rounded-full "
+                        alt={`http://localhost:1234/static/${t.profile}`}
+                        src={`http://localhost:1234/static/${t.profile}`}
+                      />
+                    </div>
+                    <div>
+                      <div className="peopleInfo ">
+                        <p className="font-bold pt-1">사용자</p>
+                        <p className="from-neutral-400 text-sm">{t.email}</p>
+                        <p className="from-neutral-400 text-sm">소개글</p>
                       </div>
+                    </div>
+                    <div className=" followBox">
+                      <button className="  bg-slate-900 text-cyan-50 font-semibold text-sm  rounded-full p-1 w-20">
+                        Follow
+                      </button>
                     </div>
                   </div>
                 );

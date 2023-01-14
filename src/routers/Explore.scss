@@ -1,1 +1,38 @@
+.profileImg {
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 100%;
+}
 
+.peopleBox {
+  width: 100%;
+  display: flex;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  align-items: center;
+}
+
+.imgBox {
+  min-width: 120px;
+  min-height: 70px;
+  padding-left: 30px;
+  padding-right: 10px;
+}
+
+.peopleInfo {
+  display: flex;
+  width: 300px;
+  flex-direction: column;
+}
+
+.followBox {
+  width: 100%;
+  display: flex;
+  justify-content: right;
+  padding-right: 30px;
+}
+
+.infoBox {
+  display: flex;
+}

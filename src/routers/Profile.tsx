@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Searchbar from "../components/Searchbar";
 import Sidebar from "../components/Sidebar";
 import SidebarRight from "../components/SidebarRight";
+import "./Profile.scss";
 
 interface UserInfo {
   email: string;
@@ -70,29 +71,79 @@ function Profile() {
       <div className="flex">
         <Sidebar />
         <form className="w-3/5">
-          <div className=" ">
-            <h1>프로필</h1>
-
-            <div>
+          <div className=" relative h-auto">
+            <img
+              className=" background "
+              alt={`http://localhost:1234/static/${userInfo}`}
+              src={`http://localhost:1234/static/${userInfo}`}
+            />
+            <div className="absolute">
               <img
-                className=" "
+                className="profile"
                 alt={`http://localhost:1234/static/${userInfo}`}
                 src={`http://localhost:1234/static/${userInfo}`}
               />
             </div>
-            <h3>사용자 아이디 {email}</h3>
-            <h2>이미지 업로드</h2>
           </div>
-          <input
-            name="profile_img"
-            type="file"
-            accept="image/*, jpeg"
-            onChange={onChange}
-            placeholder="업로드"
-          />
-          <button type="submit" onClick={onUpload}>
-            업로드
-          </button>
+          <div className=" pt-4">
+            <div className="edit">
+              <button className="editBtn">Edit profile</button>
+            </div>
+            <div className="pl-5 pt-10 text-xl   font-bold   ">사용자</div>
+            <div className="pl-5 text-neutral-500  ">{email}</div>
+
+            <div className="dateBox">
+              <div className="pt-0.5 pr-1">
+                <img className="dateIcon " alt="#" src={"/assets/user.png"} />
+              </div>
+              <div className="date text-neutral-500">Joined August 2022</div>
+            </div>
+
+            <div className="flex h-auto">
+              <div className="grow">
+                <div className="p-5"></div>
+
+                <div className=" font-semibold   w-full  text-center flex justify-around ">
+                  <button
+                    className={" button w-1/4 p-3  hover:bg-slate-200 "}
+                    onClick={() => {}}
+                  >
+                    Tweets
+                  </button>
+                  <button
+                    className={" button w-1/4 p-3  hover:bg-slate-200 "}
+                    onClick={() => {}}
+                  >
+                    Tweets & replies
+                  </button>
+                  <button
+                    className={" button w-1/4 p-3  hover:bg-slate-200 "}
+                    onClick={() => {}}
+                  >
+                    Media
+                  </button>
+                  <button
+                    className={" button w-1/4 p-3  hover:bg-slate-200 "}
+                    onClick={() => {}}
+                  >
+                    Likes
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* <div>
+              <input
+                name="profile_img"
+                type="file"
+                accept="image/*, jpeg"
+                onChange={onChange}
+                placeholder="업로드"
+              />
+              <button type="submit" onClick={onUpload}>
+                업로드
+              </button>
+            </div> */}
+          </div>
         </form>
         <SidebarRight />
       </div>

@@ -6,12 +6,34 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "NanumSquareNeo-Variable";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
 .sideBar {
-  font-family: "MapoFlowerIsland";
-  font-size: 16px;
+  font-family: Pretendard-Regular;
+  font-weight: bolder;
+  top: 0px;
+  font-size: 19px;
   align-items: flex-start;
-  padding: 2%;
+  padding-left: 4%;
+  padding-right: 4%;
+  padding-top: 2.5%;
+
   display: flex;
+  position: sticky;
   width: 20%;
   height: 100vh;
   flex-direction: column;
@@ -20,17 +42,21 @@
 
 .moreModal {
   bottom: 0;
+
   position: absolute;
   padding: 20px;
-  width: 20vw;
-  height: 20vw;
+  min-width: 20vw;
+
   border-radius: 10px;
   background-color: white;
   border: 3px solid whitesmoke;
+  box-shadow: 0 0 30px rgba(30, 30, 30, 0.185);
 }
 
 .sideRightBar {
   font-family: "MapoFlowerIsland";
+  position: sticky;
+  top: 0px;
   font-size: 16px;
   align-items: flex-start;
   padding-top: 2%;
@@ -44,9 +70,11 @@
 .btn {
   display: flex;
   position: relative;
-  height: 65px;
-  padding-top: 25px;
+
+  padding-top: 30px;
+  padding-bottom: 15px;
   min-height: 40px;
+  width: 100%;
 }
 
 .logout {

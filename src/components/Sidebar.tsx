@@ -14,21 +14,27 @@ const Sidebar = () => {
   };
 
   const [moreOpen, setMoreOpen] = useState(false);
+  const [view, setView] = useState(false);
   const onMore = () => {
     setMoreOpen((prev) => !prev);
-    console.log(onMore);
   };
 
   return (
     <div className=" sideBar h-5/5  ">
       <div>트위터</div>
       <button className="btn">
-        <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/home.png"} />
+        <div className="pt-1">
+          <img
+            className="w-5 h-5  mr-1"
+            alt="#"
+            src={"/assets/free-icon-home-1946436.png"}
+          />
+        </div>
         <Link to={"/"}>Home</Link>
       </button>
 
       <button className="btn">
-        <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/search.png"} />
+        <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/home.png"} />
         <Link to={"/explore"}>Explore</Link>
       </button>
       <button className="btn">
@@ -41,7 +47,47 @@ const Sidebar = () => {
       </button>
       <button className="btn relative" onClick={onMore}>
         {moreOpen ? (
-          <div className=" moreModal">Options</div>
+          <div className="moreModal">
+            <div className=" border-b-2">
+              <button className="btn  hover:bg-slate-100 rounded">
+                <img
+                  className="w-5 h-5 pt-0 mr-1"
+                  alt="#"
+                  src={"/assets/search.png"}
+                />
+                <Link to={"/explore"}>Topics</Link>
+              </button>
+              <button className="btn  hover:bg-slate-100 rounded ">
+                <img
+                  className="w-5 h-5 pt-0 mr-1"
+                  alt="#"
+                  src={"/assets/search.png"}
+                />
+                <Link to={"/explore"}>Twitter Circle</Link>
+              </button>
+            </div>
+            <button className="btn b-20  overflow-  hover:bg-slate-100 rounded  ">
+              <ul
+                onClick={() => {
+                  setView(!view);
+                }}
+              >
+                Creator Studio {view ? "⌃" : "⌄"}
+                {view && (
+                  <div className=" ">
+                    <li className="">마이페이지</li>
+                    <li>로그아웃</li>
+                  </div>
+                )}
+              </ul>
+            </button>
+            <button className="btn hover:bg-slate-100 rounded">
+              <Link to={"/explore"}>Professional Tools</Link>
+            </button>
+            <button className="btn hover:bg-slate-100 rounded">
+              <Link to={"/explore"}>Settings and Support</Link>
+            </button>
+          </div>
         ) : (
           <>
             <img

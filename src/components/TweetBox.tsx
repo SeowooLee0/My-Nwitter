@@ -113,7 +113,7 @@ const TweetBox = () => {
                   <p className="pt-2 pb-1">{t.content}</p>
                   <p className="pt-1 pb-1">
                     {t.tag === null
-                      ? ""
+                      ? "ddd"
                       : t.tag.map((tagId: any, i: any) => {
                           const tagName = tagId.replace(/#/g, "");
                           return (

@@ -269,7 +269,7 @@ function Tweets() {
     <>
       {/* <Header /> */}
 
-      <div className="flex">
+      <div className=" flex">
         <Sidebar />
         <div className="middleBox flex-col grow">
           <form>
