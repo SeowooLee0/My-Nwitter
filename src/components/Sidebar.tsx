@@ -16,7 +16,7 @@ const Sidebar = () => {
   const [moreOpen, setMoreOpen] = useState(false);
   const [view, setView] = useState(false);
   const onMore = () => {
-    setMoreOpen((prev) => !prev);
+    setMoreOpen(true);
   };
 
   return (
@@ -45,9 +45,18 @@ const Sidebar = () => {
         <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/email.png"} />
         <Link to={"/explore"}>Messeages</Link>
       </button>
-      <button className="btn relative" onClick={onMore}>
+      <button className="btn relative">
         {moreOpen ? (
           <div className="moreModal">
+            <button
+              onClick={() => {
+                setMoreOpen((prev) => !prev);
+                console.log(moreOpen);
+              }}
+              className=" text-end"
+            >
+              X
+            </button>
             <div className=" border-b-2">
               <button className="btn  hover:bg-slate-100 rounded">
                 <img
@@ -66,7 +75,7 @@ const Sidebar = () => {
                 <Link to={"/explore"}>Twitter Circle</Link>
               </button>
             </div>
-            <button className="btn b-20  overflow-  hover:bg-slate-100 rounded  ">
+            <button className="btn  hover:bg-slate-100 rounded  ">
               <ul
                 onClick={() => {
                   setView(!view);
@@ -90,16 +99,17 @@ const Sidebar = () => {
           </div>
         ) : (
           <>
-            <img
-              className="w-5 h-5 pt-0 mr-1"
-              alt="#"
-              src={"/assets/email.png"}
-            />
-            More
+            <div onClick={onMore} className="flex">
+              <img
+                className="w-5 h-5 pt-0 mr-1"
+                alt="#"
+                src={"/assets/email.png"}
+              />
+              More
+            </div>
           </>
         )}
       </button>
-
       <button onClick={onLogout} className=" logout hover:text-red-900">
         Logout
       </button>

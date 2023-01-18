@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { SocketContext, SOCKET_EVENT } from "../socketio";
 
 import React, {
@@ -35,6 +35,7 @@ import Searchbar from "../components/Searchbar";
 import "./Tweets.scss";
 import SidebarRight from "../components/SidebarRight";
 import { save } from "react-cookies";
+import { useQuery } from "react-query";
 
 export interface DataProps {
   data: Array<Tweet>;
@@ -106,8 +107,17 @@ function Tweets() {
 
   const socket = useContext(SocketContext);
 
+  function tweetSelectApi(): any {
+    return customAxios.get("/getTweets/select", {
+      params: { currentPage: page.current },
+    });
+  }
+
   useEffect(() => {
     dispatch(changeIsLoaded(true));
+
+    tweetSelectApi();
+
     customAxios
       .get("/getTweets/select", { params: { currentPage: page.current } })
       .then(async (res) => {
@@ -129,6 +139,16 @@ function Tweets() {
   const defaultOption = {
     threshold: 1,
   };
+
+  const { data, isLoading } = useQuery<any, any>("selectData", tweetSelectApi, {
+    select: (data) => data.data.data,
+  });
+
+  console.log(data[0]);
+  // const [data, isLoading] = useQuery<Tweet, any>(
+  //   ["selectData"],
+  //   tweetSelectApi
+  // );
 
   // const handleObserver = useCallback(async (entry, observer) => {
   //   if (entry[0].isIntersecting) {
@@ -315,7 +335,7 @@ function Tweets() {
         </div>
         <SidebarRight />
       </div>
-      <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
+      <div ref={target}>{isLoading && <p>Loading...</p>}</div>
     </>
   );
 }

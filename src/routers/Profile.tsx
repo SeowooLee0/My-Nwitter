@@ -77,9 +77,9 @@ function Profile() {
               alt={`http://localhost:1234/static/${userInfo}`}
               src={`http://localhost:1234/static/${userInfo}`}
             />
-            <div className="absolute">
+            <div className="relative">
               <img
-                className="profile"
+                className="profile absolute"
                 alt={`http://localhost:1234/static/${userInfo}`}
                 src={`http://localhost:1234/static/${userInfo}`}
               />

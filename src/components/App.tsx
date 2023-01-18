@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import AppRouter from "./router";
 import { useSelector, useDispatch } from "react-redux";
+import { QueryClientProvider, QueryClient } from "react-query";
 
 import { socket, SocketContext } from "../socketio";
 
@@ -19,6 +20,7 @@ function App() {
   );
 
   const dispatch = useDispatch();
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     customAxios
@@ -37,9 +39,11 @@ function App() {
   // const [isLogin, setIsLogin] = useState(true);
   return (
     <div>
-      <SocketContext.Provider value={socket}>
-        <AppRouter />
-      </SocketContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <SocketContext.Provider value={socket}>
+          <AppRouter />
+        </SocketContext.Provider>
+      </QueryClientProvider>
     </div>
   );
 }
