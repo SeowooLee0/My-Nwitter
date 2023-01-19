@@ -8,16 +8,15 @@ import {
   Routes,
   useNavigate,
 } from "react-router-dom";
-
-import Auth from "../routers/Auth";
-import Tweets from "../routers/Tweets";
-import Profile from "../routers/Profile";
-import Tag from "../routers/Tag";
+import Auth from "./pages/auth/Auth";
+import Tweets from "./pages/Tweets";
+import Profile from "./pages/Profile";
+import Tag from "./pages/Tag";
 import axios from "axios";
-import Explore from "../routers/Explore";
+import Explore from "./pages/Explore";
 import { is } from "immer/dist/internal";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "./redux/store";
 
 function AppRouter() {
   const isLogin = useSelector(

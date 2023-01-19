@@ -19,11 +19,11 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import CommentsList from "./commentList";
+import CommentsList from "../tweets/commentList";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeState } from "../redux/createSlice/IsLoginSlice";
-import { RootState } from "../redux/store";
+import { changeState } from "../../redux/createSlice/IsLoginSlice";
+import { RootState } from "../../redux/store";
 
 export default function Header() {
   const naviagte = useNavigate();

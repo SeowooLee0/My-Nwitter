@@ -10,14 +10,14 @@ import React, {
   useState,
 } from "react";
 import { Link } from "react-router-dom";
-import Components from "../components/component";
-import Paginations from "../components/Pagination";
-import Pagination from "../components/Pagination";
-import Header from "../components/Header";
-import TweetBox from "../components/TweetBox";
 
-import CommentsList from "../components/commentList";
-import customAxios from "../CommonAxios";
+import Paginations from "../components/layouts/Pagination";
+import Pagination from "../components/layouts/Pagination";
+import Header from "../components/layouts/Header";
+import TweetBox from "../components/tweets/TweetBox";
+
+import CommentsList from "../components/tweets/commentList";
+import customAxios from "../api/CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
@@ -29,11 +29,11 @@ import {
   changGetDataState,
   setPageCount,
 } from "../redux/createSlice/GetDataSlice";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/layouts/Sidebar";
 import { latest } from "immer/dist/internal";
-import Searchbar from "../components/Searchbar";
-import "./Tweets.scss";
-import SidebarRight from "../components/SidebarRight";
+import Searchbar from "../components/explore/Searchbar";
+import "../scss/pages/Tweets.scss";
+import SidebarRight from "../components/layouts/SidebarRight";
 import { save } from "react-cookies";
 import { useQuery } from "react-query";
 
@@ -92,7 +92,7 @@ export interface Comment {
   email: string;
 }
 
-function Tweets() {
+const Tweets = () => {
   const target = useRef<any>(null);
   const id = useSelector((state: RootState) => state.getData.id);
   const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
@@ -140,11 +140,11 @@ function Tweets() {
     threshold: 1,
   };
 
-  const { data, isLoading } = useQuery<any, any>("selectData", tweetSelectApi, {
-    select: (data) => data.data.data,
-  });
+  // const { data, isLoading } = useQuery<any, any>("selectData", tweetSelectApi, {
+  //   select: (data) => data.data.data,
+  // });
 
-  console.log(data[0]);
+  // console.log(data[0]);
   // const [data, isLoading] = useQuery<Tweet, any>(
   //   ["selectData"],
   //   tweetSelectApi
@@ -335,9 +335,9 @@ function Tweets() {
         </div>
         <SidebarRight />
       </div>
-      <div ref={target}>{isLoading && <p>Loading...</p>}</div>
+      <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
     </>
   );
-}
+};
 
 export default Tweets;

@@ -4,8 +4,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { changeCurentPage } from "../redux/createSlice/GetDataSlice";
-import { RootState } from "../redux/store";
+import { changeCurentPage } from "../../redux/createSlice/GetDataSlice";
+import { RootState } from "../../redux/store";
 
 const Pagination = () => {
   const pageNumber = [];

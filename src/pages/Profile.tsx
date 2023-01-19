@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import Searchbar from "../components/Searchbar";
-import Sidebar from "../components/Sidebar";
-import SidebarRight from "../components/SidebarRight";
-import "./Profile.scss";
+import Searchbar from "../components/explore/Searchbar";
+import Sidebar from "../components/layouts/Sidebar";
+import SidebarRight from "../components/layouts/SidebarRight";
+import "../scss/pages/Profile.scss";
 
 interface UserInfo {
   email: string;
@@ -13,7 +13,7 @@ interface UserInfo {
   profile: string;
 }
 
-function Profile() {
+const Profile = () => {
   const [email, setEmail] = useState("");
   const [fileImage, setFileImage] = useState("");
   const [userInfo, setUserInfo] = useState("");
@@ -149,6 +149,6 @@ function Profile() {
       </div>
     </>
   );
-}
+};
 
 export default Profile;

@@ -1,15 +1,15 @@
-import customAxios from "../CommonAxios";
+import customAxios from "../../api/CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../../redux/store";
 import {
   changeCurentPage,
   changeCurrentPosts,
   changGetDataState,
-} from "../redux/createSlice/GetDataSlice";
+} from "../../redux/createSlice/GetDataSlice";
 import { useState } from "react";
-import { changSearchState } from "../redux/createSlice/SearchSlice";
+import { changSearchState } from "../../redux/createSlice/SearchSlice";
 import { useNavigate } from "react-router-dom";
-import { changePeopleState } from "../redux/createSlice/PeopleDataSlice";
+import { changePeopleState } from "../../redux/createSlice/PeopleDataSlice";
 
 const Searchbar = () => {
   const [search, setSearch] = useState("");

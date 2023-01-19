@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import customAxios from "../CommonAxios";
-import { changeState } from "../redux/createSlice/IsLoginSlice";
-import Searchbar from "./Searchbar";
-import "./Sidebar.scss";
+import customAxios from "../../api/CommonAxios";
+import { changeState } from "../../redux/createSlice/IsLoginSlice";
+import Searchbar from "../explore/Searchbar";
+import "../../scss/components/Sidebar.scss";
 
 const SidebarRight = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ const SidebarRight = () => {
   };
   return (
     <div className=" sideRightBar ">
-      <Searchbar  />
+      <Searchbar />
     </div>
   );
 };

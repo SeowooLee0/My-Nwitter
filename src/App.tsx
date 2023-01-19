@@ -7,14 +7,14 @@ import AppRouter from "./router";
 import { useSelector, useDispatch } from "react-redux";
 import { QueryClientProvider, QueryClient } from "react-query";
 
-import { socket, SocketContext } from "../socketio";
+import { socket, SocketContext } from "./socketio";
 
-import store, { RootState } from "../redux/store";
-import { changeState } from "../redux/createSlice/IsLoginSlice";
-import customAxios from "../CommonAxios";
-import { changeAccessState } from "../redux/createSlice/GetAccessToken";
+import store, { RootState } from "./redux/store";
+import { changeState } from "./redux/createSlice/IsLoginSlice";
+import customAxios from "./api/CommonAxios";
+import { changeAccessState } from "./redux/createSlice/GetAccessToken";
 
-function App() {
+const App = () => {
   const isLogin = useSelector(
     (state: RootState) => state.changeIsLogin.isLogin
   );
@@ -46,6 +46,6 @@ function App() {
       </QueryClientProvider>
     </div>
   );
-}
+};
 
 export default App;

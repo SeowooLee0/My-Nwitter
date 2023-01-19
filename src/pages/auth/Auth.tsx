@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { socket } from "../socketio";
+import { socket } from "../../socketio";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { changeState } from "../redux/createSlice/IsLoginSlice";
-import customAxios from "../CommonAxios";
-import { changeAccessState } from "../redux/createSlice/GetAccessToken";
+import { RootState } from "../../redux/store";
+import { changeState } from "../../redux/createSlice/IsLoginSlice";
+import customAxios from "../../api/CommonAxios";
+import { changeAccessState } from "../../redux/createSlice/GetAccessToken";
 
-function Auth() {
+const Auth = () => {
   const naviagte = useNavigate();
   const {
     register,
@@ -137,6 +137,6 @@ function Auth() {
       </form>
     </div>
   );
-}
+};
 
 export default Auth;

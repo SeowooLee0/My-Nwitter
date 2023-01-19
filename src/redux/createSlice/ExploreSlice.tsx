@@ -1,6 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import { ExploreData } from "../../routers/Explore";
+import { ExploreData } from "../../pages/Explore";
 
 interface data {
   top: boolean;

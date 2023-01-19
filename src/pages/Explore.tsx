@@ -10,14 +10,13 @@ import React, {
   useState,
 } from "react";
 import { Link } from "react-router-dom";
-import Components from "../components/component";
-import Paginations from "../components/Pagination";
-import Pagination from "../components/Pagination";
-import Header from "../components/Header";
-import TweetBox from "../components/TweetBox";
+import Paginations from "../components/layouts/Pagination";
+import Pagination from "../components/layouts/Pagination";
+import Header from "../components/layouts/Header";
+import TweetBox from "../components/tweets/TweetBox";
 
-import CommentsList from "../components/commentList";
-import customAxios from "../CommonAxios";
+import CommentsList from "../components/tweets/commentList";
+import customAxios from "../api/CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
@@ -26,12 +25,12 @@ import {
   changeTotalPosts,
   changGetDataState,
 } from "../redux/createSlice/GetDataSlice";
-import Sidebar from "../components/Sidebar";
-import "./Explore.scss";
+import Sidebar from "../components/layouts/Sidebar";
+import "../scss/pages/Explore.scss";
 
 import { Like, Comment, Data } from "./Tweets";
 import { changeExploreState } from "../redux/createSlice/ExploreSlice";
-import Searchbar from "../components/Searchbar";
+import Searchbar from "../components/explore/Searchbar";
 import { changePeopleState } from "../redux/createSlice/PeopleDataSlice";
 import { current } from "@reduxjs/toolkit";
 
@@ -46,7 +45,7 @@ export interface ExploreData {
   write_date: string;
 }
 
-function Explore() {
+const Explore = () => {
   const socket = useContext(SocketContext);
 
   useEffect(() => {
@@ -265,6 +264,6 @@ function Explore() {
       <Pagination />
     </>
   );
-}
+};
 
 export default Explore;

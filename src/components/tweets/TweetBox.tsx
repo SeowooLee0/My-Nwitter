@@ -3,17 +3,17 @@ import axios from "axios";
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import "../routers/TweetBox.scss";
+import "../../scss/components/TweetBox.scss";
 import HeartButton from "./Heartbutton";
-import { socket, SocketContext, SOCKET_EVENT } from "../socketio";
-import customAxios from "../CommonAxios";
+import { socket, SocketContext, SOCKET_EVENT } from "../../socketio";
+import customAxios from "../../api/CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../../redux/store";
 import {
   changeCurrentPosts,
   changeIsOpened,
-} from "../redux/createSlice/GetDataSlice";
-import Searchbar from "./Searchbar";
+} from "../../redux/createSlice/GetDataSlice";
+import Searchbar from "../explore/Searchbar";
 export interface likeButton {
   tweet_id: number;
   likes: boolean;

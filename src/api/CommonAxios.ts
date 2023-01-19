@@ -3,9 +3,9 @@ import { request } from "http";
 import cookie from "react-cookies";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import router from "./components/router";
-import { changeState } from "./redux/createSlice/IsLoginSlice";
-import store, { RootState } from "./redux/store";
+import router from "../router";
+import { changeState } from "../redux/createSlice/IsLoginSlice";
+import store, { RootState } from "../redux/store";
 
 axios.defaults.withCredentials = true;
 

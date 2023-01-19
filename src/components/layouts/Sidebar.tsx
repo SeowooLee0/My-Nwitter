@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import customAxios from "../CommonAxios";
-import { changeState } from "../redux/createSlice/IsLoginSlice";
-import "./Sidebar.scss";
+import customAxios from "../../api/CommonAxios";
+import { changeState } from "../../redux/createSlice/IsLoginSlice";
+import "../../scss/components/Sidebar.scss";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
