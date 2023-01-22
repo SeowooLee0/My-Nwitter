@@ -64,7 +64,8 @@ const Profile = () => {
   //   URL.revokeObjectURL(fileImage);
   //   setFileImage("");
   // };
-  console.log(`http://localhost:1234/static/${userInfo}`);
+
+  console.log(userInfo);
 
   return (
     <>
@@ -74,14 +75,30 @@ const Profile = () => {
           <div className=" relative h-auto">
             <img
               className=" background "
-              alt={`http://localhost:1234/static/${userInfo}`}
-              src={`http://localhost:1234/static/${userInfo}`}
+              alt={
+                userInfo === null
+                  ? `/assets/회색.png`
+                  : `http://localhost:1234/static/${userInfo}`
+              }
+              src={
+                userInfo === null
+                  ? `/assets/회색.png`
+                  : `http://localhost:1234/static/${userInfo}`
+              }
             />
             <div className="relative">
               <img
                 className="profile absolute"
-                alt={`http://localhost:1234/static/${userInfo}`}
-                src={`http://localhost:1234/static/${userInfo}`}
+                alt={
+                  userInfo === null
+                    ? `/assets/회색.png`
+                    : `http://localhost:1234/static/${userInfo}`
+                }
+                src={
+                  userInfo === null
+                    ? `/assets/회색.png`
+                    : `http://localhost:1234/static/${userInfo}`
+                }
               />
             </div>
           </div>
@@ -131,7 +148,7 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            {/* <div>
+            <div>
               <input
                 name="profile_img"
                 type="file"
@@ -142,7 +159,7 @@ const Profile = () => {
               <button type="submit" onClick={onUpload}>
                 업로드
               </button>
-            </div> */}
+            </div>
           </div>
         </form>
         <SidebarRight />
