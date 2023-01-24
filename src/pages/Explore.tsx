@@ -121,7 +121,6 @@ const Explore = () => {
         focus: "top",
       })
     );
-    console.log("전송");
   }, [currentPage]);
 
   return (
@@ -248,8 +247,60 @@ const Explore = () => {
                       </div>
                     </div>
                     <div className=" followBox">
-                      <button className="  bg-slate-900 text-cyan-50 font-semibold text-sm  rounded-full p-1 w-20">
-                        Follow
+                      <button
+                        className=""
+                        key={t.user_id}
+                        onClick={() => {
+                          t.following
+                            ? customAxios
+                                .post("/saveFollow/delete", {
+                                  user_id: t.user_id,
+                                })
+                                .then(() => {
+                                  customAxios
+                                    .get("/getTweets/people", {
+                                      params: { search, currentPage },
+                                    })
+                                    .then((res) => {
+                                      dispatch(
+                                        changePeopleState({
+                                          userData: res.data.data,
+                                        })
+                                      );
+                                    });
+                                })
+                            : customAxios
+                                .post("/saveFollow", {
+                                  user_id: t.user_id,
+                                })
+                                .then(() => {
+                                  customAxios
+                                    .get("/getTweets/people", {
+                                      params: { search, currentPage },
+                                    })
+                                    .then((res) => {
+                                      dispatch(
+                                        changePeopleState({
+                                          userData: res.data.data,
+                                        })
+                                      );
+                                    });
+                                });
+                        }}
+                      >
+                        {t.following ? (
+                          <div className=" ">
+                            <span className="follow hover:bg-slate-800 ">
+                              Following
+                            </span>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="following">
+                              <span className="follow">Follow</span>
+                            </div>
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>

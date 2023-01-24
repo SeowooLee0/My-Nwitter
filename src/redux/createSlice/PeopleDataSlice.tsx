@@ -6,6 +6,7 @@ interface userData {
   password: string;
   profile: string;
   user_id: number;
+  following: boolean;
 }
 interface peopleState {
   userData: Array<userData>;

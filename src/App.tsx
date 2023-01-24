@@ -20,7 +20,7 @@ const App = () => {
   );
 
   const dispatch = useDispatch();
-  const queryClient = new QueryClient();
+ 
 
   useEffect(() => {
     customAxios
@@ -39,11 +39,9 @@ const App = () => {
   // const [isLogin, setIsLogin] = useState(true);
   return (
     <div>
-      <QueryClientProvider client={queryClient}>
-        <SocketContext.Provider value={socket}>
-          <AppRouter />
-        </SocketContext.Provider>
-      </QueryClientProvider>
+      <SocketContext.Provider value={socket}>
+        <AppRouter />
+      </SocketContext.Provider>
     </div>
   );
 };

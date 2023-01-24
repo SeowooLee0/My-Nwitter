@@ -13,12 +13,16 @@ import store from "./redux/store";
 axios.defaults.baseURL = "http://localhost:1234";
 axios.defaults.withCredentials = true;
 
+const queryClient = new QueryClient();
+
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </QueryClientProvider>
     </React.StrictMode>
   </BrowserRouter>,
   document.getElementById("root")
