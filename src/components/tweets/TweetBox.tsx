@@ -1,7 +1,7 @@
 import { type } from "@testing-library/user-event/dist/type";
 import axios from "axios";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import "../../scss/components/TweetBox.scss";
 import HeartButton from "./Heartbutton";
@@ -14,23 +14,31 @@ import {
   changeIsOpened,
 } from "../../redux/createSlice/GetDataSlice";
 import Searchbar from "../explore/Searchbar";
+import { QueryClient, useQuery, useQueryClient } from "react-query";
 export interface likeButton {
   tweet_id: number;
   likes: boolean;
 }
 
 const TweetBox = () => {
-  const data = useSelector((state: RootState) => state.getData.currentPosts);
 
+
+
+
+  const data1 = useSelector((state: RootState) => state.getData.currentPosts);
   const id = useSelector((state: RootState) => state.getData.id);
+  const getCurrentPage = useSelector(
+    (state: RootState) => state.getData.currentPage
+  );
+
+  // console.log(tweetData);
+
   const dispatch = useDispatch();
 
   const [getComments, setGetComments] = useState([]);
   const [comment, setComment] = useState("");
   const [tweetId, setTweetId] = useState("");
-
   const [check, setCheck] = useState(false);
-  // const checkData = data.filter((data: Tweet) => data.email === id);
 
   const onComment = (event: any) => {
     setComment(event.target.value);
@@ -66,17 +74,6 @@ const TweetBox = () => {
     setTweetId(e.target.id);
   };
 
-  // const onHeartButton = (e: any) => {
-  //   console.log(
-  //     data.find((d: any) => {
-  //       return (d.tweet_id = e.target.id);
-  //     })
-  //   );
-  // };
-  const getCurrentPage = useSelector(
-    (state: RootState) => state.getData.currentPage
-  );
-
   const viewComments = (e: any) => {
     customAxios
       .post("/getComments", {
@@ -87,7 +84,9 @@ const TweetBox = () => {
       });
   };
 
-  const checkData = data.filter((data: { email: string }) => data.email === id);
+  const checkData = data1.filter(
+    (data: { email: string }) => data.email === id
+  );
   // console.log(like);
 
   return (
@@ -95,7 +94,7 @@ const TweetBox = () => {
       {/* <input type="checkbox" value={id} onChange={onCheck} /> */}
 
       <div className="tweetBox">
-        {(check ? checkData : data).map((t: any, i: number) => {
+        {(check ? checkData : data1).map((t: any, i: number) => {
           return (
             <>
               <div className="tweet" key={t.tweet_id} id={`${t.tweet_id}`}>

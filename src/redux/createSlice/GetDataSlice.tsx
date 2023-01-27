@@ -21,7 +21,7 @@ const initialState = {
   postPerPage: 10,
   totalPosts: 0,
   isLoaded: false,
-  pageCount: 1,
+  pageCount: 0,
   totalPageNumber: 0,
   uploadFile: "",
 } as getDataState;

@@ -30,12 +30,12 @@ import {
   setPageCount,
 } from "../redux/createSlice/GetDataSlice";
 import Sidebar from "../components/layouts/Sidebar";
-import { latest } from "immer/dist/internal";
+import { current, latest } from "immer/dist/internal";
 import Searchbar from "../components/explore/Searchbar";
 import "../scss/pages/Tweets.scss";
 import SidebarRight from "../components/layouts/SidebarRight";
 import { save } from "react-cookies";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 export interface DataProps {
   data: Array<Tweet>;
@@ -98,6 +98,7 @@ const Tweets = () => {
   const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
   const pageCount = useSelector((state: RootState) => state.getData.pageCount);
   const page = useRef(pageCount);
+  const queryClient = useQueryClient();
 
   const getTotalPageNumber = useSelector(
     (state: RootState) => state.getData.totalPageNumber
@@ -107,83 +108,42 @@ const Tweets = () => {
 
   const socket = useContext(SocketContext);
 
-  function tweetSelectApi(): any {
+  function tweetSelectApi() {
     return customAxios.get("/getTweets/select", {
-      params: { currentPage: page.current },
+      params: { pageCount },
     });
   }
 
-  useEffect(() => {
-    dispatch(changeIsLoaded(true));
-
-    tweetSelectApi();
-
-    customAxios
-      .get("/getTweets/select", { params: { currentPage: page.current } })
-      .then(async (res) => {
-        await dispatch(changeTotalPageNumberPosts(res.data.totalPageNumber));
-        await dispatch(
-          changGetDataState({
-            id: res.data.email,
-            postPerPage: 10,
-            totalPosts: res.data.count,
-          })
-        );
-        console.log(getTotalPageNumber);
-        await dispatch(addCurrentPosts(res.data.data));
-      });
-
-    dispatch(changeIsLoaded(false));
-  }, [pageCount]);
-
-  const defaultOption = {
-    threshold: 1,
-  };
-
-  // const { data, isLoading } = useQuery<any, any>("selectData", tweetSelectApi, {
-  //   select: (data) => data.data.data,
-  // });
-
-  // console.log(data[0]);
-  // const [data, isLoading] = useQuery<Tweet, any>(
-  //   ["selectData"],
-  //   tweetSelectApi
-  // );
-
-  // const handleObserver = useCallback(async (entry, observer) => {
-  //   if (entry[0].isIntersecting) {
-  //     await dispatch(changeIsLoaded(true));
-  //     console.log("is InterSecting");
-
-  //     await dispatch(setPageCount((page.current += 1)));
-  //     dispatch(changeIsLoaded(false));
-
-  //     console.log(page.current);
-  //   }
-  // }, []);
+  const { data } = useQuery(["select", pageCount], tweetSelectApi, {
+    refetchOnWindowFocus: false,
+    onSuccess: (res: any) => {
+      console.log(res.data.data);
+      dispatch(addCurrentPosts(res.data.data));
+    },
+  });
 
   useEffect(() => {
     console.log(getTotalPageNumber);
     const observer = new IntersectionObserver(
       async (entries) => {
         console.log(entries);
-        if (entries[0].isIntersecting) {
-          console.log(getTotalPageNumber);
-          console.log("is InterSecting");
-          if (getTotalPageNumber <= page.current) {
-            await console.log(getTotalPageNumber);
-            return;
-          }
-          await dispatch(setPageCount((page.current += 1)));
 
+        if (entries[0].isIntersecting) {
+          console.log("is InterSecting");
+          dispatch(setPageCount((page.current += 1)));
+
+          queryClient.invalidateQueries(["select"]);
+          if (getTotalPageNumber > page.current) {
+          }
           console.log(page.current);
         }
       },
       {
-        ...defaultOption,
+        threshold: 1,
       }
     );
     if (target) observer.observe(target.current);
+
     return () => {
       observer.disconnect();
     };
@@ -247,12 +207,6 @@ const Tweets = () => {
       })
       .catch((err) => {});
   };
-
-  function paginate(pageNum: number) {
-    dispatch(changeCurentPage(pageNum));
-
-    //axios 요청 나눠서 들고오기
-  }
 
   const [file, setFile] = useState("");
 

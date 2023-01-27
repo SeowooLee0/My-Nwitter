@@ -33,6 +33,7 @@ import { changeExploreState } from "../redux/createSlice/ExploreSlice";
 import Searchbar from "../components/explore/Searchbar";
 import { changePeopleState } from "../redux/createSlice/PeopleDataSlice";
 import { current } from "@reduxjs/toolkit";
+import { useQuery } from "react-query";
 
 export interface ExploreData {
   id: string;
@@ -55,7 +56,7 @@ const Explore = () => {
   }, [socket]);
 
   const dispatch = useDispatch();
-  const data = useSelector((state: RootState) => state.getData.currentPosts);
+  // const data = useSelector((state: RootState) => state.getData.currentPosts);
   const isTop = useSelector((state: RootState) => state.changeExploreState.top);
 
   const isLatest = useSelector(
@@ -82,46 +83,43 @@ const Explore = () => {
   const currentPage = useSelector(
     (state: RootState) => state.getData.currentPage
   );
+  const pageCount = useSelector((state: RootState) => state.getData.pageCount);
 
   // const getLikeData = useSelector((state: RootState) => state.getData.likeData);
 
-  useEffect(() => {
-    customAxios
-      .get("/getTweets/top", {
-        params: { search, currentPage },
-      })
-      .then((res) => {
-        dispatch(changeCurrentPosts(res.data.data));
-        dispatch(changeTotalPosts(res.data.count));
-      });
-    dispatch(
-      changeExploreState({
-        top: true,
-        latest: false,
-        people: false,
-        focus: "top",
-      })
-    );
-  }, []);
+  const tweetFocusApi = () => {
+    return customAxios.get(`/getTweets/${focus}`, {
+      params: { search, pageCount },
+    });
+  };
 
-  useEffect(() => {
-    customAxios
-      .get(`/getTweets/${focus}`, {
-        params: { search, currentPage },
-      })
-      .then((res) => {
+  const { isLoading, isError, data, error } = useQuery(
+    ["selectExploreData", pageCount],
+    tweetFocusApi,
+    {
+      refetchOnWindowFocus: true, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
+      retry: 0, // 실패시 재호출 몇번 할지
+
+      onSuccess: (res: any) => {
+        console.log(res.data.data);
         dispatch(changeCurrentPosts(res.data.data));
-        dispatch(changeTotalPosts(res.data.count));
-      });
-    dispatch(
-      changeExploreState({
-        top: true,
-        latest: false,
-        people: false,
-        focus: "top",
-      })
-    );
-  }, [currentPage]);
+      },
+      onError: (e: any) => {
+        // 실패시 호출 (401, 404 같은 error가 아니라 정말 api 호출이 실패한 경우만 호출됩니다.)
+        // 강제로 에러 발생시키려면 api단에서 throw Error 날립니다. (참조: https://react-query.tanstack.com/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default)
+        console.log(e.message);
+      },
+    }
+  );
+  console.log(data);
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
 
   return (
     <>

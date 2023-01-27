@@ -2,24 +2,26 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
 import React, { useState } from "react";
+import { useQueryClient } from "react-query";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { changeCurentPage } from "../../redux/createSlice/GetDataSlice";
+import {
+  changeCurentPage,
+  setPageCount,
+} from "../../redux/createSlice/GetDataSlice";
 import { RootState } from "../../redux/store";
 
 const Pagination = () => {
   const pageNumber = [];
   const dispatch = useDispatch();
-  const postPerPage = useSelector(
-    (state: RootState) => state.getData.postPerPage
-  );
-  const getTotalPosts = useSelector(
-    (state: RootState) => state.getData.totalPosts
-  );
-  console.log(getTotalPosts);
+  const postPerPage = 10;
+  const queryClient = useQueryClient();
+  const pageCount = useSelector((state: RootState) => state.getData.pageCount);
+  const data: any = queryClient.getQueryData(["selectData"]);
+  let getTotalPosts = 56;
+
   for (let i = 1; i <= Math.ceil(getTotalPosts / postPerPage); i++) {
     pageNumber.push(i);
-    console.log(pageNumber);
   }
 
   return (
@@ -43,8 +45,8 @@ const Pagination = () => {
               className="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
               key={number}
               onClick={() => {
-                console.log(number);
-                dispatch(changeCurentPage(number));
+                dispatch(setPageCount(number));
+                queryClient.invalidateQueries(["selectExploreData"]);
               }}
             >
               {number}
