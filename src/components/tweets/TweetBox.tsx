@@ -21,10 +21,6 @@ export interface likeButton {
 }
 
 const TweetBox = () => {
-
-
-
-
   const data1 = useSelector((state: RootState) => state.getData.currentPosts);
   const id = useSelector((state: RootState) => state.getData.id);
   const getCurrentPage = useSelector(
@@ -58,7 +54,7 @@ const TweetBox = () => {
         // if (res.data === "login again") {
         //   alert("로그인이 만료되었습니다");
         // }
-        socket.emit(SOCKET_EVENT.SEND_MESSAGE, { comment, tweetId, id });
+        socket.emit(SOCKET_EVENT.SEND_COMMENT, { comment, tweetId, id });
       });
   };
 

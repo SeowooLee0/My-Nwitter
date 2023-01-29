@@ -43,7 +43,7 @@ export const getDataSlice = createSlice({
     addCurrentPosts(state, action: PayloadAction<[]>) {
       state.currentPosts.push(...action.payload);
     },
-    changeCurentPage(state, action: PayloadAction<number>) {
+    changeCurrentPage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
     },
     setPageCount(state, action: PayloadAction<number>) {
@@ -66,7 +66,7 @@ export const getDataSlice = createSlice({
 
 export const {
   changGetDataState,
-  changeCurentPage,
+  changeCurrentPage,
   changeCurrentPosts,
   changeIsOpened,
   changeTotalPosts,

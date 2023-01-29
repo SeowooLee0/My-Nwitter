@@ -20,7 +20,6 @@ import customAxios from "../api/CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
-  changeCurentPage,
   changeCurrentPosts,
   changeTotalPosts,
   changGetDataState,
@@ -89,7 +88,7 @@ const Explore = () => {
 
   const tweetFocusApi = () => {
     return customAxios.get(`/getTweets/${focus}`, {
-      params: { search, pageCount },
+      params: { search, currentPage },
     });
   };
 

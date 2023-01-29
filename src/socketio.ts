@@ -19,6 +19,8 @@ export const SOCKET_EVENT = {
   JOIN_ROOM: "JOIN_ROOM",
   SEND_MESSAGE: "SEND_MESSAGE",
   RECEIVE_MESSAGE: "RECEIVE_MESSAGE",
+  SEND_COMMENT: "SEND_COMMENT",
+  RECEIVE_COMMENT: "RECEIVE_COMMENT",
 };
 
 // export let socket: any = io("http://localhost:1234", {

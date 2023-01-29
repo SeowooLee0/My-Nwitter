@@ -43,7 +43,7 @@ const Sidebar = () => {
       </button>
       <button className="btn">
         <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/email.png"} />
-        <Link to={"/explore"}>Messeages</Link>
+        <Link to={"/message"}>Messeages</Link>
       </button>
       <button className="btn relative">
         {moreOpen ? (

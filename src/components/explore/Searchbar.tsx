@@ -2,7 +2,7 @@ import customAxios from "../../api/CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import {
-  changeCurentPage,
+  changeCurrentPage,
   changeCurrentPosts,
   changGetDataState,
 } from "../../redux/createSlice/GetDataSlice";

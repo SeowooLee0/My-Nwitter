@@ -22,7 +22,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
   addCurrentPosts,
-  changeCurentPage,
   changeCurrentPosts,
   changeIsLoaded,
   changeTotalPageNumberPosts,
@@ -35,7 +34,7 @@ import Searchbar from "../components/explore/Searchbar";
 import "../scss/pages/Tweets.scss";
 import SidebarRight from "../components/layouts/SidebarRight";
 import { save } from "react-cookies";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export interface DataProps {
   data: Array<Tweet>;
@@ -92,6 +91,11 @@ export interface Comment {
   email: string;
 }
 
+interface saveTweets {
+  content: string;
+  tag: any;
+}
+
 const Tweets = () => {
   const target = useRef<any>(null);
   const id = useSelector((state: RootState) => state.getData.id);
@@ -119,6 +123,13 @@ const Tweets = () => {
     onSuccess: (res: any) => {
       console.log(res.data.data);
       dispatch(addCurrentPosts(res.data.data));
+      dispatch(
+        changGetDataState({
+          id: res.data.email,
+          postPerPage: 10,
+          totalPosts: res.data.count,
+        })
+      );
     },
   });
 
@@ -150,7 +161,7 @@ const Tweets = () => {
   }, [getTotalPageNumber, target]);
 
   useEffect(() => {
-    socket.on("RECEIVE_MESSAGE", (data: any) => {
+    socket.on("RECEIVE_COMMENT", (data: any) => {
       window.alert("새로운 코멘트가 추가되었습니다");
     });
 
@@ -167,131 +178,155 @@ const Tweets = () => {
   // const currentPost = data.slice(0, 10);
   const [tweet, setTweet] = useState("");
   const [saveTag, setSaveTag] = useState("");
-  const saveTweets = async () => {
-    customAxios
-      .post("/saveTweets", {
-        content: tweet,
-        tag: saveTag,
-      })
-      .then((res) => {});
-  };
-
-  const onClick = (event: any) => {
-    saveTweets();
-    event.preventDefault();
-  };
-
-  const onChange = (event: any) => {
-    const { value } = event.target;
-
-    setTweet(value);
-    if (value.length >= 101) {
-      alert("글자수는 10자리로 제한되어있습니다");
-      const text = value.slice(0, 100);
-      setTweet(text);
-    }
-  };
-
-  const onTag = (event: any) => {
-    const { value } = event.target;
-    setSaveTag(value.match(/(#[^\s#]+)/g));
-  };
-
-  const onLogin = () => {
-    customAxios
-      .get("/refreshTokenRequest")
-      .then((res) => {
-        // if (res.data.data === null) {
-        //   alert("로그인이 만료되었습니다");
-        // }
-      })
-      .catch((err) => {});
-  };
-
-  const [file, setFile] = useState("");
-
-  const onFileChange = (e: any) => {
-    setFile(e.target.files[0]);
-    console.log(e.target.files[0]);
-  };
-
-  const onUpload = (e: any) => {
-    e.preventDefault();
-    const formData = new FormData();
-
-    formData.append("upload_file", file);
-    formData.append("id", id);
-    formData.append("tweet", tweet);
-    formData.append("tag", saveTag);
-
-    console.log(formData, tweet, saveTag);
-    axios
-      .post("http://localhost:1234/upload/tweets", formData, {
-        headers: {
-          "content-type": "multipart/form-data",
+  {
+    const updateTweet = useMutation(
+      (newData: saveTweets) =>
+        customAxios.post("/saveTweets", newData).then((res: any) => {
+          console.log(res);
+        }),
+      {
+        onSuccess: () => {
+          console.log("onSuccess");
+          queryClient.invalidateQueries(["select"]); // queryKey 유효성 제거
         },
-      })
-      .then((res) => {
-        console.log({ res });
-      })
-      .catch((res) => {
-        console.log({ res });
-      });
-  };
+        onError: (res) => {
+          console.log(res);
+          queryClient.invalidateQueries(["select"]); // queryKey 유효성 제거
+        },
+      }
+    );
 
-  return (
-    <>
-      {/* <Header /> */}
+    // const onClick = (event: any) => {
+    //   saveTweets();
+    //   event.preventDefault();
+    // };
 
-      <div className=" flex">
-        <Sidebar />
-        <div className="middleBox flex-col grow">
-          <form>
-            <div className="tweetTop">
-              <div className="title">Home</div>
-              <div className="flex p-5 tweetWritingBox ">
-                <img
-                  className="w-8 h-8 pt-0 m-1"
-                  alt="#"
-                  src={"/assets/user(1).png"}
-                />
-                <div className="w-full">
-                  <input
-                    className="input"
-                    name="tweet"
-                    placeholder="What's happening?"
-                    value={tweet}
-                    onClick={onLogin}
-                    onChange={onChange}
+    const onChange = (event: any) => {
+      const { value } = event.target;
+
+      setTweet(value);
+      if (value.length >= 101) {
+        alert("글자수는 10자리로 제한되어있습니다");
+        const text = value.slice(0, 100);
+        setTweet(text);
+      }
+    };
+
+    const onTag = (event: any) => {
+      const { value } = event.target;
+      setSaveTag(value.match(/(#[^\s#]+)/g));
+    };
+
+    const onLogin = () => {
+      customAxios
+        .get("/refreshTokenRequest")
+        .then((res) => {
+          // if (res.data.data === null) {
+          //   alert("로그인이 만료되었습니다");
+          // }
+        })
+        .catch((err) => {});
+    };
+
+    const [file, setFile] = useState("");
+
+    const onFileChange = (e: any) => {
+      setFile(e.target.files[0]);
+      console.log(e.target.files[0]);
+    };
+
+    const onUpload = (e: any) => {
+      e.preventDefault();
+      const formData = new FormData();
+
+      formData.append("upload_file", file);
+      formData.append("id", id);
+      formData.append("tweet", tweet);
+      formData.append("tag", saveTag);
+
+      console.log(formData, tweet, saveTag);
+      axios
+        .post("http://localhost:1234/upload/tweets", formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log({ res });
+        })
+        .catch((res) => {
+          console.log({ res });
+        });
+    };
+
+    return (
+      <>
+        {/* <Header /> */}
+
+        <div className=" flex">
+          <Sidebar />
+          <div className="middleBox flex-col grow">
+            <form>
+              <div className="tweetTop">
+                <div className="title">Home</div>
+                <div className="flex p-5 tweetWritingBox ">
+                  <img
+                    className="w-8 h-8 pt-0 m-1"
+                    alt="#"
+                    src={"/assets/user(1).png"}
                   />
-                  <input
-                    className="input"
-                    name="tag"
-                    placeholder="#태그"
-                    onClick={onLogin}
-                    onChange={onTag}
-                  />
-                  <input
-                    name="upload_file"
-                    type="file"
-                    accept="*"
-                    onChange={onFileChange}
-                    placeholder="업로드"
-                  />
-                  <div className="inputBtn">
-                    <button onClick={file ? onUpload : onClick}>업로드</button>
+                  <div className="w-full">
+                    <input
+                      className="input"
+                      name="tweet"
+                      placeholder="What's happening?"
+                      value={tweet}
+                      onClick={onLogin}
+                      onChange={onChange}
+                    />
+                    <input
+                      className="input"
+                      name="tag"
+                      placeholder="#태그"
+                      onClick={onLogin}
+                      onChange={onTag}
+                    />
+                    <input
+                      name="upload_file"
+                      type="file"
+                      accept="*"
+                      onChange={onFileChange}
+                      placeholder="업로드"
+                    />
+                    <div className="inputBtn">
+                      <button
+                        onClick={
+                          file
+                            ? onUpload
+                            : (e: any) => {
+                                e.preventDefault();
+                                updateTweet.mutate({
+                                  content: tweet,
+                                  tag: saveTag,
+                                });
+                              }
+                        }
+                      >
+                        업로드
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <TweetBox />
-          </form>
+              <TweetBox />
+            </form>
+          </div>
+          <SidebarRight />
         </div>
-        <SidebarRight />
-      </div>
-      <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
-    </>
-  );
+        <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
+      </>
+    );
+  }
 };
 
 export default Tweets;

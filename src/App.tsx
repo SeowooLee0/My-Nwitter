@@ -20,7 +20,6 @@ const App = () => {
   );
 
   const dispatch = useDispatch();
- 
 
   useEffect(() => {
     customAxios
@@ -35,8 +34,11 @@ const App = () => {
         // 로그인 페이지로 이동
         // ... 에러 처리
       });
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, []);
-  // const [isLogin, setIsLogin] = useState(true);
+
   return (
     <div>
       <SocketContext.Provider value={socket}>
