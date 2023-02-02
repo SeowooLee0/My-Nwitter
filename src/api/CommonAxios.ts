@@ -44,52 +44,45 @@ customAxios.interceptors.request.use(
 
 customAxios.interceptors.response.use(
   function (response) {
-    console.log(response.data);
+    console.log(response.status);
     if (
       // 번호값으로 체크, 문자열 체크는 버그가 발생할 , 코드번호부여
       response.data.message === "invalid refresh token, please log in again"
     ) {
-      // alert("로그인이 만료되었습니다");
+      alert("로그인이 만료되었습니다");
       console.log("반응");
       dispatch(changeState(false));
     }
 
     if (response.status === 200) {
       console.log("정상");
-
-      // const navigate = useNavigate();
-      // navigate("/");
+    }
+    if (response.status === 201) {
+      window.alert("created");
     }
 
     return response;
   },
 
   function (error: any) {
-    console.log(error.response);
+    console.log(error.response.data);
 
-    // if (error.response.status === 419) {
-    //   console.log("accessToken 만료");
-    // }
-    // if (error.response.status === 200) {
-    //   console.log("성공");
-    // }
-    // if (error.response.status === 500) {
-    //   console.log("로그인이 만료되었습니다");
-    //   alert("재로그인 필요");
-    //   dispatch(changeState(false));
-    //   const navigate = useNavigate();
-    //   navigate("/");
-    // }
-    // if (error.data === "login again") {
-    //   const dispatch = useDispatch();
-    //   alert("로그인이 만료되었습니다");
-    //   dispatch(changeState(false));
-    // }
-    // if (error.data.data === null) {
-    //   const dispatch = useDispatch();
-    //   alert("로그인이 만료되었습니다");
-    //   dispatch(changeState(false));
-    // }
+    console.log(error.response.status);
+
+    if (error.response.status === 419) {
+      console.log("재발급 필요")
+      customAxios.get("/refreshTokenRequest").then((res) => {
+        window.alert("엑세스토큰 재발급 완료");
+      });
+    }
+
+    if (error.response.status === 500) {
+      console.log("로그인이 만료되었습니다");
+      alert("재로그인 필요");
+      dispatch(changeState(false));
+      const navigate = useNavigate();
+      navigate("/");
+    }
     return Promise.reject(error);
   }
 );
