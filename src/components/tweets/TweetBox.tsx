@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import "../../scss/components/TweetBox.scss";
-import HeartButton from "./Heartbutton";
+
 import { socket, SocketContext, SOCKET_EVENT } from "../../socketio";
 import customAxios from "../../api/CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,14 +20,16 @@ export interface likeButton {
   likes: boolean;
 }
 
-const TweetBox = () => {
-  const data1 = useSelector((state: RootState) => state.getData.currentPosts);
+const TweetBox = (data1: any) => {
+  let data = data1.data;
+  const data2 = useSelector((state: RootState) => state.getData.currentPosts);
   const id = useSelector((state: RootState) => state.getData.id);
   const getCurrentPage = useSelector(
     (state: RootState) => state.getData.currentPage
   );
+  const queryClient = useQueryClient();
 
-  // console.log(tweetData);
+  console.log(data1.data);
 
   const dispatch = useDispatch();
 
@@ -80,9 +82,7 @@ const TweetBox = () => {
       });
   };
 
-  const checkData = data1.filter(
-    (data: { email: string }) => data.email === id
-  );
+  const checkData = data.filter((data: { email: string }) => data.email === id);
   // console.log(like);
 
   return (
@@ -90,7 +90,7 @@ const TweetBox = () => {
       {/* <input type="checkbox" value={id} onChange={onCheck} /> */}
 
       <div className="tweetBox">
-        {(check ? checkData : data1).map((t: any, i: number) => {
+        {(check ? checkData : data).map((t: any, i: number) => {
           return (
             <>
               <div className="tweet" key={t.tweet_id} id={`${t.tweet_id}`}>
@@ -145,9 +145,7 @@ const TweetBox = () => {
                                     params: { getCurrentPage },
                                   })
                                   .then((result: any) => {
-                                    dispatch(
-                                      changeCurrentPosts(result.data.data)
-                                    );
+                                    queryClient.invalidateQueries(["select"]);
                                   });
                               });
                           }
@@ -163,9 +161,7 @@ const TweetBox = () => {
                                     params: { getCurrentPage },
                                   })
                                   .then((result: any) => {
-                                    dispatch(
-                                      changeCurrentPosts(result.data.data)
-                                    );
+                                    queryClient.invalidateQueries(["select"]);
                                   });
                               });
                           }

@@ -91,12 +91,25 @@ export interface Comment {
   email: string;
 }
 
+export interface getDataState {
+  currentPosts: Array<Data>;
+  id: string;
+  currentPage: number;
+  postPerPage: number;
+  totalPosts: number;
+  isLoaded: boolean;
+  pageCount: number;
+  totalPageNumber: number;
+  uploadFile: string;
+}
+
 interface saveTweets {
   content: string;
   tag: any;
 }
 
 const Tweets = () => {
+  const data1 = useSelector((state: RootState) => state.getData.currentPosts);
   const target = useRef<any>(null);
   const id = useSelector((state: RootState) => state.getData.id);
   const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
@@ -118,11 +131,15 @@ const Tweets = () => {
     });
   }
 
-  const { data } = useQuery(["select", pageCount], tweetSelectApi, {
+  const getTweets = useQuery(["select", pageCount], tweetSelectApi, {
     refetchOnWindowFocus: false,
     onSuccess: (res: any) => {
-      console.log(res.data.data);
-      dispatch(addCurrentPosts(res.data.data));
+      if (pageCount > 1) {
+        setAddData([...addData, ...res.data.data]);
+      } else {
+        setAddData([...res.data.data]);
+      }
+
       dispatch(
         changGetDataState({
           id: res.data.email,
@@ -130,9 +147,15 @@ const Tweets = () => {
           totalPosts: res.data.count,
         })
       );
+
+      //   dispatch(addCurrentPosts(res.data.data));
     },
   });
+  console.log(getTweets.data);
 
+  // let newData = [...data.data.data];
+
+  const [addData, setAddData] = useState<Data[]>([]);
   useEffect(() => {
     console.log(getTotalPageNumber);
     const observer = new IntersectionObserver(
@@ -144,9 +167,12 @@ const Tweets = () => {
           dispatch(setPageCount((page.current += 1)));
 
           queryClient.invalidateQueries(["select"]);
-          if (getTotalPageNumber > page.current) {
-          }
-          console.log(page.current);
+          console.log(getTweets.data);
+          // setAddData([...addData, ...getTweets.data.data.data]);
+
+          // if (getTotalPageNumber > page.current) {
+          // }
+          // console.log(page.current);
         }
       },
       {
@@ -187,11 +213,11 @@ const Tweets = () => {
       {
         onSuccess: () => {
           console.log("onSuccess");
-          queryClient.invalidateQueries(["select"]); // queryKey 유효성 제거
+          // queryClient.invalidateQueries(["select"]); // queryKey 유효성 제거
         },
         onError: (res) => {
           console.log(res);
-          queryClient.invalidateQueries(["select"]); // queryKey 유효성 제거
+          // queryClient.invalidateQueries(["select"]); // queryKey 유효성 제거
         },
       }
     );
@@ -318,7 +344,7 @@ const Tweets = () => {
                   </div>
                 </div>
               </div>
-              <TweetBox />
+              <TweetBox data={addData} />
             </form>
           </div>
           <SidebarRight />
