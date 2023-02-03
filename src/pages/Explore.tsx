@@ -32,7 +32,8 @@ import { changeExploreState } from "../redux/createSlice/ExploreSlice";
 import Searchbar from "../components/explore/Searchbar";
 import { changePeopleState } from "../redux/createSlice/PeopleDataSlice";
 import { current } from "@reduxjs/toolkit";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
+import { changSearchState } from "../redux/createSlice/SearchSlice";
 
 export interface ExploreData {
   id: string;
@@ -46,6 +47,7 @@ export interface ExploreData {
 }
 
 const Explore = () => {
+  const queryClient = useQueryClient();
   const socket = useContext(SocketContext);
 
   useEffect(() => {
@@ -53,7 +55,7 @@ const Explore = () => {
       window.alert("새로운 코멘트가 추가되었습니다");
     });
   }, [socket]);
-
+  const [Focus, setFocus] = useState("top");
   const dispatch = useDispatch();
   // const data = useSelector((state: RootState) => state.getData.currentPosts);
   const isTop = useSelector((state: RootState) => state.changeExploreState.top);
@@ -82,10 +84,68 @@ const Explore = () => {
   const currentPage = useSelector(
     (state: RootState) => state.getData.currentPage
   );
+
   const pageCount = useSelector((state: RootState) => state.getData.pageCount);
 
-  // const getLikeData = useSelector((state: RootState) => state.getData.likeData);
+  const saveFollow = (prop: number) => {
+    customAxios
+      .post("/saveFollow", {
+        user_id: prop,
+      })
+      .then(() => {
+        customAxios
+          .get("/getTweets/people", {
+            params: { search, currentPage },
+          })
+          .then((res) => {
+            dispatch(
+              changePeopleState({
+                userData: res.data.data,
+              })
+            );
+          });
+      });
+  };
 
+  const deleteFollow = (prop: number) => {
+    customAxios
+      .post("/saveFollow/delete", {
+        user_id: prop,
+      })
+      .then(() => {
+        customAxios
+          .get("/getTweets/people", {
+            params: { search, currentPage },
+          })
+          .then((res) => {
+            dispatch(
+              changePeopleState({
+                userData: res.data.data,
+              })
+            );
+          });
+      });
+  };
+  function onExploreSearch() {
+    // // dispatch(changSearchState(prop));
+
+    return customAxios
+      .get(`/getTweets/${focus}`, {
+        params: { search },
+      })
+      .then((res) => {
+        if (focus === "people") {
+          dispatch(
+            changePeopleState({
+              userData: res.data.data,
+            })
+          );
+        }
+        queryClient.invalidateQueries(["selectExploreData"]);
+      });
+  }
+
+  const [exploreData, setExploreData] = useState<any>([]);
   const tweetFocusApi = () => {
     return customAxios.get(`/getTweets/${focus}`, {
       params: { search, currentPage },
@@ -93,15 +153,16 @@ const Explore = () => {
   };
 
   const { isLoading, isError, data, error } = useQuery(
-    ["selectExploreData", pageCount],
+    ["selectExploreData", currentPage, focus],
     tweetFocusApi,
     {
-      refetchOnWindowFocus: true, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
+      refetchOnWindowFocus: true,
+      // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
       retry: 0, // 실패시 재호출 몇번 할지
 
       onSuccess: (res: any) => {
-        console.log(res.data.data);
-        dispatch(changeCurrentPosts(res.data.data));
+        console.log(res.config.params, res.config);
+        setExploreData(res.data.data);
       },
       onError: (e: any) => {
         // 실패시 호출 (401, 404 같은 error가 아니라 정말 api 호출이 실패한 경우만 호출됩니다.)
@@ -110,7 +171,6 @@ const Explore = () => {
       },
     }
   );
-  console.log(data);
 
   if (isLoading) {
     return <span>Loading...</span>;
@@ -127,7 +187,7 @@ const Explore = () => {
         <Sidebar />
         <div className="grow">
           <div className="p-5">
-            <Searchbar />
+            <Searchbar onSearchbar={onExploreSearch} />
           </div>
 
           <div className=" font-serif w-full flex justify-around ">
@@ -138,18 +198,18 @@ const Explore = () => {
                   ? "border-solid border-b-4 border-blue-300"
                   : " border-solid border-b-4 border-white")
               }
-              onClick={() => {
-                customAxios
-                  .get("/getTweets/top", {
-                    params: { search, currentPage },
-                  })
-                  .then((res) => {
-                    let data = res.data.data.sort(
-                      (a: any, b: any) => b.like.length - a.like.length
-                    );
-                    dispatch(changeCurrentPosts(data));
-                    dispatch(changeTotalPosts(res.data.count));
-                  });
+              onClick={(e) => {
+                e.preventDefault();
+                // customAxios
+                //   .get("/getTweets/top", {
+                //     params: { search, currentPage },
+                //   })
+                //   .then((res) => {
+                //     let data = res.data.data.sort(
+                //       (a: any, b: any) => b.like.length - a.like.length
+                //     );
+                //   });
+                setFocus("top");
                 dispatch(
                   changeExploreState({
                     top: true,
@@ -158,6 +218,7 @@ const Explore = () => {
                     focus: "top",
                   })
                 );
+                queryClient.invalidateQueries(["selectExploreData"]); // queryKey 유효성 제거
               }}
             >
               Top
@@ -169,7 +230,8 @@ const Explore = () => {
                   ? "border-solid border-b-4 border-blue-300"
                   : " border-solid border-b-4 border-white")
               }
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 dispatch(
                   changeExploreState({
                     top: false,
@@ -178,14 +240,8 @@ const Explore = () => {
                     focus: "latest",
                   })
                 );
-                customAxios
-                  .get("/getTweets/latest", {
-                    params: { search, currentPage },
-                  })
-                  .then((result) => {
-                    dispatch(changeCurrentPosts(result.data.data));
-                    dispatch(changeTotalPosts(result.data.count));
-                  });
+                setFocus("latest");
+                queryClient.invalidateQueries(["selectExploreData"]);
               }}
             >
               Latest
@@ -198,18 +254,18 @@ const Explore = () => {
                   : " border-solid border-b-4 border-white")
               }
               onClick={() => {
-                customAxios
-                  .get("/getTweets/people", {
-                    params: { search, currentPage },
-                  })
-                  .then((res) => {
-                    dispatch(
-                      changePeopleState({
-                        userData: res.data.data,
-                      })
-                    );
-                    dispatch(changeTotalPosts(res.data.count));
-                  });
+                // customAxios
+                //   .get("/getTweets/people", {
+                //     params: { search, currentPage },
+                //   })
+                //   .then((res) => {
+                //     dispatch(
+                //       changePeopleState({
+                //         userData: res.data.data,
+                //       })
+                //     );
+                //     dispatch(changeTotalPosts(res.data.count));
+                //   });
 
                 dispatch(
                   changeExploreState({
@@ -219,6 +275,7 @@ const Explore = () => {
                     focus: "people",
                   })
                 );
+                setFocus("people");
               }}
             >
               People
@@ -249,40 +306,8 @@ const Explore = () => {
                         key={t.user_id}
                         onClick={() => {
                           t.following
-                            ? customAxios
-                                .post("/saveFollow/delete", {
-                                  user_id: t.user_id,
-                                })
-                                .then(() => {
-                                  customAxios
-                                    .get("/getTweets/people", {
-                                      params: { search, currentPage },
-                                    })
-                                    .then((res) => {
-                                      dispatch(
-                                        changePeopleState({
-                                          userData: res.data.data,
-                                        })
-                                      );
-                                    });
-                                })
-                            : customAxios
-                                .post("/saveFollow", {
-                                  user_id: t.user_id,
-                                })
-                                .then(() => {
-                                  customAxios
-                                    .get("/getTweets/people", {
-                                      params: { search, currentPage },
-                                    })
-                                    .then((res) => {
-                                      dispatch(
-                                        changePeopleState({
-                                          userData: res.data.data,
-                                        })
-                                      );
-                                    });
-                                });
+                            ? deleteFollow(t.user_id)
+                            : saveFollow(t.user_id);
                         }}
                       >
                         {t.following ? (
@@ -305,7 +330,7 @@ const Explore = () => {
               })}
             </>
           ) : (
-            <TweetBox />
+            <TweetBox data={exploreData} />
           )}
         </div>
       </div>

@@ -35,6 +35,7 @@ import "../scss/pages/Tweets.scss";
 import SidebarRight from "../components/layouts/SidebarRight";
 import { save } from "react-cookies";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { count } from "console";
 
 export interface DataProps {
   data: Array<Tweet>;
@@ -113,7 +114,8 @@ const Tweets = () => {
   const target = useRef<any>(null);
   const id = useSelector((state: RootState) => state.getData.id);
   const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
-  const pageCount = useSelector((state: RootState) => state.getData.pageCount);
+
+  let [pageCount, setPageCount] = useState(0);
   const page = useRef(pageCount);
   const queryClient = useQueryClient();
 
@@ -131,7 +133,7 @@ const Tweets = () => {
     });
   }
 
-  const getTweets = useQuery(["select", pageCount], tweetSelectApi, {
+  const getTweets = useQuery(["select", page], tweetSelectApi, {
     refetchOnWindowFocus: false,
     onSuccess: (res: any) => {
       if (pageCount > 1) {
@@ -164,7 +166,7 @@ const Tweets = () => {
 
         if (entries[0].isIntersecting) {
           console.log("is InterSecting");
-          dispatch(setPageCount((page.current += 1)));
+          setPageCount((page.current += 1));
 
           queryClient.invalidateQueries(["select"]);
           console.log(getTweets.data);
