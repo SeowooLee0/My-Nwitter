@@ -11,7 +11,7 @@ import { changSearchState } from "../../redux/createSlice/SearchSlice";
 import { useNavigate } from "react-router-dom";
 import { changePeopleState } from "../../redux/createSlice/PeopleDataSlice";
 
-const Searchbar = () => {
+const Searchbar = (onSearchbar: any) => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,24 +31,9 @@ const Searchbar = () => {
     dispatch(changSearchState(search));
     event.preventDefault();
 
-    customAxios
-      .get(`/getTweets/${focus}`, {
-        params: { search },
-      })
-      .then((res) => {
-        if (focus === "people") {
-          dispatch(
-            changePeopleState({
-              userData: res.data.data,
-            })
-          );
-        } else {
-          dispatch(changeCurrentPosts(res.data.data));
-        }
-      });
-
-    navigate("/explore");
+    onSearchbar.onSearchbar();
   };
+
   return (
     <form className="flex justify-center w-full">
       <div className="relative w-3/5">
