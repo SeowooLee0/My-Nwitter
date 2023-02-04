@@ -4,7 +4,7 @@ import { Data, isLike, Like, Tweet } from "../../pages/Tweets";
 
 interface getDataState {
   currentPosts: Array<Data>;
-  id: string;
+  id: any;
   currentPage: number;
   postPerPage: number;
   totalPosts: number;
@@ -16,12 +16,12 @@ interface getDataState {
 
 const initialState = {
   currentPosts: [],
-  id: "",
+  id: 1,
   currentPage: 1,
   postPerPage: 10,
   totalPosts: 0,
   isLoaded: false,
-  pageCount: 0,
+  pageCount: 1,
   totalPageNumber: 0,
   uploadFile: "",
 } as getDataState;

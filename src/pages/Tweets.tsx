@@ -141,10 +141,11 @@ const Tweets = () => {
       } else {
         setAddData([...res.data.data]);
       }
+      console.log(res.data);
 
       dispatch(
         changGetDataState({
-          id: res.data.email,
+          id: res.data.user_id,
           postPerPage: 10,
           totalPosts: res.data.count,
         })
