@@ -29,8 +29,6 @@ const TweetBox = (data1: any) => {
   );
   const queryClient = useQueryClient();
 
-  console.log(data1.data);
-
   const dispatch = useDispatch();
 
   const [getComments, setGetComments] = useState([]);
@@ -79,6 +77,51 @@ const TweetBox = (data1: any) => {
       })
       .then((res) => {
         setGetComments(res.data.data);
+      });
+  };
+
+  const deleteHearts = (prop: number) => {
+    customAxios
+      .post("/saveLike/delete", {
+        tweet_id: prop,
+      })
+      .then((res) => {
+        customAxios
+          .get("/getTweets/select", {
+            params: { getCurrentPage },
+          })
+          .then((result: any) => {
+            queryClient.invalidateQueries(["select"]);
+            //mutation 사용해보기
+          });
+      });
+  };
+
+  const addHearts = (tweet_id: number) => {
+    customAxios
+      .post("/saveLike", {
+        tweet_id: tweet_id,
+      })
+      .then((res) => {
+        customAxios
+          .get("/getTweets/select", {
+            params: { getCurrentPage },
+          })
+          .then((result: any) => {
+            queryClient.invalidateQueries(["select"]);
+          });
+      });
+  };
+
+  const openComments = (prop: number) => {
+    customAxios
+      .post("/getComments", {
+        tweet_id: prop,
+      })
+      .then((response) => {
+        dispatch(changeIsOpened(response.data.is_opened));
+        // t.is_opened = response.data.is_opened;
+        setGetComments(response.data.data);
       });
   };
 
@@ -135,35 +178,11 @@ const TweetBox = (data1: any) => {
                         id={t.tweet_id}
                         onClick={() => {
                           if (t.is_like === true) {
-                            customAxios
-                              .post("/saveLike/delete", {
-                                tweet_id: t.tweet_id,
-                              })
-                              .then((res) => {
-                                customAxios
-                                  .get("/getTweets/select", {
-                                    params: { getCurrentPage },
-                                  })
-                                  .then((result: any) => {
-                                    queryClient.invalidateQueries(["select"]);
-                                  });
-                              });
+                            deleteHearts(t.tweet_id);
                           }
 
                           if (t.is_like === false) {
-                            customAxios
-                              .post("/saveLike", {
-                                tweet_id: t.tweet_id,
-                              })
-                              .then((res) => {
-                                customAxios
-                                  .get("/getTweets/select", {
-                                    params: { getCurrentPage },
-                                  })
-                                  .then((result: any) => {
-                                    queryClient.invalidateQueries(["select"]);
-                                  });
-                              });
+                            addHearts(t.tweet_id);
                           }
                         }}
                       />
@@ -179,17 +198,7 @@ const TweetBox = (data1: any) => {
                         onClick={(e: any) => {
                           if (t.is_opened === false) {
                             // t.is_opened = !t.is_opened;
-                            customAxios
-                              .post("/getComments", {
-                                tweet_id: e.target.id,
-                              })
-                              .then((response) => {
-                                dispatch(
-                                  changeIsOpened(response.data.is_opened)
-                                );
-                                // t.is_opened = response.data.is_opened;
-                                setGetComments(response.data.data);
-                              });
+                            openComments(e.target.id);
                           }
                           if (t.is_opened === true) {
                             dispatch(changeIsOpened(false));
