@@ -161,12 +161,9 @@ const Explore = () => {
       retry: 0, // 실패시 재호출 몇번 할지
 
       onSuccess: (res: any) => {
-        console.log(res.config.params, res.config);
         setExploreData(res.data.data);
       },
       onError: (e: any) => {
-        // 실패시 호출 (401, 404 같은 error가 아니라 정말 api 호출이 실패한 경우만 호출됩니다.)
-        // 강제로 에러 발생시키려면 api단에서 throw Error 날립니다. (참조: https://react-query.tanstack.com/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default)
         console.log(e.message);
       },
     }
@@ -200,15 +197,6 @@ const Explore = () => {
               }
               onClick={(e) => {
                 e.preventDefault();
-                // customAxios
-                //   .get("/getTweets/top", {
-                //     params: { search, currentPage },
-                //   })
-                //   .then((res) => {
-                //     let data = res.data.data.sort(
-                //       (a: any, b: any) => b.like.length - a.like.length
-                //     );
-                //   });
                 setFocus("top");
                 dispatch(
                   changeExploreState({
@@ -254,19 +242,6 @@ const Explore = () => {
                   : " border-solid border-b-4 border-white")
               }
               onClick={() => {
-                // customAxios
-                //   .get("/getTweets/people", {
-                //     params: { search, currentPage },
-                //   })
-                //   .then((res) => {
-                //     dispatch(
-                //       changePeopleState({
-                //         userData: res.data.data,
-                //       })
-                //     );
-                //     dispatch(changeTotalPosts(res.data.count));
-                //   });
-
                 dispatch(
                   changeExploreState({
                     top: false,
@@ -289,8 +264,8 @@ const Explore = () => {
                     <div className="imgBox">
                       <img
                         className="profileImg rounded-full "
-                        alt={`http://localhost:1234/static/${t.profile}`}
-                        src={`http://localhost:1234/static/${t.profile}`}
+                        alt={`http://localhost:8080/static/${t.profile}`}
+                        src={`http://localhost:8080/static/${t.profile}`}
                       />
                     </div>
                     <div>

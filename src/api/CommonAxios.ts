@@ -70,7 +70,7 @@ customAxios.interceptors.response.use(
     console.log(error.response.status);
 
     if (error.response.status === 419) {
-      console.log("재발급 필요")
+      console.log("재발급 필요");
       customAxios.get("/refreshTokenRequest").then((res) => {
         window.alert("엑세스토큰 재발급 완료");
       });

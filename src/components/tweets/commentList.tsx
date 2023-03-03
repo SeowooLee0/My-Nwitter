@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
+import customAxios from "../../api/CommonAxios";
 import "./CommentList.scss";
 
 export default function CommentsList() {
   const [commentList, setCommentList] = useState<Comment[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   useEffect(() => {
-    axios.get("http://localhost:1234/getComments/newComments").then((res) => {
+    customAxios.get("/getComments/newComments").then((res) => {
       setCommentList(res.data.newComments);
     });
   }, []);

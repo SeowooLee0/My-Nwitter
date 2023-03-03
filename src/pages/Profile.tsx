@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import customAxios from "../api/CommonAxios";
 import Searchbar from "../components/explore/Searchbar";
 import Sidebar from "../components/layouts/Sidebar";
 import SidebarRight from "../components/layouts/SidebarRight";
@@ -18,10 +19,7 @@ const Profile = () => {
   const [fileImage, setFileImage] = useState("");
   const [userInfo, setUserInfo] = useState("");
   useEffect(() => {
-    axios({
-      method: "get",
-      url: "http://localhost:1234/getUsers",
-    }).then((res) => {
+    customAxios.get("/getUsers").then((res) => {
       console.log(res.data.data.profile);
       setUserInfo(res.data.data.profile);
       setEmail(res.data.email);
@@ -46,8 +44,8 @@ const Profile = () => {
     formData.append("profile_img", fileImage);
     formData.append("id", email);
     console.log(formData);
-    axios
-      .post("http://localhost:1234/upload", formData, {
+    customAxios
+      .post("/upload", formData, {
         headers: {
           "content-type": "multipart/form-data",
         },

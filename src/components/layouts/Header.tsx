@@ -24,6 +24,7 @@ import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeState } from "../../redux/createSlice/IsLoginSlice";
 import { RootState } from "../../redux/store";
+import customAxios from "../../api/CommonAxios";
 
 export default function Header() {
   const naviagte = useNavigate();
@@ -34,7 +35,7 @@ export default function Header() {
 
   const dispatch = useDispatch();
   const onLogout = () => {
-    axios.get("http://localhost:1234/logout");
+    customAxios.get("/logout");
     alert("로그아웃 되었습니다");
     dispatch(changeState(false));
   };

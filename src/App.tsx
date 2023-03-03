@@ -22,8 +22,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    customAxios
-      .get("/refreshTokenRequest")
+    customAxios("/refreshTokenRequest")
       .then((res) => {
         if (res.data.email) {
           dispatch(changeState(true));

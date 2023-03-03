@@ -20,9 +20,9 @@ export interface likeButton {
   likes: boolean;
 }
 
-const TweetBox = (data1: any) => {
-  let data = data1.data;
-  const data2 = useSelector((state: RootState) => state.getData.currentPosts);
+const TweetBox = (prop: any) => {
+  let data = prop.data;
+
   const id = useSelector((state: RootState) => state.getData.id);
   const getCurrentPage = useSelector(
     (state: RootState) => state.getData.currentPage

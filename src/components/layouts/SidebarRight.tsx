@@ -8,7 +8,7 @@ import "../../scss/components/Sidebar.scss";
 const SidebarRight = () => {
   const dispatch = useDispatch();
   const onLogout = () => {
-    customAxios.get("http://localhost:1234/logout");
+    customAxios.get("/logout");
     alert("로그아웃 되었습니다");
     dispatch(changeState(false));
   };
