@@ -21,6 +21,7 @@ export const SOCKET_EVENT = {
   RECEIVE_MESSAGE: "RECEIVE_MESSAGE",
   SEND_COMMENT: "SEND_COMMENT",
   RECEIVE_COMMENT: "RECEIVE_COMMENT",
+  START_CHAT: "START_CHAT",
 };
 
 // export let socket: any = io("http://localhost:1234", {
