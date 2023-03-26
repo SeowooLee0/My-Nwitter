@@ -18,6 +18,7 @@ import { is } from "immer/dist/internal";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import Message from "./pages/Message";
+import Bookmark from "./pages/Bookmark";
 
 function AppRouter() {
   const isLogin = useSelector(
@@ -33,6 +34,7 @@ function AppRouter() {
           <Route path="/profile" element={<Profile />} />
           <Route path="tag" element={<Tag />} />
           <Route path="message" element={<Message />} />
+          <Route path="bookmark" element={<Bookmark />} />
         </>
       ) : (
         <>
@@ -40,8 +42,9 @@ function AppRouter() {
           <Route path="/explore" element={<Navigate to={"/"} />} />
           <Route path="tag/:tagId" element={<Navigate to={"/"} />} />
           <Route path="/profile" element={<Navigate to={"/"} />} />
-          <Route path="tag" element={<Navigate to={"/"} />} />{" "}
-          <Route path="message" element={<Message />} />
+          <Route path="tag" element={<Navigate to={"/"} />} />
+          <Route path="message" element={<Navigate to={"/"} />} />
+          <Route path="bookmark" element={<Navigate to={"/"} />} />
         </>
       )}
     </Routes>
