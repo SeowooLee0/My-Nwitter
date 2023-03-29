@@ -8,13 +8,15 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
 import "../../scss/pages/Tweets.scss";
+import TweetBox from "./TweetBox";
 
 interface saveTweets {
   content: string;
   tag: any;
+  reply_tweet_id: number;
 }
 
-const AddTweet = () => {
+const AddTweet = ({ nowData }: any) => {
   const id = useSelector((state: RootState) => state.getData.id);
 
   const [tweet, setTweet] = useState("");
@@ -108,7 +110,6 @@ const AddTweet = () => {
           <div className="middleBox flex-col grow">
             <form>
               <div className="tweetTop">
-               
                 <div className="flex p-5 tweetWritingBox ">
                   <img
                     className="w-8 h-8 pt-0 m-1"
@@ -131,6 +132,7 @@ const AddTweet = () => {
                       onClick={onLogin}
                       onChange={onTag}
                     />
+                    {nowData && <TweetBox data={nowData} />}
                     <input
                       name="upload_file"
                       type="file"
@@ -148,6 +150,9 @@ const AddTweet = () => {
                                 updateTweet.mutate({
                                   content: tweet,
                                   tag: saveTag,
+                                  reply_tweet_id: nowData
+                                    ? nowData[0].tweet_id
+                                    : null,
                                 });
                               }
                         }
