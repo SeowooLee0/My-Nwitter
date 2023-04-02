@@ -45,6 +45,14 @@ const Sidebar = () => {
         <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/email.png"} />
         <Link to={"/message"}>Messeages</Link>
       </button>
+      <button className="btn">
+        <img
+          className="w-5 h-5 pt-0 mr-1"
+          alt="#"
+          src={"/assets/bookmark_before.png"}
+        />
+        <Link to={"/bookmark"}>Bookmark</Link>
+      </button>
       <button className="btn relative">
         {moreOpen ? (
           <div className="moreModal">
