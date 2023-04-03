@@ -71,10 +71,10 @@ const Message = () => {
           .replace(/:/gi, "");
         return newB - newA;
       });
-      console.log(sortData);
-      setChatRoomData(data);
+      setChatRoomData(sortData);
     });
     socket.on("BEFORE_DATA", (data: any) => {
+      console.log(data);
       let change = data.map((d: any) => {
         return JSON.parse(d);
       });
@@ -118,6 +118,36 @@ const Message = () => {
       roomId: `${time}${sortUsers.length}${id}`,
       date: time,
     });
+  };
+
+  const chatRoomClick = async (user_id: number, data: any) => {
+    await customAxios("/getUsers/chatUser", {
+      params: { user_id },
+    }).then((r: any) => {
+      let profile = r.data.profile;
+      console.log(profile);
+
+      setSelectUser({
+        user_id: user_id,
+        email: r.data.email,
+        profile: profile,
+      });
+
+      setSend([]);
+      let users = [id, user_id];
+      let sortUsers = users.sort();
+      console.log(sortUsers);
+      setSortId(sortUsers);
+      setroomId(`${time}${sortUsers.length}${id}`);
+
+      socket.emit(SOCKET_EVENT.START_CHAT, {
+        users: sortUsers,
+        roomId: `${time}${sortUsers.length}${id}`,
+        date: time,
+      });
+    });
+
+    await setRoom(true);
   };
 
   const nowDate = new Date();
@@ -192,19 +222,24 @@ const Message = () => {
               </Modal>
             </div>
           </div>
-
-          {chatRoomData.map((t: any, i: number) => {
-            console.log(chatRoomData);
-
-            return (
-              <div className="peopleBox hover:bg-slate-200 " key={t.date}>
-                <div>
-                  <div className=" font-bold pl-3">{t.receive}</div>
-                  <div className=" pl-3">{t.message}</div>
+          <div>
+            {chatRoomData.map((t: any, i: number) => {
+              return (
+                <div
+                  className="peopleBox hover:bg-slate-200 "
+                  key={t.date}
+                  onClick={() => {
+                    chatRoomClick(t.receive, t);
+                  }}
+                >
+                  <div>
+                    <div className=" font-bold pl-3">{t.receive}</div>
+                    <div className=" pl-3">{t.message}</div>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
         <div className="border-slate-900  border-spacing-3  w-7/12  justify-end flex  flex-col">
           <div className=" messageBox">
