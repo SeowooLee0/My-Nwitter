@@ -1,4 +1,60 @@
+@font-face {
+  font-family: "로고";
+  src: url("../../../public/fonts/KCC-Ganpan.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Tenada";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "LOTTERIACHAB";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/LOTTERIACHAB.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .errorMessage {
   color: red;
   font-weight: bold;
+}
+
+.logo {
+  font-family: "LOTTERIACHAB";
+  font-size: 70px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.loginAuth {
+  font-family: "Tenada";
+  border: 2px solid gainsboro;
+  border-radius: 100px;
+  padding: 80px;
+  text-align: center;
+
+  background-color: white;
+}
+
+.bgauth {
+  background-color: #14253f;
+
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.textBox {
+  padding: 10px;
+  width: 500px;
+  height: 200px;
 }

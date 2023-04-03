@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { changeState } from "../redux/createSlice/IsLoginSlice";
 import customAxios from "../api/CommonAxios";
+import "../scss/pages/Auth.scss";
 import { changeAccessState } from "../redux/createSlice/GetAccessToken";
 
 const Auth = () => {
@@ -66,75 +67,80 @@ const Auth = () => {
   };
 
   return (
-    <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-        className="mt-8 space-y-6 "
-      >
-        <div className="w-full max-w-md space-y-8">
-          <div>
-            <img
-              className="mx-auto h-12 w-auto"
-              src="/assets/twitter.png"
-              alt="Your Company"
-            />
-            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-              Sign in to your account
-            </h2>
+    <div className="bgauth">
+      <div className="flex  w-auto  items-center  justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+          className="loginAuth  "
+        >
+          <div className="textBox ">
+            <div className="w-100">
+              {/* <div className="logo">nwitter</div> */}
+              <img
+                className=""
+                src="/assets/nwitter-1.jpg"
+                alt="Your Company"
+              />
+              <h2 className=" mt-6 text-center text-3xl font-bold tracking-tight text-gray-700  pb-6">
+                Sign in to your account
+              </h2>
+            </div>
           </div>
-        </div>
 
-        <input
-          className=" outline-none"
-          {...register("email", {
-            required: "이메일은 필수 값입니다.",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i,
-              message: "올바른 이메일 형식으로 작성해주세요",
-            },
-          })}
-          placeholder="EMAIL"
-          // name="email"
-          // value={email}
-          // onChange={onChange}
-        />
-        <div className="errorMessage">
-          {errors.email?.type === "required" &&
-            "이메일을 필수 조건으로 입력하시길 바랍니다."}
-          {errors.email?.type === "pattern" && errors.email.message}
-        </div>
-        {/* <div>비밀번호</div> */}
-        <input
-          className=" outline-none"
-          {...register("password", {
-            required: "비밀번호는 필수 값입니다.",
-            minLength: {
-              value: 4,
-              message: "비밀번호는 4글자 이상이어야합니다",
-            },
-          })}
-          placeholder="PW"
-        />
-        <div className="errorMessage">
-          {errors.password?.type === "required" &&
-            "비밀번호를 필수 조건으로 입력하시길 바랍니다."}
-          {errors.password?.type === "minLength" && errors.password.message}
-        </div>
-        <button
-          className="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-400 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          onClick={handleSubmit(onSignIn)}
-        >
-          SignIn
-        </button>
-        <button
-          className="group relative flex w-full justify-center rounded-md border border-transparent  bg-blue-400 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          onClick={handleSubmit(onLogin)}
-        >
-          Login
-        </button>
-      </form>
+          <input
+            className=" p-5 mb-4 outline-none border-2 w-full h-10 rounded-2xl "
+            {...register("email", {
+              required: "이메일은 필수 값입니다.",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i,
+                message: "올바른 이메일 형식으로 작성해주세요",
+              },
+            })}
+            placeholder="EMAIL"
+            // name="email"
+            // value={email}
+            // onChange={onChange}
+          />
+          <div className="errorMessage">
+            {errors.email?.type === "required" &&
+              "이메일을 필수 조건으로 입력하시길 바랍니다."}
+            {errors.email?.type === "pattern" && errors.email.message}
+          </div>
+          {/* <div>비밀번호</div> */}
+          <input
+            className=" outline-none p-5 mb-6 border-2 w-full h-10  rounded-2xl "
+            {...register("password", {
+              required: "비밀번호는 필수 값입니다.",
+              minLength: {
+                value: 4,
+                message: "비밀번호는 4글자 이상이어야합니다",
+              },
+            })}
+            placeholder="PW"
+          />
+          <div className="errorMessage">
+            {errors.password?.type === "required" &&
+              "비밀번호를 필수 조건으로 입력하시길 바랍니다."}
+            {errors.password?.type === "minLength" && errors.password.message}
+          </div>
+          <div className="flex justify-around  ">
+            <button
+              className=" w-40 justify-center rounded-xl border border-transparent bg-blue-200 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={handleSubmit(onSignIn)}
+            >
+              SignIn
+            </button>
+            <button
+              className=" w-40  rounded-xl border border-transparent  bg-slate-600 py-2 px-4 text-sm font-medium text-white hover:bg-sky-900  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={handleSubmit(onLogin)}
+            >
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
