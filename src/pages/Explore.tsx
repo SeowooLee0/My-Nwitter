@@ -15,7 +15,7 @@ import Pagination from "../components/layouts/Pagination";
 import Header from "../components/layouts/Header";
 import TweetBox from "../components/tweets/TweetBox";
 
-import CommentsList from "../components/tweets/commentList";
+import CommentsList from "../components/tweets/CommentList";
 import customAxios from "../api/CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -118,6 +118,7 @@ const Explore = () => {
             params: { search, currentPage },
           })
           .then((res) => {
+            console.log();
             dispatch(
               changePeopleState({
                 userData: res.data.data,
@@ -129,23 +130,23 @@ const Explore = () => {
   function onExploreSearch() {
     // // dispatch(changSearchState(prop));
 
-    return customAxios
-      .get(`/getTweets/${focus}`, {
-        params: { search },
-      })
-      .then((res) => {
-        if (focus === "people") {
-          dispatch(
-            changePeopleState({
-              userData: res.data.data,
-            })
-          );
-        }
-        queryClient.invalidateQueries(["selectExploreData"]);
-      });
+    return customAxios.get(`/getTweets/${focus}`, {
+      params: { search },
+    });
+    // .then((res) => {
+    //   // if (focus === "people") {
+    //   //   dispatch(
+    //   //     changePeopleState({
+    //   //       userData: res.data.data,
+    //   //     })
+    //   //   );
+    //   // }
+    //   // queryClient.invalidateQueries(["selectExploreData"]);
+    // });
   }
 
-  const [exploreData, setExploreData] = useState<any>([]);
+  const [exploreData, setExploreData] = useState<Data[]>([]);
+
   const tweetFocusApi = () => {
     return customAxios.get(`/getTweets/${focus}`, {
       params: { search, currentPage },
@@ -161,6 +162,7 @@ const Explore = () => {
       retry: 0, // 실패시 재호출 몇번 할지
 
       onSuccess: (res: any) => {
+        console.log(res.data.data);
         setExploreData(res.data.data);
       },
       onError: (e: any) => {

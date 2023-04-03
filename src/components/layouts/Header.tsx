@@ -19,7 +19,7 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import CommentsList from "../tweets/commentList";
+import CommentsList from "../tweets/CommentList";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeState } from "../../redux/createSlice/IsLoginSlice";

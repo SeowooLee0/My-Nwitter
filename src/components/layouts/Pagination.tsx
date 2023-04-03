@@ -6,7 +6,6 @@ import { useQueryClient } from "react-query";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {
-  
   changeCurrentPage,
   setPageCount,
 } from "../../redux/createSlice/GetDataSlice";
@@ -19,7 +18,7 @@ const Pagination = () => {
   const queryClient = useQueryClient();
   const pageCount = useSelector((state: RootState) => state.getData.pageCount);
   const data: any = queryClient.getQueryData(["selectData"]);
-  let getTotalPosts = 56;
+  let getTotalPosts = pageCount;
 
   for (let i = 1; i <= Math.ceil(getTotalPosts / postPerPage); i++) {
     pageNumber.push(i);
@@ -32,7 +31,6 @@ const Pagination = () => {
           className="isolate inline-flex -space-x-px rounded-md shadow-sm"
           aria-label="Pagination"
         >
-    
           {pageNumber.map((number) => (
             <div
               aria-current="page"
@@ -46,7 +44,6 @@ const Pagination = () => {
               {number}
             </div>
           ))}
-         
         </nav>
       </div>
     </div>
