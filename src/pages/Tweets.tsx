@@ -58,6 +58,7 @@ export interface Data {
   email: string;
   tweet_id: number;
   content: string;
+  profile: string;
   tag: Array<string>;
   write_date: string;
   upload_file: string;

@@ -26,6 +26,7 @@ export interface likeButton {
 const TweetBox = (prop: any) => {
   const dispatch = useDispatch();
   let data = prop.data;
+  console.log(data);
 
   const id = useSelector((state: RootState) => state.getData.id);
 
@@ -243,11 +244,18 @@ const TweetBox = (prop: any) => {
             <>
               <div className="tweet" key={t.tweet_id} id={`${t.tweet_id}`}>
                 <img
-                  className="w-8 h-8 pt-0 m-1"
-                  alt="#"
-                  src={"/assets/user(1).png"}
+                  className="w-10 h-10 pt-0 m-1  rounded-full"
+                  alt={
+                    t.profile === null
+                      ? `/assets/회색.png`
+                      : `http://localhost:1234/static/${t.profile}`
+                  }
+                  src={
+                    t.profile === null
+                      ? `/assets/회색.png`
+                      : `http://localhost:1234/static/${t.profile}`
+                  }
                 />
-
                 <div className="info">
                   <div className="userInfo">
                     <p className="font-bold pt-1">{t.email}</p>
