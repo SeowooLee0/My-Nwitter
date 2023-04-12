@@ -46,7 +46,6 @@ const TweetBox = (prop: any) => {
   let retweetRef = useRef(null);
 
   useEffect(() => {
-    console.log(prop.data);
     setGetData(prop.data);
   }, [prop.data]);
 
@@ -191,48 +190,35 @@ const TweetBox = (prop: any) => {
       open: t.retweet_opened,
       index: i,
     });
-
-    // customAxios
-    //   .post("/saveTweet", {
-    //     reply_tweet_id: tweet_id,
-    //     user_id: id,
-    //     // content: value,
-    //     tag: [""],
-    //   })
-    //   .then((res) => {
-    //     customAxios
-    //       .get("/getTweets/select", {
-    //         params: { getCurrentPage },
-    //       })
-    //       .then((result: any) => {
-    //         queryClient.invalidateQueries(["select"]);
-    //       });
-    //   });
   };
 
-  const openComments = (prop: number) => {
+  const openComments = ({ id, number }: any) => {
     customAxios
       .post("/getComments", {
-        tweet_id: prop,
+        tweet_id: id,
       })
       .then((response) => {
-        dispatch(changeIsOpened(response.data.is_opened));
-        // t.is_opened = response.data.is_opened;
+        data[number].is_opened = response.data.is_opened;
+
+        setGetData([...data]);
         setGetComments(response.data.data);
       });
+  };
+
+  const closeComments = (number: number) => {
+    data[number].is_opened = false;
+    setGetComments([]);
   };
 
   const openRetweet = ({ tweet_id, open, index }: any) => {
     data[index].retweet_opened = open === false ? true : false;
 
-    console.log(data);
     setGetData([...data]);
   };
 
   const checkData = getData.filter(
     (data: { email: string }) => data.email === id
   );
-  // console.log(like);
 
   return (
     <>
@@ -317,14 +303,9 @@ const TweetBox = (prop: any) => {
                         alt="#"
                         src={"/assets/messenger.png"}
                         onClick={(e: any) => {
-                          if (t.is_opened === false) {
-                            // t.is_opened = !t.is_opened;
-                            openComments(e.target.id);
-                          }
-                          if (t.is_opened === true) {
-                            dispatch(changeIsOpened(false));
-                            setGetComments([]);
-                          }
+                          t.is_opened === true
+                            ? closeComments(i)
+                            : openComments({ id: e.target.id, number: i });
                         }}
                         id={t.tweet_id}
                       />
@@ -402,53 +383,32 @@ const TweetBox = (prop: any) => {
                             )
                           )}
                         </div>
-
-                        {/* <img
-                          className="w-5 h-5"
-                          alt="#"
-                          src={"/assets/messenger.png"}
-                          onClick={(e: any) => {
-                            // console.log(t.is_opened);
-
-                            if (t.is_opened === false) {
-                              // t.is_opened = !t.is_opened;
-                              axios
-                                .post("http://localhost:1234/getComments", {
-                                  tweet_id: e.target.id,
-                                })
-                                .then((res) => {
-                                  t.is_opened = res.data.is_opened;
-                                  setGetComments(res.data.data);
-                                });
-                            }
-                            if (t.is_opened === true) {
-                              t.is_opened = false;
-                              setGetComments([]);
-                            }
-                          }}
-                          id={t.tweet_id}
-                        /> */}
                       </div>
 
-                      {/* <div className="comment_inputBox " id={`${t.tweet_id}`}>
-                        <input
-                          className="comment_input placeholder-gray-500"
-                          id={`${t.tweet_id}`}
-                          type="text"
-                          placeholder="댓글달기..."
-                          onChange={onComment}
-                          // value={comment}
-                        />
-                        <button
-                          className="comment_button"
-                          onClick={saveComment}
-                        >
-                          게시
-                        </button>
-                      </div> */}
-                      {/* <div className="commentBox font-black" key={t.comment.id}>
-                        {t.is_opened
-                          ? getComments.map((t: any) => {
+                      <div className="commentBox font-black" key={t.comment.id}>
+                        {t.is_opened ? (
+                          <>
+                            <div
+                              className="comment_inputBox "
+                              id={`${t.tweet_id}`}
+                            >
+                              <input
+                                className="comment_input placeholder-gray-500"
+                                id={`${t.tweet_id}`}
+                                type="text"
+                                placeholder="댓글달기..."
+                                onChange={onComment}
+                                // value={comment}
+                              />
+                              <button
+                                className="comment_button"
+                                onClick={saveComment}
+                              >
+                                게시
+                              </button>
+                            </div>
+
+                            {getComments.map((t: any) => {
                               return (
                                 <>
                                   <div className="comment_title">Comments</div>
@@ -457,9 +417,12 @@ const TweetBox = (prop: any) => {
                                   </div>
                                 </>
                               );
-                            })
-                          : ""}
-                      </div> */}
+                            })}
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
