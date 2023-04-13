@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import customAxios from "../api/CommonAxios";
 import Searchbar from "../components/explore/Searchbar";
 import Sidebar from "../components/layouts/Sidebar";
 import SidebarRight from "../components/layouts/SidebarRight";
+import TweetBox from "../components/tweets/TweetBox";
 import "../scss/pages/Profile.scss";
+import { Data } from "./Tweets";
 
 interface UserInfo {
   email: string;
@@ -18,13 +21,23 @@ const Profile = () => {
   const [email, setEmail] = useState("");
   const [fileImage, setFileImage] = useState("");
   const [userInfo, setUserInfo] = useState("");
-  useEffect(() => {
-    customAxios.get("/getUsers").then((res) => {
-      console.log(res.data.data.profile);
+  const [getData, setGetData] = useState<Data[]>([]);
+  const [editOpen, setEditOpen] = useState(false);
+
+  function profileApi() {
+    return customAxios.get("/getUsers");
+  }
+
+  const { data } = useQuery(["profileData"], profileApi, {
+    refetchOnWindowFocus: false,
+    onSuccess: (res: any) => {
+      console.log(res);
+      setGetData(res.data.tweetData);
       setUserInfo(res.data.data.profile);
       setEmail(res.data.email);
-    });
+    },
   });
+
   //파일 미리볼 url을 저장해줄 state
   const onChange = (e: any) => {
     setFileImage(e.target.files[0]);
@@ -62,8 +75,6 @@ const Profile = () => {
   //   URL.revokeObjectURL(fileImage);
   //   setFileImage("");
   // };
-
-  console.log(userInfo);
 
   return (
     <>
@@ -120,33 +131,38 @@ const Profile = () => {
 
                 <div className=" font-semibold   w-full  text-center flex justify-around ">
                   <button
-                    className={" button w-1/4 p-3  hover:bg-slate-200 "}
-                    onClick={() => {}}
+                    className={" button w-1/3 p-3  hover:bg-slate-200 "}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setGetData(data.data.tweetData);
+                    }}
                   >
                     Tweets
                   </button>
                   <button
-                    className={" button w-1/4 p-3  hover:bg-slate-200 "}
-                    onClick={() => {}}
+                    className={" button w-1/3 p-3  hover:bg-slate-200 "}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setGetData(data.data.retweet);
+                    }}
                   >
                     Tweets & replies
                   </button>
+
                   <button
-                    className={" button w-1/4 p-3  hover:bg-slate-200 "}
-                    onClick={() => {}}
-                  >
-                    Media
-                  </button>
-                  <button
-                    className={" button w-1/4 p-3  hover:bg-slate-200 "}
-                    onClick={() => {}}
+                    className={" button w-1/3 p-3  hover:bg-slate-200 "}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setGetData(data.data.likes);
+                    }}
                   >
                     Likes
                   </button>
                 </div>
               </div>
             </div>
-            <div>
+            <TweetBox data={getData} />
+            {/* <div>
               <input
                 name="profile_img"
                 type="file"
@@ -157,7 +173,7 @@ const Profile = () => {
               <button type="submit" onClick={onUpload}>
                 업로드
               </button>
-            </div>
+            </div> */}
           </div>
         </form>
         <SidebarRight />
