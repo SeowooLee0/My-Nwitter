@@ -87,12 +87,12 @@ const Profile = () => {
               alt={
                 userInfo === null
                   ? `/assets/회색.png`
-                  : `http://localhost:1234/static/${userInfo}`
+                  : `http://localhost:1234/static/uploads/${userInfo}`
               }
               src={
                 userInfo === null
                   ? `/assets/회색.png`
-                  : `http://localhost:1234/static/${userInfo}`
+                  : `http://localhost:1234/static/uploads/${userInfo}`
               }
             />
             <div className="relative">
@@ -101,12 +101,12 @@ const Profile = () => {
                 alt={
                   userInfo === null
                     ? `/assets/회색.png`
-                    : `http://localhost:1234/static/${userInfo}`
+                    : `http://localhost:1234/static/uploads/${userInfo}`
                 }
                 src={
                   userInfo === null
                     ? `/assets/회색.png`
-                    : `http://localhost:1234/static/${userInfo}`
+                    : `http://localhost:1234/static/uploads/${userInfo}`
                 }
               />
             </div>

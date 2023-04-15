@@ -234,12 +234,12 @@ const TweetBox = (prop: any) => {
                   alt={
                     t.profile === null
                       ? `/assets/회색.png`
-                      : `http://localhost:1234/static/${t.profile}`
+                      : `http://localhost:1234/static/uploads/${t.profile}`
                   }
                   src={
                     t.profile === null
                       ? `/assets/회색.png`
-                      : `http://localhost:1234/static/${t.profile}`
+                      : `http://localhost:1234/static/uploads/${t.profile}`
                   }
                 />
                 <div className="info">
@@ -255,6 +255,13 @@ const TweetBox = (prop: any) => {
                       </div>
                     )}
                   </div>
+                  {t.upload_file && (
+                    <img
+                      className=" background "
+                      alt={`http://localhost:1234/static/tweets/${t.upload_file}`}
+                      src={`http://localhost:1234/static/tweets/${t.upload_file}`}
+                    />
+                  )}
                   <p className="pt-1 pb-1">
                     {t.tag === null
                       ? "ddd"
