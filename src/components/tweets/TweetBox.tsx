@@ -16,7 +16,7 @@ import {
 import Searchbar from "../explore/Searchbar";
 import { QueryClient, useQuery, useQueryClient } from "react-query";
 import { Data } from "../../pages/Tweets";
-import { AnyTxtRecord } from "dns";
+
 import AddTweet from "./AddTweet";
 export interface likeButton {
   tweet_id: number;
