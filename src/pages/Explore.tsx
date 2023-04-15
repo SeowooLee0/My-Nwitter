@@ -9,21 +9,16 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Link } from "react-router-dom";
+
 import Paginations from "../components/layouts/Pagination";
 import Pagination from "../components/layouts/Pagination";
-import Header from "../components/layouts/Header";
+
 import TweetBox from "../components/tweets/TweetBox";
 
-import CommentsList from "../components/tweets/CommentList";
 import customAxios from "../api/CommonAxios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import {
-  changeCurrentPosts,
-  changeTotalPosts,
-  changGetDataState,
-} from "../redux/createSlice/GetDataSlice";
+
 import Sidebar from "../components/layouts/Sidebar";
 import "../scss/pages/Explore.scss";
 

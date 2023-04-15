@@ -11,9 +11,6 @@ import React, {
 } from "react";
 import { Link } from "react-router-dom";
 
-import Paginations from "../components/layouts/Pagination";
-import Pagination from "../components/layouts/Pagination";
-import Header from "../components/layouts/Header";
 import TweetBox from "../components/tweets/TweetBox";
 
 import customAxios from "../api/CommonAxios";
@@ -28,13 +25,12 @@ import {
   setPageCount,
 } from "../redux/createSlice/GetDataSlice";
 import Sidebar from "../components/layouts/Sidebar";
-import { current, latest } from "immer/dist/internal";
-import Searchbar from "../components/explore/Searchbar";
+
 import "../scss/pages/Tweets.scss";
 import SidebarRight from "../components/layouts/SidebarRight";
-import { save } from "react-cookies";
+
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { count } from "console";
+
 import AddTweet from "../components/tweets/AddTweet";
 
 export interface DataProps {
