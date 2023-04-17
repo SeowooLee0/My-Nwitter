@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import customAxios from "../api/CommonAxios";
 import Searchbar from "../components/explore/Searchbar";
@@ -19,19 +19,20 @@ interface UserInfo {
 
 const Profile = () => {
   const [email, setEmail] = useState("");
+  const [type, setType] = useState("tweets");
   const [fileImage, setFileImage] = useState("");
   const [userInfo, setUserInfo] = useState("");
   const [getData, setGetData] = useState<Data[]>([]);
   const [editOpen, setEditOpen] = useState(false);
 
+  const queryClient = useQueryClient();
   function profileApi() {
-    return customAxios.get("/getUsers");
+    return customAxios.get("/getUsers", { params: { type: type } });
   }
 
-  const { data } = useQuery(["profileData"], profileApi, {
+  const { data } = useQuery(["profileData", type], profileApi, {
     refetchOnWindowFocus: false,
     onSuccess: (res: any) => {
-      console.log(res);
       setGetData(res.data.tweetData);
       setUserInfo(res.data.data.profile);
       setEmail(res.data.email);
@@ -134,7 +135,8 @@ const Profile = () => {
                     className={" button w-1/3 p-3  hover:bg-slate-200 "}
                     onClick={(e) => {
                       e.preventDefault();
-                      setGetData(data.data.tweetData);
+                      setType("tweets");
+                      queryClient.invalidateQueries(["profileData"]);
                     }}
                   >
                     Tweets
@@ -143,7 +145,8 @@ const Profile = () => {
                     className={" button w-1/3 p-3  hover:bg-slate-200 "}
                     onClick={(e) => {
                       e.preventDefault();
-                      setGetData(data.data.retweet);
+                      setType("retweets");
+                      queryClient.invalidateQueries(["profileData"]);
                     }}
                   >
                     Tweets & replies
@@ -153,7 +156,8 @@ const Profile = () => {
                     className={" button w-1/3 p-3  hover:bg-slate-200 "}
                     onClick={(e) => {
                       e.preventDefault();
-                      setGetData(data.data.likes);
+                      setType("likes");
+                      queryClient.invalidateQueries(["profileData"]);
                     }}
                   >
                     Likes
