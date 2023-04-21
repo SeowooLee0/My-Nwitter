@@ -29,16 +29,22 @@ import { changePeopleState } from "../redux/createSlice/PeopleDataSlice";
 import { current } from "@reduxjs/toolkit";
 import { useQuery, useQueryClient } from "react-query";
 import { changSearchState } from "../redux/createSlice/SearchSlice";
+import { wait } from "@testing-library/user-event/dist/utils";
 
 export interface ExploreData {
   id: string;
   email: string;
   tweet_id: number;
   comment: Array<Comment>;
+  reply_tweet_id: any;
   like: Array<Like>;
   content: string;
   tag: Array<string>;
   write_date: string;
+  profile: string;
+  user_id: number;
+  is_bookmark: boolean;
+  is_like: boolean;
 }
 
 const Explore = () => {
@@ -123,21 +129,9 @@ const Explore = () => {
       });
   };
   function onExploreSearch() {
-    // // dispatch(changSearchState(prop));
-
     return customAxios.get(`/getTweets/${focus}`, {
       params: { search },
     });
-    // .then((res) => {
-    //   // if (focus === "people") {
-    //   //   dispatch(
-    //   //     changePeopleState({
-    //   //       userData: res.data.data,
-    //   //     })
-    //   //   );
-    //   // }
-    //   // queryClient.invalidateQueries(["selectExploreData"]);
-    // });
   }
 
   const [exploreData, setExploreData] = useState<Data[]>([]);
@@ -192,8 +186,7 @@ const Explore = () => {
                   ? "border-solid border-b-4 border-blue-300"
                   : " border-solid border-b-4 border-white")
               }
-              onClick={(e) => {
-                e.preventDefault();
+              onClick={async (e) => {
                 setFocus("top");
                 dispatch(
                   changeExploreState({
@@ -203,7 +196,9 @@ const Explore = () => {
                     focus: "top",
                   })
                 );
-                queryClient.invalidateQueries(["selectExploreData"]); // queryKey 유효성 제거
+                queryClient.invalidateQueries(["selectExploreData"]);
+
+                // queryKey 유효성 제거
               }}
             >
               Top
@@ -215,8 +210,7 @@ const Explore = () => {
                   ? "border-solid border-b-4 border-blue-300"
                   : " border-solid border-b-4 border-white")
               }
-              onClick={(e) => {
-                e.preventDefault();
+              onClick={async (e) => {
                 dispatch(
                   changeExploreState({
                     top: false,
@@ -225,8 +219,9 @@ const Explore = () => {
                     focus: "latest",
                   })
                 );
+
                 setFocus("latest");
-                queryClient.invalidateQueries(["selectExploreData"]);
+                await queryClient.invalidateQueries(["selectExploreData"]);
               }}
             >
               Latest
@@ -238,7 +233,7 @@ const Explore = () => {
                   ? "border-solid border-b-4 border-blue-300"
                   : " border-solid border-b-4 border-white")
               }
-              onClick={() => {
+              onClick={async () => {
                 dispatch(
                   changeExploreState({
                     top: false,
@@ -248,6 +243,7 @@ const Explore = () => {
                   })
                 );
                 setFocus("people");
+                queryClient.invalidateQueries(["selectExploreData"]);
               }}
             >
               People
@@ -255,14 +251,22 @@ const Explore = () => {
           </div>
           {isPeople ? (
             <>
-              {peopleData.map((t: any, i: number) => {
+              {data.data.data.map((t: any, i: number) => {
                 return (
                   <div className="peopleBox" key={t.user_id}>
                     <div className="imgBox">
                       <img
                         className="profileImg rounded-full "
-                        alt={`http://localhost:8080/static/${t.profile}`}
-                        src={`http://localhost:8080/static/${t.profile}`}
+                        alt={
+                          t.profile === null
+                            ? `/assets/회색.png`
+                            : `http://localhost:1234/static/uploads/${t.profile}`
+                        }
+                        src={
+                          t.profile === null
+                            ? `/assets/회색.png`
+                            : `http://localhost:1234/static/uploads/${t.profile}`
+                        }
                       />
                     </div>
                     <div>
@@ -302,7 +306,7 @@ const Explore = () => {
               })}
             </>
           ) : (
-            <TweetBox data={exploreData} />
+            <TweetBox data={data.data.data} />
           )}
         </div>
       </div>
