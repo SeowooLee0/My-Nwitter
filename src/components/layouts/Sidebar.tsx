@@ -21,37 +21,49 @@ const Sidebar = () => {
 
   return (
     <div className=" sideBar h-5/5  ">
-      <div>트위터</div>
+      <Link to={"/"}>
+        <img className=" w-15 h-8 " alt="#" src={"/assets/nwitter.jpg"} />
+      </Link>
       <button className="btn">
         <div className="pt-1">
-          <img
+          {/* <img
             className="w-5 h-5  mr-1"
             alt="#"
             src={"/assets/free-icon-home-1946436.png"}
-          />
+          /> */}
         </div>
-        <Link to={"/"}>Home</Link>
+        <Link to={"/"}>
+          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+        </Link>
       </button>
 
       <button className="btn">
-        <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/home.png"} />
-        <Link to={"/explore"}>Explore</Link>
+        {/* <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/home.png"} /> */}
+        <Link to={"/explore"}>
+          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+        </Link>
       </button>
       <button className="btn">
-        <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/user.png"} />
-        <Link to={"/profile"}>Profile</Link>
+        {/* <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/user.png"} /> */}
+        <Link to={"/profile"}>
+          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+        </Link>
       </button>
       <button className="btn">
-        <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/email.png"} />
-        <Link to={"/message"}>Messeages</Link>
+        {/* <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/email.png"} /> */}
+        <Link to={"/message"}>
+          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+        </Link>
       </button>
       <button className="btn">
-        <img
+        {/* <img
           className="w-5 h-5 pt-0 mr-1"
           alt="#"
           src={"/assets/bookmark_before.png"}
-        />
-        <Link to={"/bookmark"}>Bookmark</Link>
+        /> */}
+        <Link to={"/bookmark"}>
+          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+        </Link>
       </button>
       <button className="btn relative">
         {moreOpen ? (
@@ -68,7 +80,7 @@ const Sidebar = () => {
             <div className=" border-b-2">
               <button className="btn  hover:bg-slate-100 rounded">
                 <img
-                  className="w-5 h-5 pt-0 mr-1"
+                  className="w-5 h-6 pt-0 mr-1"
                   alt="#"
                   src={"/assets/search.png"}
                 />
@@ -76,7 +88,7 @@ const Sidebar = () => {
               </button>
               <button className="btn  hover:bg-slate-100 rounded ">
                 <img
-                  className="w-5 h-5 pt-0 mr-1"
+                  className="w-5 h-6 pt-0 mr-1"
                   alt="#"
                   src={"/assets/search.png"}
                 />
@@ -108,18 +120,22 @@ const Sidebar = () => {
         ) : (
           <>
             <div onClick={onMore} className="flex">
-              <img
-                className="w-5 h-5 pt-0 mr-1"
+              {/* <img
+                className="w-auto h-5 pt-0 mr-1"
                 alt="#"
                 src={"/assets/email.png"}
+              /> */}
+              <img
+                className="w-auto h-9"
+                alt="#"
+                src={"/assets/HomeLogo.png"}
               />
-              More
             </div>
           </>
         )}
       </button>
       <button onClick={onLogout} className=" logout hover:text-red-900">
-        Logout
+        <img className="w-auto h-6" alt="#" src={"/assets/LogoutLogo.png"} />
       </button>
     </div>
   );
