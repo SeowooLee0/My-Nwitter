@@ -94,17 +94,7 @@ const Explore = () => {
         user_id: prop,
       })
       .then(() => {
-        customAxios
-          .get("/getTweets/people", {
-            params: { search, currentPage },
-          })
-          .then((res) => {
-            dispatch(
-              changePeopleState({
-                userData: res.data.data,
-              })
-            );
-          });
+        queryClient.invalidateQueries(["selectExploreData"]);
       });
   };
 
@@ -114,18 +104,7 @@ const Explore = () => {
         user_id: prop,
       })
       .then(() => {
-        customAxios
-          .get("/getTweets/people", {
-            params: { search, currentPage },
-          })
-          .then((res) => {
-            console.log();
-            dispatch(
-              changePeopleState({
-                userData: res.data.data,
-              })
-            );
-          });
+        queryClient.invalidateQueries(["selectExploreData"]);
       });
   };
   function onExploreSearch() {
@@ -134,7 +113,7 @@ const Explore = () => {
     });
   }
 
-  const [exploreData, setExploreData] = useState<Data[]>([]);
+  // const [exploreData, setExploreData] = useState<Data[]>([]);
 
   const tweetFocusApi = () => {
     return customAxios.get(`/getTweets/${focus}`, {
@@ -142,8 +121,8 @@ const Explore = () => {
     });
   };
 
-  const { isLoading, isError, data, error } = useQuery(
-    ["selectExploreData", currentPage, focus],
+  const { isLoading, isError, data, error }: any = useQuery(
+    ["selectExploreData", currentPage, focus, search],
     tweetFocusApi,
     {
       refetchOnWindowFocus: true,
@@ -151,9 +130,9 @@ const Explore = () => {
       retry: 0, // 실패시 재호출 몇번 할지
 
       onSuccess: (res: any) => {
-        console.log(res.data.data);
-        setExploreData(res.data.data);
+        console.log(res);
       },
+
       onError: (e: any) => {
         console.log(e.message);
       },
@@ -186,7 +165,8 @@ const Explore = () => {
                   ? "border-solid border-b-4 border-blue-300"
                   : " border-solid border-b-4 border-white")
               }
-              onClick={async (e) => {
+              onClick={(e) => {
+                e.preventDefault();
                 setFocus("top");
                 dispatch(
                   changeExploreState({
@@ -210,7 +190,8 @@ const Explore = () => {
                   ? "border-solid border-b-4 border-blue-300"
                   : " border-solid border-b-4 border-white")
               }
-              onClick={async (e) => {
+              onClick={(e) => {
+                e.preventDefault();
                 dispatch(
                   changeExploreState({
                     top: false,
@@ -221,7 +202,7 @@ const Explore = () => {
                 );
 
                 setFocus("latest");
-                await queryClient.invalidateQueries(["selectExploreData"]);
+                queryClient.invalidateQueries(["selectExploreData"]);
               }}
             >
               Latest
@@ -233,7 +214,8 @@ const Explore = () => {
                   ? "border-solid border-b-4 border-blue-300"
                   : " border-solid border-b-4 border-white")
               }
-              onClick={async () => {
+              onClick={(e) => {
+                e.preventDefault();
                 dispatch(
                   changeExploreState({
                     top: false,
@@ -288,7 +270,7 @@ const Explore = () => {
                       >
                         {t.following ? (
                           <div className=" ">
-                            <span className="follow hover:bg-slate-800 ">
+                            <span className="follow hover:bg-slate-700 ">
                               Following
                             </span>
                           </div>
