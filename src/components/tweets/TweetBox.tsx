@@ -26,7 +26,6 @@ export interface likeButton {
 const TweetBox = (prop: any) => {
   const dispatch = useDispatch();
   let data = prop.data;
-  console.log(data);
 
   const id = useSelector((state: RootState) => state.getData.id);
 
@@ -47,6 +46,7 @@ const TweetBox = (prop: any) => {
 
   useEffect(() => {
     setGetData(prop.data);
+    console.log(prop.data);
   }, [prop.data]);
 
   const onComment = (event: any) => {
@@ -63,7 +63,6 @@ const TweetBox = (prop: any) => {
         tweet_id: tweetId,
       })
       .then((res) => {
-        // console.log(res.headers);
         // if (res.data === "login again") {
         //   alert("로그인이 만료되었습니다");
         // }
@@ -384,7 +383,10 @@ const TweetBox = (prop: any) => {
                                   >
                                     X
                                   </button>
-                                  <AddTweet nowData={[nowData]} />
+                                  <AddTweet
+                                    nowData={[nowData]}
+                                    profile={prop.userProfile}
+                                  />
                                 </div>
                               </Modal>
                             )

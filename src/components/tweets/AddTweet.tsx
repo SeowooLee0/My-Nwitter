@@ -16,7 +16,8 @@ interface saveTweets {
   reply_tweet_id: number;
 }
 
-const AddTweet = ({ nowData }: any) => {
+const AddTweet = (prop: any) => {
+  console.log(prop);
   const id = useSelector((state: RootState) => state.getData.id);
 
   const [tweet, setTweet] = useState("");
@@ -112,9 +113,17 @@ const AddTweet = ({ nowData }: any) => {
               <div className="tweetTop">
                 <div className="flex p-5 tweetWritingBox ">
                   <img
-                    className="w-8 h-8 pt-0 m-1"
-                    alt="#"
-                    src={"/assets/user(1).png"}
+                    className="w-10 h-10 pt-0 m-1  rounded-full"
+                    alt={
+                      prop.profile === null
+                        ? `/assets/회색.png`
+                        : `http://localhost:1234/static/uploads/${prop.profile}`
+                    }
+                    src={
+                      prop.profile === null
+                        ? `/assets/회색.png`
+                        : `http://localhost:1234/static/uploads/${prop.profile}`
+                    }
                   />
                   <div className="w-full">
                     <input
@@ -132,7 +141,7 @@ const AddTweet = ({ nowData }: any) => {
                       onClick={onLogin}
                       onChange={onTag}
                     />
-                    {nowData && <TweetBox data={nowData} />}
+                    {prop.nowData && <TweetBox data={prop.nowData} />}
                     <input
                       name="upload_file"
                       type="file"
@@ -150,8 +159,8 @@ const AddTweet = ({ nowData }: any) => {
                                 updateTweet.mutate({
                                   content: tweet,
                                   tag: saveTag,
-                                  reply_tweet_id: nowData
-                                    ? nowData[0].tweet_id
+                                  reply_tweet_id: prop.nowData
+                                    ? prop.nowData[0].tweet_id
                                     : null,
                                 });
                               }
