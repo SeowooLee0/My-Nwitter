@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/*",
-      "destination": "https://my-nwitter-backend.vercel.app/"
+      "source": "/localhost:1234/(.*)",
+      "destination": "https://my-nwitter-backend.vercel.app/(.*)"
     }
   ]
 }
