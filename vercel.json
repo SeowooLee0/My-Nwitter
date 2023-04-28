@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/localhost:1234/(.*)",
+      "source": "http://localhost:1234/(.*)",
       "destination": "https://my-nwitter-backend.vercel.app/(.*)"
     }
   ]
