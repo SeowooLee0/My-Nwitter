@@ -113,8 +113,9 @@ const Tweets = () => {
   const target = useRef<any>(null);
   const id = useSelector((state: RootState) => state.getData.id);
   const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
-
+  const [addData, setAddData] = useState<Data[]>([]);
   let [pageCount, setPageCount] = useState(0);
+  let [profile, setProfile] = useState("");
   const page = useRef(pageCount);
   const queryClient = useQueryClient();
 
@@ -132,9 +133,10 @@ const Tweets = () => {
     });
   }
 
-  const getTweets = useQuery(["select", page], tweetSelectApi, {
+  const { data } = useQuery(["select", page], tweetSelectApi, {
     refetchOnWindowFocus: false,
     onSuccess: (res: any) => {
+      setProfile(res.data.profile);
       if (pageCount > 1) {
         setAddData([...addData, ...res.data.data]);
       } else {
@@ -155,7 +157,6 @@ const Tweets = () => {
 
   // let newData = [...data.data.data];
 
-  const [addData, setAddData] = useState<Data[]>([]);
   useEffect(() => {
     console.log(getTotalPageNumber);
     const observer = new IntersectionObserver(
@@ -167,7 +168,7 @@ const Tweets = () => {
           setPageCount((page.current += 1));
 
           queryClient.invalidateQueries(["select"]);
-          console.log(getTweets.data);
+          console.log(data.data);
           // setAddData([...addData, ...getTweets.data.data.data]);
 
           // if (getTotalPageNumber > page.current) {
@@ -208,10 +209,10 @@ const Tweets = () => {
 
         <div className="middleBox flex-col grow">
           <div className="title">Home</div>
-          <AddTweet />
-          <TweetBox data={addData} />
+          <AddTweet profile={profile} />
+          <TweetBox data={addData} userProfile={profile} />
         </div>
-        <SidebarRight />
+        {/* <SidebarRight /> */}
       </div>
       <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
     </>
