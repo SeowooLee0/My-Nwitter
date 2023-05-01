@@ -198,15 +198,13 @@ const TweetBox = (prop: any) => {
       })
       .then((response) => {
         data[number].is_opened = response.data.is_opened;
-
+        data[number].comment = response.data.data;
         setGetData([...data]);
-        setGetComments(response.data.data);
       });
   };
 
   const closeComments = (number: number) => {
     data[number].is_opened = false;
-    setGetComments([]);
   };
 
   const openRetweet = ({ tweet_id, open, index }: any) => {
@@ -417,7 +415,7 @@ const TweetBox = (prop: any) => {
                               </button>
                             </div>
 
-                            {getComments.map((t: any) => {
+                            {t.comment.map((t: any) => {
                               return (
                                 <>
                                   <div className="comment_title">Comments</div>
