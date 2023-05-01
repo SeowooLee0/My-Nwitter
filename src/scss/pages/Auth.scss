@@ -1,6 +1,6 @@
 @font-face {
   font-family: "로고";
-  src: url("../../../public/fonts/KCC-Ganpan.ttf") format("truetype");
+  src: url("../../../public/fonts/HeirofLightOTFBold.otf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -22,7 +22,8 @@
 }
 
 .errorMessage {
-  color: red;
+  font-family: "Tenda";
+  color: rgb(60, 24, 24);
   font-weight: bold;
 }
 
@@ -35,9 +36,8 @@
 }
 
 .loginAuth {
-  font-family: "Tenada";
-  border: 2px solid gainsboro;
-  border-radius: 100px;
+  font-family: "로고";
+
   padding: 80px;
   text-align: center;
 
@@ -46,15 +46,29 @@
 
 .bgauth {
   background-color: #14253f;
-
+  background-image: url("../../../public/assets/1.1.jpg");
+  background-size: cover;
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
 }
 
+.inputBox {
+  background-image: url("../../../public/assets/Group 24.png");
+
+  background-size: 100% 100%;
+
+  max-width: 800px;
+  max-height: 700px;
+  padding: 40px;
+  height: auto;
+}
+
 .textBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 10px;
-  width: 500px;
   height: 200px;
 }
