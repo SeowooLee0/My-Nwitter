@@ -33,26 +33,26 @@ const Sidebar = () => {
           /> */}
         </div>
         <Link to={"/"}>
-          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+          <img className="w-auto h-9" alt="#" src={"/assets/home.png"} />
         </Link>
       </button>
 
       <button className="btn">
         {/* <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/home.png"} /> */}
         <Link to={"/explore"}>
-          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+          <img className="w-auto h-9" alt="#" src={"/assets/search.png"} />
         </Link>
       </button>
       <button className="btn">
         {/* <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/user.png"} /> */}
         <Link to={"/profile"}>
-          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+          <img className="w-auto h-9" alt="#" src={"/assets/user.png"} />
         </Link>
       </button>
       <button className="btn">
         {/* <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/email.png"} /> */}
         <Link to={"/message"}>
-          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+          <img className="w-auto h-9" alt="#" src={"/assets/messenger.png"} />
         </Link>
       </button>
       <button className="btn">
@@ -62,7 +62,7 @@ const Sidebar = () => {
           src={"/assets/bookmark_before.png"}
         /> */}
         <Link to={"/bookmark"}>
-          <img className="w-auto h-9" alt="#" src={"/assets/HomeLogo.png"} />
+          <img className="w-auto h-9" alt="#" src={"/assets/bookmark.png"} />
         </Link>
       </button>
       <button className="btn relative">
@@ -125,17 +125,13 @@ const Sidebar = () => {
                 alt="#"
                 src={"/assets/email.png"}
               /> */}
-              <img
-                className="w-auto h-9"
-                alt="#"
-                src={"/assets/HomeLogo.png"}
-              />
+              <img className="w-auto h-9" alt="#" src={"/assets/more.png"} />
             </div>
           </>
         )}
       </button>
       <button onClick={onLogout} className=" logout hover:text-red-900">
-        <img className="w-auto h-6" alt="#" src={"/assets/LogoutLogo.png"} />
+     로그아웃
       </button>
     </div>
   );
