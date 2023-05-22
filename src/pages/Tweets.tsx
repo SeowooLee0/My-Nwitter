@@ -157,7 +157,6 @@ const Tweets = () => {
 
   const [addData, setAddData] = useState<Data[]>([]);
   useEffect(() => {
-    console.log(getTotalPageNumber);
     const observer = new IntersectionObserver(
       async (entries) => {
         console.log(entries);
@@ -167,7 +166,7 @@ const Tweets = () => {
           setPageCount((page.current += 1));
 
           queryClient.invalidateQueries(["select"]);
-          console.log(getTweets.data);
+
           // setAddData([...addData, ...getTweets.data.data.data]);
 
           // if (getTotalPageNumber > page.current) {

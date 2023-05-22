@@ -30,6 +30,7 @@ import { current } from "@reduxjs/toolkit";
 import { useQuery, useQueryClient } from "react-query";
 import { changSearchState } from "../redux/createSlice/SearchSlice";
 import { wait } from "@testing-library/user-event/dist/utils";
+import { changeCurrentPage } from "../redux/createSlice/GetDataSlice";
 
 export interface ExploreData {
   id: string;
@@ -86,6 +87,8 @@ const Explore = () => {
     (state: RootState) => state.getData.currentPage
   );
 
+  console.log(currentPage);
+
   const pageCount = useSelector((state: RootState) => state.getData.pageCount);
 
   const saveFollow = (prop: number) => {
@@ -129,9 +132,7 @@ const Explore = () => {
       // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
       retry: 0, // 실패시 재호출 몇번 할지
 
-      onSuccess: (res: any) => {
-        console.log(res);
-      },
+      onSuccess: (res: any) => {},
 
       onError: (e: any) => {
         console.log(e.message);
@@ -176,6 +177,7 @@ const Explore = () => {
                     focus: "top",
                   })
                 );
+                dispatch(changeCurrentPage(1));
                 queryClient.invalidateQueries(["selectExploreData"]);
 
                 // queryKey 유효성 제거
@@ -200,7 +202,7 @@ const Explore = () => {
                     focus: "latest",
                   })
                 );
-
+                dispatch(changeCurrentPage(1));
                 setFocus("latest");
                 queryClient.invalidateQueries(["selectExploreData"]);
               }}
@@ -224,6 +226,7 @@ const Explore = () => {
                     focus: "people",
                   })
                 );
+                dispatch(changeCurrentPage(1));
                 setFocus("people");
                 queryClient.invalidateQueries(["selectExploreData"]);
               }}
@@ -292,7 +295,7 @@ const Explore = () => {
           )}
         </div>
       </div>
-      <Pagination />
+      <Pagination count={data.data.count} />
     </>
   );
 };

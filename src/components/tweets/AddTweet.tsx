@@ -50,7 +50,7 @@ const AddTweet = (prop: any) => {
 
       setTweet(value);
       if (value.length >= 101) {
-        alert("글자수는 10자리로 제한되어있습니다");
+        alert("글자수는 100자리로 제한되어있습니다");
         const text = value.slice(0, 100);
         setTweet(text);
       }

@@ -11,16 +11,19 @@ import {
 } from "../../redux/createSlice/GetDataSlice";
 import { RootState } from "../../redux/store";
 
-const Pagination = () => {
+const Pagination = ({ count }: any) => {
   const pageNumber = [];
   const dispatch = useDispatch();
   const postPerPage = 10;
   const queryClient = useQueryClient();
-  const pageCount = useSelector((state: RootState) => state.getData.pageCount);
-  const data: any = queryClient.getQueryData(["selectData"]);
-  let getTotalPosts = pageCount;
 
-  for (let i = 1; i <= Math.ceil(getTotalPosts / postPerPage); i++) {
+  const data: any = queryClient.getQueryData(["selectData"]);
+
+  const currentPage = useSelector(
+    (state: RootState) => state.getData.currentPage
+  );
+
+  for (let i = 1; i <= Math.ceil(count / postPerPage); i++) {
     pageNumber.push(i);
   }
 
@@ -38,6 +41,7 @@ const Pagination = () => {
               key={number}
               onClick={() => {
                 dispatch(changeCurrentPage(number));
+                console.log(number);
                 queryClient.invalidateQueries(["selectExploreData"]);
               }}
             >
