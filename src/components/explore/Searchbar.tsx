@@ -30,7 +30,7 @@ const Searchbar = (onSearchbar: any) => {
   const onSearch = (event: any) => {
     dispatch(changSearchState(search));
     event.preventDefault();
-
+    console.log(onSearchbar);
     onSearchbar.onSearchbar();
   };
 
