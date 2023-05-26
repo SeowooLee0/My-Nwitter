@@ -84,14 +84,14 @@ const Auth = () => {
                   src="/assets/Nwitter-2.png"
                   alt="Your Company"
                 />
-                <h2 className=" m-5 text-center text-3xl font-bold tracking-tight text-slate-600  ">
+                <h2 className=" m-5 mt-7 text-center text-3xl font-bold tracking-tight text-slate-600  ">
                   Sign in to your account
                 </h2>
               </div>
             </div>
 
             <input
-              className=" p-6 m-3 outline-none border-2 w-full h-10 rounded-2xl "
+              className=" p-6 m-3 mt-7 outline-none border-2 w-full h-10 rounded-2xl "
               {...register("email", {
                 required: "이메일은 필수 값입니다.",
                 pattern: {
@@ -111,7 +111,7 @@ const Auth = () => {
             </div>
             {/* <div>비밀번호</div> */}
             <input
-              className=" outline-none p-6 m-3  border-2 w-full h-10  rounded-2xl "
+              className=" outline-none p-6 m-3 mt-8  border-2 w-full h-10  rounded-2xl "
               {...register("password", {
                 required: "비밀번호는 필수 값입니다.",
                 minLength: {

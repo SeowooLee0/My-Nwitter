@@ -370,8 +370,9 @@ const TweetBox = (prop: any) => {
                           ) : (
                             modalIsOpen && (
                               <Modal
-                                className=" commentModal"
+                                className=" commentModal "
                                 isOpen={modalIsOpen}
+                                
                                 ariaHideApp={false}
                               >
                                 <div className="list">

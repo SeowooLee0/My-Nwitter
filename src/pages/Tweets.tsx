@@ -115,6 +115,7 @@ const Tweets = () => {
   const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
 
   let [pageCount, setPageCount] = useState(0);
+  const [profile, setProfile] = useState("");
   const page = useRef(pageCount);
   const queryClient = useQueryClient();
 
@@ -135,6 +136,7 @@ const Tweets = () => {
   const getTweets = useQuery(["select", page], tweetSelectApi, {
     refetchOnWindowFocus: false,
     onSuccess: (res: any) => {
+      setProfile(res.data.profile);
       if (pageCount > 1) {
         setAddData([...addData, ...res.data.data]);
       } else {
@@ -201,18 +203,20 @@ const Tweets = () => {
   return (
     <>
       {/* <Header /> */}
-
-      <div className=" flex">
+      <div className="flex">
         <Sidebar />
 
-        <div className="middleBox flex-col grow">
-          <div className="title">Home</div>
-          <AddTweet />
-          <TweetBox data={addData} />
+        <div className=" flex  justify-center items-center w-full h-5/5 ">
+          <div className="middleBox ">
+            <div className="title" />
+            <div className="tweets">
+              <AddTweet profile={profile} />
+              <TweetBox data={addData} />{" "}
+              <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
+            </div>
+          </div>
         </div>
-        <SidebarRight />
       </div>
-      <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
     </>
   );
 };

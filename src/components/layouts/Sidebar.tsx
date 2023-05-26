@@ -47,13 +47,13 @@ const Sidebar = () => {
         <button className="btn">
           {/* <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/user.png"} /> */}
           <Link to={"/profile"}>
-            <img className="w-auto h-9" alt="#" src={"/assets/user.png"} />
+            <img className="w-auto h-9" alt="#" src={"/assets/profile.png"} />
           </Link>
         </button>
         <button className="btn">
           {/* <img className="w-5 h-5 pt-0 mr-1" alt="#" src={"/assets/email.png"} /> */}
           <Link to={"/message"}>
-            <img className="w-auto h-9" alt="#" src={"/assets/messenger.png"} />
+            <img className="w-auto h-9" alt="#" src={"/assets/message.png"} />
           </Link>
         </button>
         <button className="btn">
@@ -66,7 +66,7 @@ const Sidebar = () => {
             <img className="w-auto h-9" alt="#" src={"/assets/bookmark.png"} />
           </Link>
         </button>
-        <button className="btn relative">
+        {/* <button className="btn relative">
           {moreOpen ? (
             <div className="moreModal">
               <button
@@ -95,8 +95,8 @@ const Sidebar = () => {
                   />
                   <Link to={"/explore"}>Twitter Circle</Link>
                 </button>
-              </div>
-              <button className="btn  hover:bg-slate-100 rounded  ">
+              </div> */}
+        {/* <button className="btn  hover:bg-slate-100 rounded  ">
                 <ul
                   onClick={() => {
                     setView(!view);
@@ -126,14 +126,14 @@ const Sidebar = () => {
                 alt="#"
                 src={"/assets/email.png"}
               /> */}
-                <img className="w-auto h-9" alt="#" src={"/assets/more.png"} />
+        {/* <img className="w-auto h-9" alt="#" src={"/assets/more.png"} />
               </div>
-            </>
-          )}
+            </> */}
+        {/* )}
+        </button> */}
+        <button className="btn" onClick={onLogout}>
+          <img className="w-auto h-9" alt="#" src={"/assets/logout.png"} />
         </button>
-        {/* <button onClick={onLogout} className=" logout hover:text-red-900">
-     로그아웃
-      </button> */}
       </div>
     </div>
   );

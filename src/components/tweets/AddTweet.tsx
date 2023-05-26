@@ -7,7 +7,7 @@ import customAxios from "../../api/CommonAxios";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
-import "../../scss/pages/Tweets.scss";
+import "../../scss/components/TweetBox.scss";
 import TweetBox from "./TweetBox";
 
 interface saveTweets {
@@ -17,7 +17,6 @@ interface saveTweets {
 }
 
 const AddTweet = (prop: any) => {
-  console.log(prop);
   const id = useSelector((state: RootState) => state.getData.id);
 
   const [tweet, setTweet] = useState("");
@@ -102,79 +101,74 @@ const AddTweet = (prop: any) => {
           console.log({ res });
         });
     };
+    console.log(prop.profile);
 
     return (
       <>
         {/* <Header /> */}
 
-        <div className=" flex">
-          <div className="middleBox flex-col grow">
-            <form>
-              <div className="tweetTop">
-                <div className="flex p-5 tweetWritingBox ">
-                  <img
-                    className="w-10 h-10 pt-0 m-1  rounded-full"
-                    alt={
-                      prop.profile === null
-                        ? `/assets/회색.png`
-                        : `http://localhost:1234/static/uploads/${prop.profile}`
-                    }
-                    src={
-                      prop.profile === null
-                        ? `/assets/회색.png`
-                        : `http://localhost:1234/static/uploads/${prop.profile}`
-                    }
-                  />
-                  <div className="w-full">
-                    <input
-                      className="input"
-                      name="tweet"
-                      placeholder="What's happening?"
-                      value={tweet}
-                      onClick={onLogin}
-                      onChange={onChange}
-                    />
-                    <input
-                      className="input"
-                      name="tag"
-                      placeholder="#태그"
-                      onClick={onLogin}
-                      onChange={onTag}
-                    />
-                    {prop.nowData && <TweetBox data={prop.nowData} />}
-                    <input
-                      name="upload_file"
-                      type="file"
-                      accept="*"
-                      onChange={onFileChange}
-                      placeholder="업로드"
-                    />
-                    <div className="inputBtn">
-                      <button
-                        onClick={
-                          file
-                            ? onUpload
-                            : (e: any) => {
-                                e.preventDefault();
-                                updateTweet.mutate({
-                                  content: tweet,
-                                  tag: saveTag,
-                                  reply_tweet_id: prop.nowData
-                                    ? prop.nowData[0].tweet_id
-                                    : null,
-                                });
-                              }
+        <form className="flex justify-center">
+          <div className="addTweetBox ">
+            <img
+              className="w-10 h-10 pt-0 m-1  rounded-full"
+              alt={
+                prop.profile === undefined
+                  ? `/assets/회색.png`
+                  : `http://localhost:1234/static/uploads/${prop.profile}`
+              }
+              src={
+                prop.profile === undefined
+                  ? `/assets/회색.png`
+                  : `http://localhost:1234/static/uploads/${prop.profile}`
+              }
+            />
+            <div className="w-full">
+              <input
+                className="input"
+                name="tweet"
+                placeholder="What's happening?"
+                value={tweet}
+                onClick={onLogin}
+                onChange={onChange}
+              />
+              <input
+                className="input"
+                name="tag"
+                placeholder="#태그"
+                onClick={onLogin}
+                onChange={onTag}
+              />
+              {prop.nowData && <TweetBox data={prop.nowData} />}
+              <input
+                name="upload_file"
+                type="file"
+                accept="*"
+                onChange={onFileChange}
+                placeholder="업로드"
+              />
+              <div className="inputBtn">
+                <button
+                  onClick={
+                    file
+                      ? onUpload
+                      : (e: any) => {
+                          e.preventDefault();
+                          updateTweet.mutate({
+                            content: tweet,
+                            tag: saveTag,
+                            reply_tweet_id: prop.nowData
+                              ? prop.nowData[0].tweet_id
+                              : null,
+                          });
                         }
-                      >
-                        업로드
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                  }
+                >
+                  업로드
+                </button>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
+        </form>
       </>
     );
   }

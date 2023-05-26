@@ -25,19 +25,19 @@
 .sideBar {
   font-family: Pretendard-Regular;
   font-weight: bolder;
-  top: 0px;
-  justify-content: center;
 
+  justify-content: center;
+  opacity: 60%;
   display: flex;
   position: sticky;
-  width: 10%;
+  width: 5%;
   height: 100vh;
   flex-direction: column;
 }
 .buttonBox {
   position: absolute;
-  width: 55px;
-  padding: 8px;
+  width: 70px;
+  padding: 15px;
 
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
