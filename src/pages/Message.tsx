@@ -167,148 +167,157 @@ const Message = () => {
     <>
       <div className=" flex ">
         <Sidebar />
-        <div className="w-1/3 border-spacing-r-10  border-black">
-          <div className="flex justify-between pl-3 pr-3">
-            <div className=" text-lg font-semibold  p-5 ">Message</div>
+        <div className=" flex  justify-center items-center w-full h-5/5 ">
+          <div className="middleBox ">
+            <div className="messageTitle" />
+            <div className="message ">
+              <div className="w-1/3 border-spacing-r-10  border-black">
+                <div className="flex justify-between pl-3 pr-3">
+                  <div className=" text-lg font-semibold  p-5 ">Message</div>
 
-            <div className="pt-5 pr-5">
-              <img
-                className="w-7 h-7"
-                alt="#"
-                src={"/assets/addMessage.png"}
-                onClick={() => {
-                  setModalIsOpen(true);
-                }}
-              />
-
-              <Modal className=" commentModal" isOpen={modalIsOpen}>
-                <div className="list">
-                  <button
-                    onClick={() => setModalIsOpen(false)}
-                    className=" text-end"
-                  >
-                    X
-                  </button>
-                  <Searchbar onSearchbar={peopleApi} />
-                  <div className="pt-3">
-                    {people.map((t: any, i: number) => {
-                      return (
-                        <div
-                          className="peopleBox hover:bg-slate-200 "
-                          key={t.user_id}
-                          onClick={() => peopleClick(t.user_id, t)}
-                        >
-                          <div className="imgBox">
-                            <img
-                              className="profileImg rounded-full "
-                              alt={`http://localhost:1234/static/${t.profile}`}
-                              src={`http://localhost:1234/static/${t.profile}`}
-                            />
-                          </div>
-                          <div>
-                            <div className="peopleInfo ">
-                              <p className="font-bold pt-1">사용자</p>
-                              <p className="from-neutral-400 text-sm">
-                                {t.email}
-                              </p>
-                              <p className="from-neutral-400 text-sm">소개글</p>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </Modal>
-            </div>
-          </div>
-          <div>
-            {chatRoomData.map((t: any, i: number) => {
-              return (
-                <div
-                  className="peopleBox hover:bg-slate-200 "
-                  key={t.date}
-                  onClick={() => {
-                    chatRoomClick(t.receive, t);
-                  }}
-                >
-                  <div>
-                    <div className=" font-bold pl-3">{t.receive}</div>
-                    <div className=" pl-3">{t.message}</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="border-slate-900  border-spacing-3  w-7/12  justify-end flex  flex-col">
-          <div className=" messageBox">
-            {room ? (
-              <>
-                <div className="flex items-center ">
-                  <div className=" ">
+                  <div className="pt-5 pr-5">
                     <img
-                      className="w-10 h-10 rounded-full "
-                      alt={`http://localhost:1234/static/${selectUser.profile}`}
-                      src={`http://localhost:1234/static/${selectUser.profile}`}
+                      className="w-7 h-7"
+                      alt="#"
+                      src={"/assets/addMessage.png"}
+                      onClick={() => {
+                        setModalIsOpen(true);
+                      }}
                     />
+
+                    <Modal className=" commentModal" isOpen={modalIsOpen}>
+                      <div className="list">
+                        <button
+                          onClick={() => setModalIsOpen(false)}
+                          className=" text-end"
+                        >
+                          X
+                        </button>
+                        <Searchbar onSearchbar={peopleApi} />
+                        <div className="pt-3">
+                          {people.map((t: any, i: number) => {
+                            return (
+                              <div
+                                className="peopleBox hover:bg-slate-200 "
+                                key={t.user_id}
+                                onClick={() => peopleClick(t.user_id, t)}
+                              >
+                                <div className="imgBox">
+                                  <img
+                                    className="profileImg rounded-full "
+                                    alt={`http://localhost:1234/static/uploads/${t.profile}`}
+                                    src={`http://localhost:1234/static/uploads/${t.profile}`}
+                                  />
+                                </div>
+                                <div>
+                                  <div className="peopleInfo ">
+                                    <p className="font-bold pt-1">사용자</p>
+                                    <p className="from-neutral-400 text-sm">
+                                      {t.email}
+                                    </p>
+                                    <p className="from-neutral-400 text-sm">
+                                      소개글
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </Modal>
                   </div>
-
-                  <p className="from-neutral-400 text-sm  font-bold pl-4">
-                    {selectUser.email}
-                  </p>
                 </div>
-
-                <div className=" ">
-                  {send.map((t: any, i: number) => {
+                <div>
+                  {chatRoomData.map((t: any, i: number) => {
                     return (
                       <div
-                        className={
-                          `${id}` === t.send
-                            ? " flex justify-end"
-                            : " flex justify-start"
-                        }
+                        className="peopleBox hover:bg-slate-200 "
+                        key={t.date}
+                        onClick={() => {
+                          chatRoomClick(t.receive, t);
+                        }}
                       >
-                        <div
-                          className={
-                            `${id}` === t.send ? "myChatBox" : "chatBox"
-                          }
-                          key={i}
-                        >
-                          {t.message}
+                        <div>
+                          <div className=" font-bold pl-3">{t.receive}</div>
+                          <div className=" pl-3">{t.message}</div>
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              </>
-            ) : (
-              <></>
-            )}
-          </div>
-          <div className=" flex p-2">
-            <input
-              className="input"
-              type="text"
-              placeholder="전송하려는 메세지를 입력하세요."
-              value={message}
-              onChange={(e: any) => setMessage(e.target.value)}
-            />
-            <button
-              className="sendButton w-10"
-              onClick={(e) => {
-                let newData = {
-                  send: `${id}`,
-                  message: message,
-                  date: time,
-                };
-                sendMessage(selectUser.user_id, id);
+              </div>
+              <div className="border-slate-900  border-spacing-3  w-2/3 justify-end flex  flex-col">
+                <div className=" messageBox">
+                  {room ? (
+                    <>
+                      <div className="flex items-center ">
+                        <div className=" ">
+                          <img
+                            className="w-10 h-10 rounded-full "
+                            alt={`http://localhost:1234/static/uploads/${selectUser.profile}`}
+                            src={`http://localhost:1234/static/uploads/${selectUser.profile}`}
+                          />
+                        </div>
 
-                setSend([...send, newData]);
-              }}
-            >
-              전송
-            </button>
+                        <p className="from-neutral-400 text-sm  font-bold pl-4">
+                          {selectUser.email}
+                        </p>
+                      </div>
+
+                      <div className=" ">
+                        {send.map((t: any, i: number) => {
+                          return (
+                            <div
+                              className={
+                                `${id}` === t.send
+                                  ? " flex justify-end"
+                                  : " flex justify-start"
+                              }
+                            >
+                              <div
+                                className={
+                                  `${id}` === t.send ? "myChatBox" : "chatBox"
+                                }
+                                key={i}
+                              >
+                                {t.message}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                <div className=" flex p-2">
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="전송하려는 메세지를 입력하세요."
+                    value={message}
+                    onChange={(e: any) => setMessage(e.target.value)}
+                  />
+                  <button
+                    className="sendButton w-10"
+                    onClick={(e) => {
+                      let newData = {
+                        send: `${id}`,
+                        message: message,
+                        date: time,
+                      };
+                      sendMessage(selectUser.user_id, id);
+
+                      setSend([...send, newData]);
+                    }}
+                  >
+                    전송
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

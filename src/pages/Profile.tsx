@@ -81,92 +81,101 @@ const Profile = () => {
     <>
       <div className="flex">
         <Sidebar />
-        <form className="w-3/5">
-          <div className=" relative h-auto">
-            <img
-              className=" background "
-              alt={
-                userInfo === null
-                  ? `/assets/회색.png`
-                  : `http://localhost:1234/static/uploads/${userInfo}`
-              }
-              src={
-                userInfo === null
-                  ? `/assets/회색.png`
-                  : `http://localhost:1234/static/uploads/${userInfo}`
-              }
-            />
-            <div className="relative">
-              <img
-                className="profile absolute"
-                alt={
-                  userInfo === null
-                    ? `/assets/회색.png`
-                    : `http://localhost:1234/static/uploads/${userInfo}`
-                }
-                src={
-                  userInfo === null
-                    ? `/assets/회색.png`
-                    : `http://localhost:1234/static/uploads/${userInfo}`
-                }
-              />
-            </div>
-          </div>
-          <div className=" pt-4">
-            <div className="edit">
-              <button className="editBtn">Edit profile</button>
-            </div>
-            <div className="pl-5 pt-10 text-xl   font-bold   ">사용자</div>
-            <div className="pl-5 text-neutral-500  ">{email}</div>
-
-            <div className="dateBox">
-              <div className="pt-0.5 pr-1">
-                <img className="dateIcon " alt="#" src={"/assets/user.png"} />
-              </div>
-              <div className="date text-neutral-500">Joined August 2022</div>
-            </div>
-
-            <div className="flex h-auto">
-              <div className="grow">
-                <div className="p-5"></div>
-
-                <div className=" font-semibold   w-full  text-center flex justify-around ">
-                  <button
-                    className={" button w-1/3 p-3  hover:bg-slate-200 "}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setType("tweets");
-                      queryClient.invalidateQueries(["profileData"]);
-                    }}
-                  >
-                    Tweets
-                  </button>
-                  <button
-                    className={" button w-1/3 p-3  hover:bg-slate-200 "}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setType("retweets");
-                      queryClient.invalidateQueries(["profileData"]);
-                    }}
-                  >
-                    Tweets & replies
-                  </button>
-
-                  <button
-                    className={" button w-1/3 p-3  hover:bg-slate-200 "}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setType("likes");
-                      queryClient.invalidateQueries(["profileData"]);
-                    }}
-                  >
-                    Likes
-                  </button>
+        <form className="flex justify-center items-center w-full h-5/5">
+          <div className="middleBox ">
+            <div className="profileTitle" />
+            <div className="tweets">
+              <div className=" relative ">
+                <img
+                  className=" background "
+                  alt={
+                    userInfo === null
+                      ? `/assets/회색.png`
+                      : `http://localhost:1234/static/uploads/${userInfo}`
+                  }
+                  src={
+                    userInfo === null
+                      ? `/assets/회색.png`
+                      : `http://localhost:1234/static/uploads/${userInfo}`
+                  }
+                />
+                <div className="relative">
+                  <img
+                    className="profile absolute"
+                    alt={
+                      userInfo === null
+                        ? `/assets/회색.png`
+                        : `http://localhost:1234/static/uploads/${userInfo}`
+                    }
+                    src={
+                      userInfo === null
+                        ? `/assets/회색.png`
+                        : `http://localhost:1234/static/uploads/${userInfo}`
+                    }
+                  />
                 </div>
               </div>
-            </div>
-            <TweetBox data={getData} />
-            {/* <div>
+              <div className=" pt-4">
+                <div className="edit">
+                  <button className="editBtn">Edit profile</button>
+                </div>
+                <div className="pl-5 pt-10 text-xl   font-bold   ">사용자</div>
+                <div className="pl-5 text-neutral-500  ">{email}</div>
+
+                <div className="dateBox">
+                  <div className="pt-0.5 pr-1">
+                    <img
+                      className="dateIcon "
+                      alt="#"
+                      src={"/assets/user.png"}
+                    />
+                  </div>
+                  <div className="date text-neutral-500">
+                    Joined August 2022
+                  </div>
+                </div>
+
+                <div className="flex h-auto">
+                  <div className="grow">
+                    <div className="p-5"></div>
+
+                    <div className=" font-semibold   w-full  text-center flex justify-around ">
+                      <button
+                        className={" button w-1/3 p-3  hover:bg-slate-200 "}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setType("tweets");
+                          queryClient.invalidateQueries(["profileData"]);
+                        }}
+                      >
+                        Tweets
+                      </button>
+                      <button
+                        className={" button w-1/3 p-3  hover:bg-slate-200 "}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setType("retweets");
+                          queryClient.invalidateQueries(["profileData"]);
+                        }}
+                      >
+                        Tweets & replies
+                      </button>
+
+                      <button
+                        className={" button w-1/3 p-3  hover:bg-slate-200 "}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setType("likes");
+                          queryClient.invalidateQueries(["profileData"]);
+                        }}
+                      >
+                        Likes
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <TweetBox data={getData} />
+                {/* <div>
               <input
                 name="profile_img"
                 type="file"
@@ -178,9 +187,10 @@ const Profile = () => {
                 업로드
               </button>
             </div> */}
+              </div>
+            </div>
           </div>
         </form>
-        <SidebarRight />
       </div>
     </>
   );

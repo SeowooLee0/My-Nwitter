@@ -43,13 +43,14 @@
   flex-direction: column;
 }
 
-.title {
+.tweetTitle {
   background-image: url("../../../public/assets/Group\ 25.png");
   background-size: contain;
-  width: 700px;
+  width: 100%;
+  height: 50px;
+  margin-left: 80px;
   background-repeat: no-repeat;
   padding: 1.5%;
-  margin-left: 50px;
   margin-top: 14px;
 }
 

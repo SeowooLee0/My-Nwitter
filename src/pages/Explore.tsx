@@ -151,151 +151,158 @@ const Explore = () => {
   return (
     <>
       {/* <Header /> */}
-      <div className="flex h-auto">
+      <div className="flex">
         <Sidebar />
-        <div className="grow">
-          <div className="p-5">
-            <Searchbar onSearchbar={onExploreSearch} />
-          </div>
+        <div className=" flex  justify-center items-center w-full h-5/5 ">
+          <div className="middleBox ">
+            <div className="exploreTitle" />
+            <div className="tweets">
+              <div className="p-5">
+                <Searchbar onSearchbar={onExploreSearch} />
+              </div>
 
-          <div className=" font-serif w-full flex justify-around ">
-            <button
-              className={
-                " button w-20 p-3 ml-3 hover:bg-slate-200 " +
-                (isTop
-                  ? "border-solid border-b-4 border-blue-300"
-                  : " border-solid border-b-4 border-white")
-              }
-              onClick={(e) => {
-                e.preventDefault();
-                setFocus("top");
-                dispatch(
-                  changeExploreState({
-                    top: true,
-                    latest: false,
-                    people: false,
-                    focus: "top",
-                  })
-                );
-                dispatch(changeCurrentPage(1));
-                queryClient.invalidateQueries(["selectExploreData"]);
+              <div className=" font-serif w-full flex justify-around ">
+                <button
+                  className={
+                    " button w-20 p-3 ml-3 hover:bg-slate-200 " +
+                    (isTop
+                      ? "border-solid border-b-4 border-blue-300"
+                      : " border-solid border-b-4 border-white")
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setFocus("top");
+                    dispatch(
+                      changeExploreState({
+                        top: true,
+                        latest: false,
+                        people: false,
+                        focus: "top",
+                      })
+                    );
+                    dispatch(changeCurrentPage(1));
+                    queryClient.invalidateQueries(["selectExploreData"]);
 
-                // queryKey 유효성 제거
-              }}
-            >
-              Top
-            </button>
-            <button
-              className={
-                " button w-20 p-3 ml-3 hover:bg-slate-200 " +
-                (isLatest
-                  ? "border-solid border-b-4 border-blue-300"
-                  : " border-solid border-b-4 border-white")
-              }
-              onClick={(e) => {
-                e.preventDefault();
-                dispatch(
-                  changeExploreState({
-                    top: false,
-                    latest: true,
-                    people: false,
-                    focus: "latest",
-                  })
-                );
-                dispatch(changeCurrentPage(1));
-                setFocus("latest");
-                queryClient.invalidateQueries(["selectExploreData"]);
-              }}
-            >
-              Latest
-            </button>
-            <button
-              className={
-                " button w-20 p-3  ml-3 hover:bg-slate-200 " +
-                (isPeople
-                  ? "border-solid border-b-4 border-blue-300"
-                  : " border-solid border-b-4 border-white")
-              }
-              onClick={(e) => {
-                e.preventDefault();
-                dispatch(
-                  changeExploreState({
-                    top: false,
-                    latest: false,
-                    people: true,
-                    focus: "people",
-                  })
-                );
-                dispatch(changeCurrentPage(1));
-                setFocus("people");
-                queryClient.invalidateQueries(["selectExploreData"]);
-              }}
-            >
-              People
-            </button>
-          </div>
-          {isPeople ? (
-            <>
-              {data.data.data.map((t: any, i: number) => {
-                return (
-                  <div className="peopleBox" key={t.user_id}>
-                    <div className="imgBox">
-                      <img
-                        className="profileImg rounded-full "
-                        alt={
-                          t.profile === null
-                            ? `/assets/회색.png`
-                            : `http://localhost:1234/static/uploads/${t.profile}`
-                        }
-                        src={
-                          t.profile === null
-                            ? `/assets/회색.png`
-                            : `http://localhost:1234/static/uploads/${t.profile}`
-                        }
-                      />
-                    </div>
-                    <div>
-                      <div className="peopleInfo ">
-                        <p className="font-bold pt-1">사용자</p>
-                        <p className="from-neutral-400 text-sm">{t.email}</p>
-                        <p className="from-neutral-400 text-sm">소개글</p>
-                      </div>
-                    </div>
-                    <div className=" followBox">
-                      <button
-                        className=""
-                        key={t.user_id}
-                        onClick={() => {
-                          t.following
-                            ? deleteFollow(t.user_id)
-                            : saveFollow(t.user_id);
-                        }}
-                      >
-                        {t.following ? (
-                          <div className=" ">
-                            <span className="follow hover:bg-slate-700 ">
-                              Following
-                            </span>
+                    // queryKey 유효성 제거
+                  }}
+                >
+                  Top
+                </button>
+                <button
+                  className={
+                    " button w-20 p-3 ml-3 hover:bg-slate-200 " +
+                    (isLatest
+                      ? "border-solid border-b-4 border-blue-300"
+                      : " border-solid border-b-4 border-white")
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(
+                      changeExploreState({
+                        top: false,
+                        latest: true,
+                        people: false,
+                        focus: "latest",
+                      })
+                    );
+                    dispatch(changeCurrentPage(1));
+                    setFocus("latest");
+                    queryClient.invalidateQueries(["selectExploreData"]);
+                  }}
+                >
+                  Latest
+                </button>
+                <button
+                  className={
+                    " button w-20 p-3  ml-3 hover:bg-slate-200 " +
+                    (isPeople
+                      ? "border-solid border-b-4 border-blue-300"
+                      : " border-solid border-b-4 border-white")
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(
+                      changeExploreState({
+                        top: false,
+                        latest: false,
+                        people: true,
+                        focus: "people",
+                      })
+                    );
+                    dispatch(changeCurrentPage(1));
+                    setFocus("people");
+                    queryClient.invalidateQueries(["selectExploreData"]);
+                  }}
+                >
+                  People
+                </button>
+              </div>
+              {isPeople ? (
+                <>
+                  {data.data.data.map((t: any, i: number) => {
+                    return (
+                      <div className="peopleBox" key={t.user_id}>
+                        <div className="imgBox">
+                          <img
+                            className="profileImg rounded-full "
+                            alt={
+                              t.profile === null
+                                ? `/assets/회색.png`
+                                : `http://localhost:1234/static/uploads/${t.profile}`
+                            }
+                            src={
+                              t.profile === null
+                                ? `/assets/회색.png`
+                                : `http://localhost:1234/static/uploads/${t.profile}`
+                            }
+                          />
+                        </div>
+                        <div>
+                          <div className="peopleInfo ">
+                            <p className="font-bold pt-1">사용자</p>
+                            <p className="from-neutral-400 text-sm">
+                              {t.email}
+                            </p>
+                            <p className="from-neutral-400 text-sm">소개글</p>
                           </div>
-                        ) : (
-                          <>
-                            <div className="following">
-                              <span className="follow">Follow</span>
-                            </div>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </>
-          ) : (
-            <TweetBox data={data.data.data} />
-          )}
+                        </div>
+                        <div className=" followBox">
+                          <button
+                            className=""
+                            key={t.user_id}
+                            onClick={() => {
+                              t.following
+                                ? deleteFollow(t.user_id)
+                                : saveFollow(t.user_id);
+                            }}
+                          >
+                            {t.following ? (
+                              <div className=" ">
+                                <span className="follow hover:bg-slate-700 ">
+                                  Following
+                                </span>
+                              </div>
+                            ) : (
+                              <>
+                                <div className="following">
+                                  <span className="follow">Follow</span>
+                                </div>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              ) : (
+                <TweetBox data={data.data.data} />
+              )}
+            </div>
+            <Pagination count={data.data.count} />
+          </div>
         </div>
       </div>
-      <Pagination count={data.data.count} />
     </>
   );
 };

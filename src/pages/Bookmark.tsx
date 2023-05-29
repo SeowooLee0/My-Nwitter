@@ -44,9 +44,13 @@ const Bookmark = () => {
     <>
       <div className="flex">
         <Sidebar />
-        <div className="">
-          <div className="title">Bookmark</div>
-          <TweetBox TweetBox data={bookmarkData} />
+        <div className=" flex  justify-center items-center w-full h-5/5 ">
+          <div className="middleBox ">
+            <div className="bookmarkTitle" />
+            <div className="bookmarks">
+              <TweetBox TweetBox data={bookmarkData} />
+            </div>
+          </div>
         </div>
       </div>
     </>

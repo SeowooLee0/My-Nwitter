@@ -1,7 +1,39 @@
-.title {
-  font-family: "Vidaloka", serif;
-  font-size: 20px;
+.bookmarkTitle {
+  background-image: url("../../../public/assets/Group\ 29.png");
+  background-size: contain;
   width: 100%;
-  padding-left: 25px;
-  padding-top: 30px;
+  height: 50px;
+  margin-left: 80px;
+  background-repeat: no-repeat;
+  padding: 1.5%;
+  margin-top: 14px;
+}
+
+.middleBox {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90%;
+  width: 80%;
+  background: #d9d9d9;
+  border-radius: 15px;
+}
+
+.bookmarks::-webkit-scrollbar {
+  display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+.bookmarks {
+  position: relative;
+  padding: 10px;
+  display: flex;
+  margin-top: -7px;
+  width: 95%;
+  height: 90%;
+  border-radius: 15px;
+  background-color: white;
+  display: flex;
+  overflow: auto;
+  flex-direction: row;
 }

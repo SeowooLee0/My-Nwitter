@@ -28,7 +28,7 @@ const Pagination = ({ count }: any) => {
   }
 
   return (
-    <div className="flex justify-items-center border-t border-gray-200 bg-white  ">
+    <div className="flex justify-items-center border-t   ">
       <div className="flex flex-1 w-full justify-center ">
         <nav
           className="isolate inline-flex -space-x-px rounded-md shadow-sm"
@@ -37,7 +37,7 @@ const Pagination = ({ count }: any) => {
           {pageNumber.map((number) => (
             <div
               aria-current="page"
-              className="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
+              className="relative inline-flex items-center border rounded-lg border-gray-300 m-2 bg-white px-4 py-2 text-sm  font-bold font-mono text-gray-500 hover:bg-gray-50 focus:z-20"
               key={number}
               onClick={() => {
                 dispatch(changeCurrentPage(number));

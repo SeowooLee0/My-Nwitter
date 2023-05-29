@@ -208,7 +208,7 @@ const Tweets = () => {
 
         <div className=" flex  justify-center items-center w-full h-5/5 ">
           <div className="middleBox ">
-            <div className="title" />
+            <div className="tweetTitle" />
             <div className="tweets">
               <AddTweet profile={profile} />
               <TweetBox data={addData} />{" "}
