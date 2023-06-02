@@ -11,7 +11,30 @@
   border-radius: 100%;
   border: 3px solid white;
   top: -65px;
-  left: 15px;
+  left: 20px;
+}
+
+.editBackground {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.profileBorder {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 120px;
+  width: 100%;
+}
+
+.editProfile {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 100%;
+  border: 3px solid white;
+  top: -130px;
 }
 
 .edit {

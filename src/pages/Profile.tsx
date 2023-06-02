@@ -9,6 +9,7 @@ import SidebarRight from "../components/layouts/SidebarRight";
 import TweetBox from "../components/tweets/TweetBox";
 import "../scss/pages/Profile.scss";
 import { Data } from "./Tweets";
+import Modal from "react-modal";
 
 interface UserInfo {
   email: string;
@@ -24,6 +25,7 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState("");
   const [getData, setGetData] = useState<Data[]>([]);
   const [editOpen, setEditOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const queryClient = useQueryClient();
   function profileApi() {
@@ -99,9 +101,9 @@ const Profile = () => {
                       : `http://localhost:1234/static/uploads/${userInfo}`
                   }
                 />
-                <div className="relative">
+                <div className="relative ">
                   <img
-                    className="profile absolute"
+                    className="profile absolute "
                     alt={
                       userInfo === null
                         ? `/assets/회색.png`
@@ -117,11 +119,86 @@ const Profile = () => {
               </div>
               <div className=" pt-4">
                 <div className="edit">
-                  <button className="editBtn">Edit profile</button>
-                </div>
-                <div className="pl-5 pt-10 text-xl   font-bold   ">사용자</div>
-                <div className="pl-5 text-neutral-500  ">{email}</div>
+                  <button
+                    className="editBtn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setModalIsOpen(true);
+                    }}
+                  >
+                    Edit profile
+                  </button>
+                  {modalIsOpen && (
+                    <Modal
+                      className=" commentModal "
+                      isOpen={modalIsOpen}
+                      ariaHideApp={false}
+                    >
+                      <div className="list">
+                        <button
+                          onClick={() => setModalIsOpen(false)}
+                          className=" text-end"
+                        >
+                          X
+                        </button>
 
+                        <div className=" relative">
+                          <img
+                            className="editBackground "
+                            alt={
+                              userInfo === null
+                                ? `/assets/회색.png`
+                                : `http://localhost:1234/static/uploads/${userInfo}`
+                            }
+                            src={
+                              userInfo === null
+                                ? `/assets/회색.png`
+                                : `http://localhost:1234/static/uploads/${userInfo}`
+                            }
+                          />
+
+                          <div className=" profileBorder">
+                            <img
+                              className="editProfile absolute"
+                              alt={
+                                userInfo === null
+                                  ? `/assets/회색.png`
+                                  : `http://localhost:1234/static/uploads/${userInfo}`
+                              }
+                              src={
+                                userInfo === null
+                                  ? `/assets/회색.png`
+                                  : `http://localhost:1234/static/uploads/${userInfo}`
+                              }
+                            />
+                          </div>
+                        </div>
+
+                        <div className=" text-center flex-col justify-center">
+                          <div className="  text-xl  p-2 font-bold ">
+                            사용자
+                          </div>
+                          <div className=" text-neutral-500  ">{email}</div>
+
+                          <div className="">
+                            <button className="m-2 p-2  bg-blue-300  rounded-3xl ">
+                              배경화면 변경
+                            </button>
+                            <button className="m-2 p-2 bg-blue-300  rounded-3xl ">
+                              포로필 사진 변경
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </Modal>
+                  )}
+                </div>
+                <div>
+                  <div className="pl-5 pt-10 text-xl   font-bold   ">
+                    사용자
+                  </div>
+                  <div className="pl-5 text-neutral-500  ">{email}</div>
+                </div>
                 <div className="dateBox">
                   <div className="pt-0.5 pr-1">
                     <img
