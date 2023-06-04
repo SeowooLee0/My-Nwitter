@@ -29,7 +29,12 @@ import Sidebar from "../components/layouts/Sidebar";
 import "../scss/pages/Tweets.scss";
 import SidebarRight from "../components/layouts/SidebarRight";
 
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 
 import AddTweet from "../components/tweets/AddTweet";
 
@@ -115,8 +120,9 @@ const Tweets = () => {
   const isLoaded = useSelector((state: RootState) => state.getData.isLoaded);
 
   let [pageCount, setPageCount] = useState(0);
+  let [total, setTotal] = useState(10);
   const [profile, setProfile] = useState("");
-  const page = useRef(pageCount);
+  let page = useRef(pageCount);
   const queryClient = useQueryClient();
 
   const getTotalPageNumber = useSelector(
@@ -133,31 +139,54 @@ const Tweets = () => {
     });
   }
 
-  const getTweets = useQuery(["select", page], tweetSelectApi, {
-    refetchOnWindowFocus: false,
-    onSuccess: (res: any) => {
-      setProfile(res.data.profile);
-      if (pageCount > 1) {
-        setAddData([...addData, ...res.data.data]);
-      } else {
-        setAddData([...res.data.data]);
+  const all = queryClient.getQueriesData(["select"]);
+
+  // const getTWeets: any = useQuery(["select", page], tweetSelectApi, {
+  //   refetchOnWindowFocus: false,
+  //   onSuccess: (res: any) => {
+  //     console.log(res);
+  //     setProfile(res.data.profile);
+  //     setTotal(res.data.count);
+  //     if (pageCount > 1) {
+  //       setAddData([...addData, ...res.data.data]);
+  //     } else {
+  //       setAddData([...res.data.data]);
+  //     }
+
+  //     // dispatch(
+  //     //   changGetDataState({
+  //     //     id: res.data.user_id,
+  //     //     postPerPage: 10,
+  //     //     totalPosts: res.data.count,
+  //     //   })
+  //     // );
+  //   },
+  // });
+
+  const { data, hasNextPage, isFetching, isFetchingNextPage, fetchNextPage } =
+    useInfiniteQuery(
+      ["select"],
+      async ({ pageParam = 1 }) =>
+        customAxios
+          .get("/getTweets/select", {
+            params: { pageParam },
+          })
+          .then((res: any) => {
+            setProfile(res.data.profile);
+            setTotal(res.data.count);
+            return res;
+          }),
+
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          return pageCount + 1;
+        },
+        refetchOnWindowFocus: false,
       }
-
-      dispatch(
-        changGetDataState({
-          id: res.data.user_id,
-          postPerPage: 10,
-          totalPosts: res.data.count,
-        })
-      );
-
-      //   dispatch(addCurrentPosts(res.data.data));
-    },
-  });
-
-  // let newData = [...data.data.data];
+    );
 
   const [addData, setAddData] = useState<Data[]>([]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       async (entries) => {
@@ -165,14 +194,14 @@ const Tweets = () => {
 
         if (entries[0].isIntersecting) {
           console.log("is InterSecting");
-          setPageCount((page.current += 1));
-
-          queryClient.invalidateQueries(["select"]);
 
           // setAddData([...addData, ...getTweets.data.data.data]);
 
-          // if (getTotalPageNumber > page.current) {
-          // }
+          if (Math.ceil(total / 10) > page.current) {
+            fetchNextPage();
+            setPageCount((page.current += 1));
+            // queryClient.invalidateQueries(["select"]);
+          }
           // console.log(page.current);
         }
       },
@@ -185,10 +214,10 @@ const Tweets = () => {
     return () => {
       observer.disconnect();
     };
-  }, [target]);
+  }, [target, total]);
 
   useEffect(() => {
-    socket.on("RECEIVE_COMMENT", (data: any) => {
+    socket.on("RECEIVE_COMMENT", (i: any) => {
       window.alert("새로운 코멘트가 추가되었습니다");
     });
 
@@ -199,6 +228,7 @@ const Tweets = () => {
     //   });
     // };
   }, [socket]);
+  // console.log(data.pages);
 
   return (
     <>
@@ -210,9 +240,21 @@ const Tweets = () => {
           <div className="middleBox ">
             <div className="tweetTitle" />
             <div className="tweets">
-              <AddTweet profile={profile} />
-              <TweetBox data={addData} />{" "}
+              <AddTweet profile={profile} count={Math.ceil(total / 10)} />
+              {!data ? (
+                <p>Loading...</p>
+              ) : (
+                <TweetBox
+                  data={data?.pages.map((page) => page.data.data)}
+                  profile={profile}
+                />
+              )}
               <div ref={target}>{isLoaded && <p>Loading...</p>}</div>
+              {/* <div>
+                {isFetching && !isFetchingNextPage ? "Fetching..." : null}
+              </div> */}
+
+              {/* 클릭 시 이전 페이지 호출 */}
             </div>
           </div>
         </div>

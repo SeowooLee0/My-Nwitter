@@ -5,12 +5,12 @@ import { Data, isLike, Like, Tweet } from "../../pages/Tweets";
 interface getDataState {
   currentPosts: Array<Data>;
   id: any;
-  currentPage: number;
+  currentPage: any;
   postPerPage: number;
   totalPosts: number;
   isLoaded: boolean;
   pageCount: number;
-  totalPageNumber: number;
+  totalPageNumber: any;
   uploadFile: string;
 }
 
@@ -22,7 +22,7 @@ const initialState = {
   totalPosts: 0,
   isLoaded: false,
   pageCount: 1,
-  totalPageNumber: 0,
+  totalPageNumber: 10,
   uploadFile: "",
 } as getDataState;
 
@@ -37,13 +37,13 @@ export const getDataSlice = createSlice({
     changeCurrentPosts(state, action: PayloadAction<[]>) {
       state.currentPosts = action.payload;
     },
-    changeTotalPageNumberPosts(state, action: PayloadAction<number>) {
+    changeTotalPageNumberPosts(state, action: PayloadAction<any>) {
       state.totalPageNumber = action.payload;
     },
     addCurrentPosts(state, action: PayloadAction<[]>) {
       state.currentPosts.push(...action.payload);
     },
-    changeCurrentPage(state, action: PayloadAction<number>) {
+    changeCurrentPage(state, action: PayloadAction<any>) {
       state.currentPage = action.payload;
     },
     setPageCount(state, action: PayloadAction<number>) {

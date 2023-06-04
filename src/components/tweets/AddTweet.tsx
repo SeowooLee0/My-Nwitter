@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { useState } from "react";
 
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import customAxios from "../../api/CommonAxios";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -16,21 +16,28 @@ interface saveTweets {
   reply_tweet_id: number;
 }
 
-const AddTweet = (prop: any) => {
+const AddTweet = ({ profile, count, nowData }: any) => {
   const id = useSelector((state: RootState) => state.getData.id);
+  const getTotalPageNumber = useSelector(
+    (state: RootState) => state.getData.totalPosts
+  );
 
+  const queryClient = useQueryClient();
   const [tweet, setTweet] = useState("");
   const [saveTag, setSaveTag] = useState("");
   {
     const updateTweet = useMutation(
-      (newData: saveTweets) =>
-        customAxios.post("/saveTweets", newData).then((res: any) => {
-          console.log(res);
-        }),
+      (newData: saveTweets) => {
+        return customAxios.post("/saveTweets", newData);
+      },
       {
-        onSuccess: () => {
-          console.log("onSuccess");
-          // queryClient.invalidateQueries(["select"]); // queryKey 유효성 제거
+        onSuccess: (res) => {
+          const data = queryClient.getQueriesData([
+            "select",
+            { current: count },
+          ]);
+          console.log(data, count);
+          // queryKey 유효성 제거
         },
         onError: (res) => {
           console.log(res);
@@ -87,7 +94,6 @@ const AddTweet = (prop: any) => {
       formData.append("tweet", tweet);
       formData.append("tag", saveTag);
 
-      console.log(formData, tweet, saveTag);
       axios
         .post("http://localhost:1234/upload/tweets", formData, {
           headers: {
@@ -101,7 +107,6 @@ const AddTweet = (prop: any) => {
           console.log({ res });
         });
     };
-    console.log(prop.profile);
 
     return (
       <>
@@ -112,14 +117,14 @@ const AddTweet = (prop: any) => {
             <img
               className="w-10 h-10 pt-0 m-1  rounded-full"
               alt={
-                prop.profile === undefined
+                profile === undefined
                   ? `/assets/회색.png`
-                  : `http://localhost:1234/static/uploads/${prop.profile}`
+                  : `http://localhost:1234/static/uploads/${profile}`
               }
               src={
-                prop.profile === undefined
+                profile === undefined
                   ? `/assets/회색.png`
-                  : `http://localhost:1234/static/uploads/${prop.profile}`
+                  : `http://localhost:1234/static/uploads/${profile}`
               }
             />
             <div className="w-full">
@@ -138,7 +143,7 @@ const AddTweet = (prop: any) => {
                 onClick={onLogin}
                 onChange={onTag}
               />
-              {prop.nowData && <TweetBox data={prop.nowData} />}
+              {nowData && <TweetBox data={nowData} />}
               <input
                 name="upload_file"
                 type="file"
@@ -156,8 +161,8 @@ const AddTweet = (prop: any) => {
                           updateTweet.mutate({
                             content: tweet,
                             tag: saveTag,
-                            reply_tweet_id: prop.nowData
-                              ? prop.nowData[0].tweet_id
+                            reply_tweet_id: nowData
+                              ? nowData[0].tweet_id
                               : null,
                           });
                         }

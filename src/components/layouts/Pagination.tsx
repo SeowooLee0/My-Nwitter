@@ -37,7 +37,7 @@ const Pagination = ({ count }: any) => {
           {pageNumber.map((number) => (
             <div
               aria-current="page"
-              className="relative inline-flex items-center border rounded-lg border-gray-300 m-2 bg-white px-4 py-2 text-sm  font-bold font-mono text-gray-500 hover:bg-gray-50 focus:z-20"
+              className="relative inline-flex items-center border rounded-lg border-gray-300  bg-white px-4 py-2 text-sm  font-bold font-mono text-gray-500 hover:bg-gray-50 focus:z-20"
               key={number}
               onClick={() => {
                 dispatch(changeCurrentPage(number));

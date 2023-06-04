@@ -27,7 +27,6 @@ customAxios.interceptors.request.use(
   function (config) {
     let accessToken = cookie.load("accessToken");
     if (accessToken) {
-      console.log(accessToken);
       config.headers.common["Authorization"] = `Bearer ${accessToken}`;
     }
     return config;
@@ -44,7 +43,6 @@ customAxios.interceptors.request.use(
 
 customAxios.interceptors.response.use(
   function (response) {
-    console.log(response.status);
     if (
       // 번호값으로 체크, 문자열 체크는 버그가 발생할 , 코드번호부여
       response.data.message === "invalid refresh token, please log in again"
@@ -55,7 +53,7 @@ customAxios.interceptors.response.use(
     }
 
     if (response.status === 200) {
-      console.log("정상");
+      // console.log("정상");
     }
     if (response.status === 201) {
       window.alert("created");
