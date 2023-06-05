@@ -179,7 +179,7 @@ const Tweets = () => {
 
       {
         getNextPageParam: (lastPage, allPages) => {
-          return pageCount + 1;
+          return lastPage.config.params.pageParam + 1;
         },
         refetchOnWindowFocus: false,
       }

@@ -32,11 +32,7 @@ const AddTweet = ({ profile, count, nowData }: any) => {
       },
       {
         onSuccess: (res) => {
-          const data = queryClient.getQueriesData([
-            "select",
-            { current: count },
-          ]);
-          console.log(data, count);
+          queryClient.invalidateQueries(["select"]);
           // queryKey 유효성 제거
         },
         onError: (res) => {
