@@ -48,7 +48,18 @@ const Bookmark = () => {
           <div className="middleBox ">
             <div className="bookmarkTitle" />
             <div className="bookmarks">
-              <TweetBox TweetBox data={bookmarkData} />
+              <TweetBox data={bookmarkData} />
+              <div className="memo">
+                <div className=" font-bold text-lg p-1 w-20 text-center text-white rounded-full bg-black m-5  ">
+                  Memo
+                </div>
+                <textarea className="memoBox" />
+                <div className=" w-full flex justify-center">
+                  <button className=" font-bold text-lg p-1 w-60  text-center text-black rounded-full bg-zinc-200     mt-10">
+                    Save
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

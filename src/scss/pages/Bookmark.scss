@@ -28,6 +28,7 @@
   position: relative;
   padding: 10px;
   display: flex;
+  justify-content: space-around;
   margin-top: -7px;
   width: 95%;
   height: 90%;
@@ -36,4 +37,20 @@
   display: flex;
   overflow: auto;
   flex-direction: row;
+}
+
+.memo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 3px;
+  padding: 3px;
+  width: 50%;
+}
+.memoBox {
+  width: 100%;
+  border-radius: 10px;
+  height: 70%;
+  background-color: rgb(249, 247, 143);
+  text-align: center;
 }
