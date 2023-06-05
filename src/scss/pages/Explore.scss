@@ -59,11 +59,12 @@
 }
 
 .following:hover:before {
-  content: UnFollow;
-  color: red;
-  background-color: white;
+  content: "UnFollow"; /* 수정된 부분 */
+
+  color: white;
+  background-color: red;
   border: 1px solid red;
-  width: 3em;
+  width: auto;
   height: 33px;
   border-radius: 20px;
   padding: 10px;
