@@ -16,7 +16,7 @@ interface saveTweets {
   reply_tweet_id: number;
 }
 
-const AddTweet = ({ profile, count, nowData }: any) => {
+const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
   const id = useSelector((state: RootState) => state.getData.id);
   const getTotalPageNumber = useSelector(
     (state: RootState) => state.getData.totalPosts
@@ -32,6 +32,7 @@ const AddTweet = ({ profile, count, nowData }: any) => {
       },
       {
         onSuccess: (res) => {
+          nowData && closeModal();
           queryClient.invalidateQueries(["select"]);
           // queryKey 유효성 제거
         },
@@ -78,7 +79,7 @@ const AddTweet = ({ profile, count, nowData }: any) => {
 
     const onFileChange = (e: any) => {
       setFile(e.target.files[0]);
-      console.log(e.target.files[0]);
+      
     };
 
     const onUpload = (e: any) => {

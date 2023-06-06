@@ -18,6 +18,7 @@ import { QueryClient, useQuery, useQueryClient } from "react-query";
 import { Data } from "../../pages/Tweets";
 
 import AddTweet from "./AddTweet";
+import { AnyTxtRecord } from "dns";
 export interface likeButton {
   tweet_id: number;
   likes: boolean;
@@ -48,7 +49,6 @@ const TweetBox = (prop: any) => {
     if (prop.data && prop.data.length > 0) {
       const flattenedData = prop.data.flat();
       setGetData(flattenedData);
-      console.log(flattenedData);
     }
     // if (prop.data && prop.data.length > 1) {
     //   const flattenedData = prop.data.flat();
@@ -62,18 +62,17 @@ const TweetBox = (prop: any) => {
     setTweetId(event.target.id);
   };
 
-  const saveComment = (event: any) => {
-    event.preventDefault();
-
+  const saveComment = ({ id, number }: any) => {
     customAxios
       .post("/saveComments", {
         comment: comment,
         tweet_id: tweetId,
       })
       .then((res) => {
-        // if (res.data === "login again") {
-        //   alert("로그인이 만료되었습니다");
-        // }
+        getData[number].comment.push(res.data);
+
+        setGetData([...getData]);
+
         socket.emit(SOCKET_EVENT.SEND_COMMENT, { comment, tweetId, id });
       });
   };
@@ -191,7 +190,7 @@ const TweetBox = (prop: any) => {
   const quoteRetweet = ({ t, i }: any) => {
     setModalIsOpen(true);
 
-    setNowData(data[i]);
+    setNowData([getData[i]]);
     openRetweet({
       tweet_id: t.tweet_id,
       open: t.retweet_opened,
@@ -199,26 +198,29 @@ const TweetBox = (prop: any) => {
     });
   };
 
+  function closeRetweet() {
+    return setModalIsOpen(false);
+  }
+  const openRetweet = ({ tweet_id, open, index }: any) => {
+    getData[index].retweet_opened = open === false ? true : false;
+    setGetData([...getData]);
+  };
   const openComments = ({ id, number }: any) => {
     customAxios
       .post("/getComments", {
         tweet_id: id,
       })
       .then((response) => {
-        data[number].is_opened = response.data.is_opened;
-        data[number].comment = response.data.data;
-        setGetData([...data]);
+        getData[number].is_opened = response.data.is_opened;
+        getData[number].comment = response.data.data;
+
+        setGetData([...getData]);
       });
   };
 
   const closeComments = (number: number) => {
-    data[number].is_opened = false;
-  };
-
-  const openRetweet = ({ tweet_id, open, index }: any) => {
-    data[index].retweet_opened = open === false ? true : false;
-
-    setGetData([...data]);
+    getData[number].is_opened = false;
+    setGetData([...getData]);
   };
 
   const checkData = getData.filter(
@@ -320,9 +322,7 @@ const TweetBox = (prop: any) => {
                           }}
                           id={t.tweet_id}
                         />
-                        <div className="font-light text-sm pl-2">
-                          {t.comment.length}
-                        </div>
+
                         <img
                           className="w-6 h-4 pl-2"
                           alt="#"
@@ -389,8 +389,9 @@ const TweetBox = (prop: any) => {
                                       X
                                     </button>
                                     <AddTweet
-                                      nowData={[nowData]}
+                                      nowData={nowData}
                                       profile={prop.profile}
+                                      closeModal={closeRetweet}
                                     />
                                   </div>
                                 </Modal>
@@ -419,7 +420,10 @@ const TweetBox = (prop: any) => {
                                 />
                                 <button
                                   className="comment_button"
-                                  onClick={saveComment}
+                                  onClick={(e: any) => {
+                                    console.log(t.tweet_id, i);
+                                    saveComment({ id: e.tweet_id, number: i });
+                                  }}
                                 >
                                   게시
                                 </button>

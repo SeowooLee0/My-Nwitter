@@ -174,6 +174,7 @@ const Tweets = () => {
           .then((res: any) => {
             setProfile(res.data.profile);
             setTotal(res.data.count);
+
             return res;
           }),
 
