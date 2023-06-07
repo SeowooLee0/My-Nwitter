@@ -12,7 +12,7 @@ import { useEffect } from "react";
 axios.defaults.withCredentials = true;
 
 const customAxios = axios.create({
-  baseURL: "https://my-nwitter-backend-goops2000.vercel.app/",
+  baseURL: "https://my-nwitter-backend-eq5c.vercel.app/",
   // headers: {
   //   Authorization: `Bearer ${accessToken}`,
   // },
