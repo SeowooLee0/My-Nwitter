@@ -2,7 +2,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "https://my-nwitter.vercel.app"
+      "dest": "https://my-nwitter-backend.vercel.app/"
     }
   ]
 }

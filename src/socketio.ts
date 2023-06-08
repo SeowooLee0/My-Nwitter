@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { createContext } from "react";
 
-export const socket = io("https://my-nwitter.vercel.app", {
+export const socket = io("https://my-nwitter-backend.vercel.app", {
   transports: ["websocket"],
   withCredentials: true,
 });
