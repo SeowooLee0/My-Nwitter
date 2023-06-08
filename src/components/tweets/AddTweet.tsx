@@ -79,7 +79,6 @@ const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
 
     const onFileChange = (e: any) => {
       setFile(e.target.files[0]);
-      
     };
 
     const onUpload = (e: any) => {
@@ -92,11 +91,15 @@ const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
       formData.append("tag", saveTag);
 
       axios
-        .post("http://localhost:1234/upload/tweets", formData, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
+        .post(
+          "https://my-nwitter-backend-eq5c.vercel.app/upload/tweets",
+          formData,
+          {
+            headers: {
+              "content-type": "multipart/form-data",
+            },
+          }
+        )
         .then((res) => {
           console.log({ res });
         })
@@ -116,12 +119,12 @@ const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
               alt={
                 profile === undefined
                   ? `/assets/회색.png`
-                  : `http://localhost:1234/static/uploads/${profile}`
+                  : `https://my-nwitter-backend-eq5c.vercel.app/static/uploads/${profile}`
               }
               src={
                 profile === undefined
                   ? `/assets/회색.png`
-                  : `http://localhost:1234/static/uploads/${profile}`
+                  : `https://my-nwitter-backend-eq5c.vercel.app/uploads/${profile}`
               }
             />
             <div className="w-full">

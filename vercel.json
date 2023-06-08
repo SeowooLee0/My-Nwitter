@@ -2,13 +2,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "https://my-nwitter-backend-eq5c.vercel.app/"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://my-nwitter-backend-eq5c.vercel.app/:path*"
+      "dest": "https://my-nwitter.vercel.app"
     }
   ]
 }

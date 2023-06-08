@@ -240,12 +240,12 @@ const TweetBox = (prop: any) => {
                     alt={
                       t.profile === null
                         ? `/assets/회색.png`
-                        : `http://localhost:1234/static/uploads/${t.profile}`
+                        : `https://my-nwitter.vercel.app/static/uploads/${t.profile}`
                     }
                     src={
                       t.profile === null
                         ? `/assets/회색.png`
-                        : `http://localhost:1234/static/uploads/${t.profile}`
+                        : `https://my-nwitter.vercel.app/static/uploads/${t.profile}`
                     }
                   />
                   <div className="info">
@@ -264,8 +264,8 @@ const TweetBox = (prop: any) => {
                     {t.upload_file && (
                       <img
                         className=" background "
-                        alt={`http://localhost:1234/static/tweets/${t.upload_file}`}
-                        src={`http://localhost:1234/static/tweets/${t.upload_file}`}
+                        alt={`hhttps://my-nwitter-backend-eq5c.vercel.app/static/tweets/${t.upload_file}`}
+                        src={`https://my-nwitter-backend-eq5c.vercel.app/tweets/${t.upload_file}`}
                       />
                     )}
                     <p className="pt-1 pb-1">

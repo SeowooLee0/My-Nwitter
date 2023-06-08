@@ -12,7 +12,7 @@ import { useEffect } from "react";
 axios.defaults.withCredentials = true;
 
 const customAxios = axios.create({
-  baseURL: "https://my-nwitter-backend-eq5c.vercel.app/",
+  baseURL: "https://my-nwitter.vercel.app",
   // headers: {
   //   Authorization: `Bearer ${accessToken}`,
   // },
@@ -26,6 +26,7 @@ const { dispatch } = store;
 customAxios.interceptors.request.use(
   function (config) {
     let accessToken = cookie.load("accessToken");
+
     if (accessToken) {
       config.headers.common["Authorization"] = `Bearer ${accessToken}`;
     }
