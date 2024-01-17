@@ -7,7 +7,18 @@
 <br>
 트위터와 인스타그램 같은 인기 있는 SNS 웹사이트의 레이아웃을 참고하여 다양한 형태로 설계되었습니다. <br>
 이를 통해 사용자들에게 친숙하면서도 새로운 경험을 제공하는 커뮤니티 공간을 만들고자 했습니다.
+
 <br>
+<br>
+
+현재 보시는 코드는 **nwitter 프로젝트의 프론트 코드** 입니다.
+
+<br>
+
+### 💻 백엔드 코드
+
+Nwitter 프로젝트의 백엔드 코드를 보고 싶다면 [여기를 클릭하세요](https://github.com/goops2000/My-Nwitter-Backend)
+
 <br>
 
 ## 배포 링크
@@ -72,6 +83,3 @@ npm run start
 <br>
 <br>
 
-### 💻 백엔드 코드
-
-Nwitter 프로젝트의 백엔드 코드를 보고 싶다면 [여기를 클릭하세요](https://github.com/goops2000/My-Nwitter-Backend)
