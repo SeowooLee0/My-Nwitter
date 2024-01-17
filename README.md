@@ -1,4 +1,4 @@
-# 🌌 NWITTER
+# 🚀 Nwitter 프로젝트 
 <br>
 본 프로젝트는 우주 배경의 테마로 된 학교 커뮤니티 사이트를 구현하는 것을 목표로 한 프로젝트입니다. <br>
 이 사이트는 주로 학생들이 정보를 공유하고 주고받는 플랫폼으로 기획되었습니다. <br>
@@ -69,4 +69,9 @@ npm run start
 
 
  이제 `(http://localhost:8080/)`에서 Nwitter 애플리케이션에 접근할 수 있습니다.
+<br>
+<br>
 
+### 💻 백엔드 코드
+
+Nwitter 프로젝트의 백엔드 코드를 보고 싶다면 [여기를 클릭하세요](https://github.com/goops2000/My-Nwitter-Backend)
