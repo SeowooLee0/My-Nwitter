@@ -1,46 +1,68 @@
-# Getting Started with Create React App
+# 🌌 NWITTER
+<br>
+본 프로젝트는 우주 배경의 테마로 된 학교 커뮤니티 사이트를 구현하는 것을 목표로 한 프로젝트입니다. <br>
+이 사이트는 주로 학생들이 정보를 공유하고 주고받는 플랫폼으로 기획되었습니다. <br>
+트위터의 업데이트되는 정보 흐름을 모델로 삼아, 기본적인 트윗 기능과 북마크 및 메모 기능을 통합했습니다.
+<br>
+<br>
+트위터와 인스타그램 같은 인기 있는 SNS 웹사이트의 레이아웃을 참고하여 다양한 형태로 설계되었습니다. <br>
+이를 통해 사용자들에게 친숙하면서도 새로운 경험을 제공하는 커뮤니티 공간을 만들고자 했습니다.
+<br>
+<br>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 배포 링크
+실제 작동중인 사이트를 보고싶다면 [여기를 클릭하세요](https://reportmaster1.streamlit.app/)
+<br>
+<br>
 
-## Available Scripts
+## 프로젝트 이미지
 
-In the project directory, you can run:
+![My-Nwitter 이미지](이미지 URL)
 
-### `npm start`
+<br>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 사용한 기술과 라이브러리
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+**프론트엔드 :**  `React`, `Typescript`, `Redux`, `React-Query`, `SCSS`
 
-### `npm test`
+**백엔드 :** `Node.js`, `Express.js`, `JWT`, `WebSocket`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**데이터베이스 :** `MySQL` (`Sequelize` ORM 사용), `Redis`(채팅서비스)
 
-### `npm run build`
+**클라우드 및 배포 :** `AWS`, `AWS RDS`, `Vercel` 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<br>
+<br>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 기능
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **회원가입 및 로그인 기능**:  jwt 토큰과 쿠키 사용 기반의 사용자 계정 생성 및 인증, 로그인 상태에 따른 라우팅 기능
+- **게시물 업로드 기능** : formData, multer, mysql, sequelize 기반의 다양한 형식의 콘텐츠 업로드 기능
+- **게시물 하단 부가 기능** : 리트윗, 북마크, 좋아요, 댓글 등의 트윗 게시물 하단 버튼 기능
+- **북마크와 메모 기능** : 북마크 페이지 생성하여 북마크 데이터와 사용자 메모 연동 기능
+- **페이지네이션 및 Explore 기능** : 페이지네이션, 무한스크롤, 최신순/인기순 정렬, 팔로우, SearchBar 검색 기능
+- **메세지 채팅 기능** : websocket, redis기반의 사용자 간의 메세지 채팅 기능
+- **프로필 관리 및 게시물 수정/삭제 기능** : 사용자 프로필 수정, 트윗 게시물 삭제 또는 수정 기능
+<br>
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 프로젝트 설치 및 실행 방법
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. 저장소 클론:
+```
+git clone https://github.com/goops2000/My-Nwitter.git
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+2. 의존성 설치:
+```
+npm install
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+3. 애플리케이션 실행:
+```
+npm run start
+```
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ 이제 `(http://localhost:8080/)`에서 Nwitter 애플리케이션에 접근할 수 있습니다.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
