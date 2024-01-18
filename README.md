@@ -20,10 +20,6 @@
 Nwitter 프로젝트의 백엔드 코드를 보고 싶다면 [여기를 클릭하세요](https://github.com/goops2000/My-Nwitter-Backend)
 
 <br>
-
-## 배포 링크
-실제 작동중인 사이트를 보고싶다면 [여기를 클릭하세요](https://my-nwitter.vercel.app/)
-<br>
 <br>
 
 ## 프로젝트 이미지
