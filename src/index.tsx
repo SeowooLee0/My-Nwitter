@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 import { QueryClientProvider, QueryClient } from "react-query";
 import store from "./redux/store";
 
-axios.defaults.baseURL = "https://my-nwitter-backend.vercel.app";
+axios.defaults.baseURL = "http://localhost:1234/";
 axios.defaults.withCredentials = true;
 
 const queryClient = new QueryClient();

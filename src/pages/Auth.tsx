@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+
 import { useNavigate } from "react-router";
 import { socket } from "../socketio";
-import { useContext } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+
 import { changeState } from "../redux/createSlice/IsLoginSlice";
 import customAxios from "../api/CommonAxios";
 import "../scss/pages/Auth.scss";
-import { changeAccessState } from "../redux/createSlice/GetAccessToken";
+import { changGetDataState } from "../redux/createSlice/GetDataSlice";
 
 const Auth = () => {
   const naviagte = useNavigate();
@@ -55,7 +55,7 @@ const Auth = () => {
         // console.log(token);
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
         //엑세스토큰 -> 쿠키값으로 담기, http-only -> 쿠키값 접근안됨
-        console.log(response);
+
         alert("로그인 성공");
         dispatch(changeState(true));
         socket.emit("login", { email: data.email, socketID: socket.id });

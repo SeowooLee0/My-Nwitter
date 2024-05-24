@@ -13,14 +13,8 @@ import { changePeopleState } from "../../redux/createSlice/PeopleDataSlice";
 
 const Searchbar = (onSearchbar: any) => {
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
-  const focus = useSelector(
-    (state: RootState) => state.changeExploreState.focus
-  );
-  const searchData = useSelector(
-    (state: RootState) => state.changeSearchState.search
-  );
 
   const onChange = (event: any) => {
     const { value } = event.target;
@@ -30,7 +24,6 @@ const Searchbar = (onSearchbar: any) => {
   const onSearch = (event: any) => {
     dispatch(changSearchState(search));
     event.preventDefault();
-    console.log(onSearchbar);
     onSearchbar.onSearchbar();
   };
 

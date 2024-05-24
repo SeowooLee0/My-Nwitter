@@ -17,6 +17,7 @@ interface saveTweets {
 }
 
 const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
+
   const id = useSelector((state: RootState) => state.getData.id);
   const getTotalPageNumber = useSelector(
     (state: RootState) => state.getData.totalPosts
@@ -91,15 +92,11 @@ const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
       formData.append("tag", saveTag);
 
       axios
-        .post(
-          "https://my-nwitter-backend-eq5c.vercel.app/upload/tweets",
-          formData,
-          {
-            headers: {
-              "content-type": "multipart/form-data",
-            },
-          }
-        )
+        .post("http://localhost:1234/upload/tweets", formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
         .then((res) => {
           console.log({ res });
         })
@@ -117,14 +114,14 @@ const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
             <img
               className="w-10 h-10 pt-0 m-1  rounded-full"
               alt={
-                profile === undefined
-                  ? `/assets/회색.png`
-                  : `https://my-nwitter-backend-eq5c.vercel.app/static/uploads/${profile}`
+                profile === null
+                  ? `/assets/사람.png`
+                  : `http://localhost:1234/static/uploads/${profile}`
               }
               src={
-                profile === undefined
-                  ? `/assets/회색.png`
-                  : `https://my-nwitter-backend-eq5c.vercel.app/uploads/${profile}`
+                profile === null
+                  ? `/assets/사람.png`
+                  : `http://localhost:1234/static/uploads/${profile}`
               }
             />
             <div className="w-full">

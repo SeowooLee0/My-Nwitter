@@ -1,6 +1,6 @@
 import { type } from "@testing-library/user-event/dist/type";
 import axios from "axios";
-
+import imageCompression from "browser-image-compression";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import "../../scss/components/TweetBox.scss";
@@ -16,6 +16,8 @@ import {
 import Searchbar from "../explore/Searchbar";
 import { QueryClient, useQuery, useQueryClient } from "react-query";
 import { Data } from "../../pages/Tweets";
+import "../../scss/components/TweetBox.scss";
+import "../../scss/components/TweetBox.scss";
 
 import AddTweet from "./AddTweet";
 import { AnyTxtRecord } from "dns";
@@ -29,7 +31,6 @@ const TweetBox = (prop: any) => {
   let data = prop.data;
 
   const id = useSelector((state: RootState) => state.getData.id);
-
   const getCurrentPage = useSelector(
     (state: RootState) => state.getData.currentPage
   );
@@ -43,7 +44,13 @@ const TweetBox = (prop: any) => {
   const [retweetBtn, setRetweetBtn] = useState(false);
   const [tweetId, setTweetId] = useState("");
   const [check, setCheck] = useState(false);
-  let retweetRef = useRef(null);
+  const [optimizedProfileUrl, setOptimizedProfileUrl] = useState<string>("");
+  const [optimizedHeartUrl, setOptimizedHeartUrl] = useState<string>("");
+  const [optimizedEmptyHeartUrl, setOptimizedEmptyHeartUrl] =
+    useState<string>("");
+  const [optimizedBookmarkUrl, setOptimizedBookmarkUrl] = useState<string>("");
+  const [optimizedBookmarkBeforeUrl, setOptimizedBookmarkBeforeUrl] =
+    useState<string>("");
 
   useEffect(() => {
     if (prop.data && prop.data.length > 0) {
@@ -56,6 +63,73 @@ const TweetBox = (prop: any) => {
     //   setGetData(flattenedData);
     // }
   }, [prop.data]);
+
+  useEffect(() => {
+    const optimizeAndDisplayImages = async () => {
+      try {
+        const optimizeImage = async (
+          originalImageUrl: any,
+          setStateFunc: React.Dispatch<React.SetStateAction<string>>
+        ) => {
+          const options = {
+            maxSizeMB: 0.1, // 최대 이미지 크기 (0.1MB = 100KB)
+            maxWidthOrHeight: 150, // 이미지 최대 너비 또는 높이
+            useWebWorker: true, // 웹 워커 사용 여부 (브라우저의 성능을 최적화하기 위함)
+          };
+
+          const imageBlob = await fetch(`${originalImageUrl}`).then((res) =>
+            res.blob()
+          );
+
+          // Blob을 File 인스턴스로 변환 (여기서 파일 이름을 설정합니다)
+          const imageFile = new File([imageBlob], "image.png", {
+            type: "image/png",
+          });
+
+          // 이미지 최적화
+          const compressedImage = await imageCompression(imageFile, options);
+
+          // 최적화된 이미  지 URL 설정
+          const optimizedImageUrl = await imageCompression.getDataUrlFromFile(
+            compressedImage
+          );
+
+          setStateFunc(optimizedImageUrl);
+        };
+
+        // 프로필 이미지 최적화 및 표시
+        await optimizeImage(
+          "http://localhost:8080/assets/사람.png",
+          setOptimizedProfileUrl
+        );
+        // Heart 아이콘 최적화 및 표시
+        await optimizeImage(
+          "http://localhost:8080/assets/heart.png",
+          setOptimizedHeartUrl
+        );
+        // EmptyHeart 아이콘 최적화 및 표시
+        await optimizeImage(
+          "http://localhost:8080/assets/EmptyHeart.png",
+          setOptimizedEmptyHeartUrl
+        );
+        // Bookmark 아이콘 최적화 및 표시
+        await optimizeImage(
+          "http://localhost:8080/assets/bookmark.png",
+          setOptimizedBookmarkUrl
+        );
+        // BookmarkBefore 아이콘 최적화 및 표시
+        await optimizeImage(
+          "http://localhost:8080/assets/bookmark_before.png",
+          setOptimizedBookmarkBeforeUrl
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    // 페이지 로드 시 최적화된 이미지 표시
+    optimizeAndDisplayImages();
+  }, []);
 
   const onComment = (event: any) => {
     setComment(event.target.value);
@@ -167,6 +241,22 @@ const TweetBox = (prop: any) => {
       });
   };
 
+  const deleteTweet = (tweet_id: number) => {
+    customAxios
+      .post("/saveTweets/delete", {
+        tweet_id: tweet_id,
+      })
+      .then((res) => {
+        customAxios
+          .get("/getTweets/select", {
+            params: { getCurrentPage },
+          })
+          .then((result: any) => {
+            queryClient.invalidateQueries(["select"]);
+          });
+      });
+  };
+
   //리트윗 일단 모두에게 보여지는걸로
   const retweet = (tweet_id: number) => {
     customAxios
@@ -239,33 +329,53 @@ const TweetBox = (prop: any) => {
                     className="w-10 h-10 pt-0 m-1  rounded-full"
                     alt={
                       t.profile === null
-                        ? `/assets/회색.png`
-                        : `https://my-nwitter.vercel.app/static/uploads/${t.profile}`
+                        ? `${optimizedProfileUrl}`
+                        : `http://localhost:1234/static/uploads/${t.profile}`
                     }
                     src={
                       t.profile === null
-                        ? `/assets/회색.png`
-                        : `https://my-nwitter.vercel.app/static/uploads/${t.profile}`
+                        ? `${optimizedProfileUrl}`
+                        : `http://localhost:1234/static/uploads/${t.profile}`
                     }
                   />
                   <div className="info">
                     <div className="userInfo">
                       <p className="font-bold pt-1">{t.email}</p>
-                      <div>{t.write_date}</div>
+                      <div className="flex">
+                        <div>{t.write_date}</div>
+                        {t.user_id === id && (
+                          <img
+                            className="w-4 h-4 m-1"
+                            alt="#"
+                            src={"/assets/삭제.png"}
+                            onClick={() => {
+                              deleteTweet(t.tweet_id);
+                            }}
+                            id={t.tweet_id}
+                          />
+                        )}
+                      </div>
                     </div>
                     <div className="pt-2 pb-1">
                       {t.content}
                       {t.reply_tweet_id && (
                         <div className="m-3 border-2  rounded-3xl   border-neutral-200">
-                          {<TweetBox data={t.retweet_data} />}
+                          {t.retweet_data && t.retweet_data.length > 0 ? (
+                            <TweetBox data={t.retweet_data} />
+                          ) : (
+                            <div className="text-center p-3">
+                              게시물이 삭제되었습니다
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
                     {t.upload_file && (
                       <img
                         className=" background "
-                        alt={`hhttps://my-nwitter-backend-eq5c.vercel.app/static/tweets/${t.upload_file}`}
-                        src={`https://my-nwitter-backend-eq5c.vercel.app/tweets/${t.upload_file}`}
+                        alt={`http://localhost:1234/static/tweets/${t.upload_file}`}
+                        src={`http://localhost:1234/static/tweets/${t.upload_file}`}
+                        key={t.tweet_id}
                       />
                     )}
                     <p className="pt-1 pb-1">
@@ -291,8 +401,8 @@ const TweetBox = (prop: any) => {
                           alt="#"
                           src={
                             t.is_like
-                              ? "/assets/heart.png"
-                              : "/assets/EmptyHeart.png"
+                              ? `${optimizedHeartUrl}`
+                              : `${optimizedEmptyHeartUrl}`
                           }
                           id={t.tweet_id}
                           onClick={() => {
@@ -328,8 +438,8 @@ const TweetBox = (prop: any) => {
                           alt="#"
                           src={
                             t.is_bookmark
-                              ? "/assets/bookmark.png"
-                              : "/assets/bookmark_before.png"
+                              ? `${optimizedBookmarkUrl}`
+                              : `${optimizedBookmarkBeforeUrl}`
                           }
                           onClick={() => {
                             if (t.is_bookmark === true) {

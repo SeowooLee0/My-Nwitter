@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import {
-  BrowserRouter,
-  redirect,
   Navigate,
   Route,
   Routes,
-  useNavigate,
 } from "react-router-dom";
 import Auth from "./pages/Auth";
 import Tweets from "./pages/Tweets";
@@ -21,7 +18,7 @@ import Message from "./pages/Message";
 import Bookmark from "./pages/Bookmark";
 
 function AppRouter() {
-  const isLogin = useSelector(
+  const isLogin = useSelector( 
     (state: RootState) => state.changeIsLogin.isLogin
   );
   return (

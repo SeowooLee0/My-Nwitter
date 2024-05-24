@@ -106,12 +106,12 @@ const Profile = () => {
                     className="profile absolute "
                     alt={
                       userInfo === null
-                        ? `/assets/회색.png`
+                        ? `/assets/사람.png`
                         : `http://localhost:1234/static/uploads/${userInfo}`
                     }
                     src={
                       userInfo === null
-                        ? `/assets/회색.png`
+                        ? `/assets/사람.png`
                         : `http://localhost:1234/static/uploads/${userInfo}`
                     }
                   />
@@ -147,12 +147,12 @@ const Profile = () => {
                             className="editBackground "
                             alt={
                               userInfo === null
-                                ? `/assets/회색.png`
+                                ? `/assets/사람.png`
                                 : `http://localhost:1234/static/uploads/${userInfo}`
                             }
                             src={
                               userInfo === null
-                                ? `/assets/회색.png`
+                                ? `/assets/사람.png`
                                 : `http://localhost:1234/static/uploads/${userInfo}`
                             }
                           />
@@ -162,12 +162,12 @@ const Profile = () => {
                               className="editProfile absolute"
                               alt={
                                 userInfo === null
-                                  ? `/assets/회색.png`
+                                  ? `/assets/사람.png`
                                   : `http://localhost:1234/static/uploads/${userInfo}`
                               }
                               src={
                                 userInfo === null
-                                  ? `/assets/회색.png`
+                                  ? `/assets/사람.png`
                                   : `http://localhost:1234/static/uploads/${userInfo}`
                               }
                             />

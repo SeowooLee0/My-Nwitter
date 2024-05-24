@@ -11,15 +11,17 @@ import Modal from "react-modal";
 import { socket, SOCKET_EVENT } from "../socketio";
 import "../scss/pages/Message.scss";
 
-interface chatType {
-  key: string;
+interface ChatMessage {
+  send: number;
+  receive: number;
+  message: string;
+  date: string;
+  score?: number;
   roomId: string;
-  data: {
-    send: string;
-    receive: string;
-    message: string;
-    date: string;
-  };
+}
+
+interface ChatRooms {
+  [roomId: string]: ChatMessage[];
 }
 
 const Message = () => {
@@ -34,11 +36,12 @@ const Message = () => {
   }
 
   const [message, setMessage] = useState("");
-  const [sortId, setSortId] = useState<chatType[]>([]);
-  const [roomId, setroomId] = useState("");
-  const [send, setSend] = useState<any>([""]);
-  const [chatRoomData, setChatRoomData] = useState<any>([""]);
-  const [room, setRoom] = useState(false);
+  const [sortedChatRooms, setSortedChatRooms] = useState<ChatRooms>({});
+
+  const [chatRoomData, setChatRoomData] = useState<ChatRooms>({});
+  const [selectedMessages, setSelectedMessages] = useState<ChatMessage[]>([]); // 선택된 채팅방의 메시지 상태
+  const [selectedRoomId, setSelectedRoomId] = useState<string>("");
+
   const [people, setPeople] = useState<userData[]>([]);
   const [selectUser, setSelectUser] = useState<any>();
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -47,107 +50,101 @@ const Message = () => {
   );
   const id = useSelector((state: RootState) => state.getData.id);
 
-  const receiveMessage = (m: any) => {
-    setSend((prev: any) => [m, ...prev]);
-  };
-
   useEffect(() => {
-    socket.on("RECEIVE_MESSAGE", (data: any) => {
-      console.log(data);
-      setSend(data);
-    });
+    const onReceiveMessage = (data: ChatMessage[]) => {
+      alert("새로운 메세지 도착");
+    };
+
+    socket.on("RECEIVE_MESSAGE", onReceiveMessage);
+
     socket.emit("REQUEST_DATA", {
       id: id,
     });
-    socket.on("RESPOND_DATA", (data: any) => {
-      let sortData = data.sort(function (a: any, b: any) {
-        let newA = a.date
-          .replace(" ", "")
-          .replace(/-/gi, "")
-          .replace(/:/gi, "");
-        let newB = b.date
-          .replace(" ", "")
-          .replace(/-/gi, "")
-          .replace(/:/gi, "");
-        return newB - newA;
-      });
-      setChatRoomData(sortData);
-    });
-    socket.on("BEFORE_DATA", (data: any) => {
-      console.log(data);
-      let change = data.map((d: any) => {
-        return JSON.parse(d);
-      });
 
-      setSend(change);
+    socket.on("RESPOND_DATA", (data: ChatMessage[] | ChatMessage) => {
+      let updatedChatRooms = { ...sortedChatRooms };
+
+      // 데이터가 배열인지 단일 객체인지 확인
+      if (Array.isArray(data)) {
+        // 배열일 경우: 기존 로직 사용
+        data.forEach((message) => {
+          if (!updatedChatRooms[message.roomId]) {
+            updatedChatRooms[message.roomId] = [];
+          }
+          updatedChatRooms[message.roomId].push(message);
+        });
+        Object.keys(updatedChatRooms).forEach((roomId) => {
+          updatedChatRooms[roomId].sort((a, b) => {
+            let dateA = new Date(a.date);
+            let dateB = new Date(b.date);
+            return dateA.getTime() - dateB.getTime();
+          });
+        });
+
+        setChatRoomData(updatedChatRooms);
+      } else {
+        const newData = data;
+        const stringId = id.toString();
+
+        if (newData.send !== stringId) {
+          setChatRoomData((prevChatRooms) => {
+            // 새 메시지의 roomId를 기반으로 적절한 채팅방 찾기
+            const updatedRoom = prevChatRooms[newData.roomId]
+              ? [...prevChatRooms[newData.roomId]]
+              : [];
+            updatedRoom.push(newData);
+
+            // 메시지를 날짜 순으로 정렬
+            updatedRoom.sort(
+              (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+            );
+            // 선택된 채팅방의 메시지 업데이트 (만약 선택된 채팅방이 현재 메시지의 채팅방과 동일한 경우)
+
+            console.log("작동중");
+            setSelectedMessages(updatedRoom);
+
+            setSelectedRoomId(newData.roomId);
+
+            // 새로운 상태 반환
+            return { ...prevChatRooms, [newData.roomId]: updatedRoom };
+          });
+        }
+      }
     });
+
+    socket.on("BEFORE_DATA", (data: string) => {
+      setSelectedMessages(chatRoomData[data]);
+      setSelectedRoomId(data);
+    });
+
     return () => {
-      socket.off("RECEIVE_MESSAGE", (data: any) => {});
+      socket.off("RECEIVE_MESSAGE", onReceiveMessage);
     };
   }, [socket]);
 
-  const sendMessage = (receiveUser: number, event: any) => {
-    // event.preventDefault();
-    let date = Date();
-    socket.emit(SOCKET_EVENT.SEND_MESSAGE, {
-      message,
-      receiveUser,
-      id,
-      time,
-      score,
-      sortId,
-    });
-  };
+  // const sendMessage = (receiveUser: number, event: any) => {
+  //   // event.preventDefault();
+  //   socket.emit(SOCKET_EVENT.SEND_MESSAGE, {
+  //     message,
+  //     receiveUser,
+  //     id,
+  //     time,
+  //     score,
+  //     roomId,
+  //   });
+  // };
 
   const peopleClick = (user_id: number, data: any) => {
-    setRoom(true);
     setModalIsOpen(false);
-    setSelectUser({
-      user_id: user_id,
-      email: data.email,
-      profile: data.profile,
+
+    const roomId = `chat-${[id, user_id].sort().join("-")}`; // 채팅방 ID 생성
+    setSelectedRoomId(roomId); // 선택된 채팅방 ID 업데이트
+    setSelectUser(user_id);
+    socket.emit("START_CHAT", {
+      users: [id, user_id],
+      roomId: roomId,
+      date: new Date().toISOString(),
     });
-    setSend([]);
-    let users = [id, user_id];
-    let sortUsers = users.sort();
-    setSortId(sortUsers);
-    setroomId(`${time}${sortUsers.length}${id}`);
-
-    socket.emit(SOCKET_EVENT.START_CHAT, {
-      users: sortUsers,
-      roomId: `${time}${sortUsers.length}${id}`,
-      date: time,
-    });
-  };
-
-  const chatRoomClick = async (user_id: number, data: any) => {
-    await customAxios("/getUsers/chatUser", {
-      params: { user_id },
-    }).then((r: any) => {
-      let profile = r.data.profile;
-      console.log(profile);
-
-      setSelectUser({
-        user_id: user_id,
-        email: r.data.email,
-        profile: profile,
-      });
-
-      setSend([]);
-      let users = [id, user_id];
-      let sortUsers = users.sort();
-      console.log(sortUsers);
-      setSortId(sortUsers);
-      setroomId(`${time}${sortUsers.length}${id}`);
-
-      socket.emit(SOCKET_EVENT.START_CHAT, {
-        users: sortUsers,
-        roomId: `${time}${sortUsers.length}${id}`,
-        date: time,
-      });
-    });
-
-    await setRoom(true);
   };
 
   const nowDate = new Date();
@@ -156,12 +153,54 @@ const Message = () => {
     .replace("T", " ")
     .slice(0, -5);
 
-  const score = time.replace(" ", "").replace(/-/gi, "").replace(/:/gi, "");
-  let chat = {};
+  const score = parseInt(
+    time.replace(" ", "").replace(/-/g, "").replace(/:/g, ""),
+    10
+  );
 
-  //   const year = time.getFullYear();
-  // const month = time.getMonth() + 1;
-  // const date = time.getDate();
+  const handleSendMessage = (receiveUser: number) => {
+    if (!selectedRoomId || message.trim() === "") return;
+
+    const newMessage = {
+      send: id,
+      receive: receiveUser,
+      message: message,
+      date: time,
+      score: score,
+      roomId: selectedRoomId,
+    };
+
+    socket.emit("SEND_MESSAGE", newMessage);
+    setMessage("");
+    // 선택된 채팅방의 메시지 목록 업데이트
+    const updatedMessages: ChatMessage[] = [...selectedMessages, newMessage];
+    setSelectedMessages(updatedMessages);
+
+    // 전역 채팅방 데이터 업데이트
+    const updatedChatRoomData: { [key: string]: ChatMessage[] } = {
+      ...chatRoomData,
+      [selectedRoomId]: updatedMessages,
+    };
+    setChatRoomData(updatedChatRoomData);
+  };
+
+  const handleChatRoomClick = (roomId: string) => {
+    console.log(roomId);
+    setSelectedMessages(chatRoomData[roomId]);
+    setSelectedRoomId(roomId);
+    const parts = roomId.split("-");
+
+    // 'chat' 문자열과 현재 사용자 ID를 제외하고 나머지 부분을 추출
+    const otherUserId = parts.find(
+      (part) => part !== "chat" && part !== id.toString()
+    );
+    if (otherUserId == undefined) {
+      setSelectUser(id);
+    } else {
+      console.log(otherUserId);
+      setSelectUser(parseInt(otherUserId));
+    }
+  };
 
   return (
     <>
@@ -205,8 +244,16 @@ const Message = () => {
                                 <div className="imgBox">
                                   <img
                                     className="profileImg rounded-full "
-                                    alt={`http://localhost:1234/static/uploads/${t.profile}`}
-                                    src={`http://localhost:1234/static/uploads/${t.profile}`}
+                                    alt={
+                                      t.profile === null
+                                        ? `/assets/사람.png`
+                                        : `http://localhost:1234/static/uploads/${t.profile}`
+                                    }
+                                    src={
+                                      t.profile === null
+                                        ? `/assets/사람.png`
+                                        : `http://localhost:1234/static/uploads/${t.profile}`
+                                    }
                                   />
                                 </div>
                                 <div>
@@ -229,18 +276,19 @@ const Message = () => {
                   </div>
                 </div>
                 <div>
-                  {chatRoomData.map((t: any, i: number) => {
+                  {Object.keys(chatRoomData).map((roomKey) => {
+                    const lastMessage =
+                      chatRoomData[roomKey][chatRoomData[roomKey].length - 1];
+
                     return (
                       <div
-                        className="peopleBox hover:bg-slate-200 "
-                        key={t.date}
-                        onClick={() => {
-                          chatRoomClick(t.receive, t);
-                        }}
+                        className="peopleBox hover:bg-slate-200"
+                        key={roomKey}
+                        onClick={() => handleChatRoomClick(roomKey)}
                       >
                         <div>
-                          <div className=" font-bold pl-3">{t.receive}</div>
-                          <div className=" pl-3">{t.message}</div>
+                          <div className="font-bold pl-3">{roomKey}</div>
+                          <div className="pl-3">{lastMessage.message}</div>
                         </div>
                       </div>
                     );
@@ -249,48 +297,24 @@ const Message = () => {
               </div>
               <div className="border-slate-900  border-spacing-3  w-2/3 justify-end flex  flex-col">
                 <div className=" messageBox">
-                  {room ? (
-                    <>
-                      <div className="flex items-center ">
-                        <div className=" ">
-                          <img
-                            className="w-10 h-10 rounded-full "
-                            alt={`http://localhost:1234/static/uploads/${selectUser.profile}`}
-                            src={`http://localhost:1234/static/uploads/${selectUser.profile}`}
-                          />
-                        </div>
-
-                        <p className="from-neutral-400 text-sm  font-bold pl-4">
-                          {selectUser.email}
-                        </p>
+                  <div>{selectedRoomId}</div>
+                  {selectedMessages.map((message, i) => (
+                    <div
+                      className={
+                        id == message.send
+                          ? "flex justify-end"
+                          : "flex justify-start"
+                      }
+                      key={i}
+                    >
+                      <div
+                        className={id == message.send ? "myChatBox" : "chatBox"}
+                        key={i}
+                      >
+                        {message.message}
                       </div>
-
-                      <div className=" ">
-                        {send.map((t: any, i: number) => {
-                          return (
-                            <div
-                              className={
-                                `${id}` === t.send
-                                  ? " flex justify-end"
-                                  : " flex justify-start"
-                              }
-                            >
-                              <div
-                                className={
-                                  `${id}` === t.send ? "myChatBox" : "chatBox"
-                                }
-                                key={i}
-                              >
-                                {t.message}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </>
-                  ) : (
-                    <></>
-                  )}
+                    </div>
+                  ))}
                 </div>
                 <div className=" flex p-2">
                   <input
@@ -302,15 +326,8 @@ const Message = () => {
                   />
                   <button
                     className="sendButton w-10"
-                    onClick={(e) => {
-                      let newData = {
-                        send: `${id}`,
-                        message: message,
-                        date: time,
-                      };
-                      sendMessage(selectUser.user_id, id);
-
-                      setSend([...send, newData]);
+                    onClick={() => {
+                      handleSendMessage(selectUser);
                     }}
                   >
                     전송

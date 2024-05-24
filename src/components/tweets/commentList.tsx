@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import customAxios from "../../api/CommonAxios";
-import "./CommentList.scss";
+import "../../scss/components/CommentList.scss";
 
 export default function CommentsList() {
   const [commentList, setCommentList] = useState<Comment[]>([]);

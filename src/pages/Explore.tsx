@@ -51,12 +51,26 @@ export interface ExploreData {
 const Explore = () => {
   const queryClient = useQueryClient();
   const socket = useContext(SocketContext);
+  const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     socket.on("RECEIVE_MESSAGE", (data: any) => {
       window.alert("새로운 코멘트가 추가되었습니다");
     });
   }, [socket]);
+
+  useEffect(() => {
+    // 이미지가 로드될 때까지 상태를 false로 유지합니다.
+    setIsImageLoaded(false);
+
+    // 이미지 로드를 시도합니다.
+    const image = new Image();
+    image.onload = () => {
+      // 이미지 로드가 완료되면 상태를 true로 업데이트합니다.
+      setIsImageLoaded(true);
+    };
+    image.src = "http://localhost:8080/assets/1.1.jpg";
+  }, []);
   const [Focus, setFocus] = useState("top");
   const dispatch = useDispatch();
   // const data = useSelector((state: RootState) => state.getData.currentPosts);
@@ -86,8 +100,6 @@ const Explore = () => {
   const currentPage = useSelector(
     (state: RootState) => state.getData.currentPage
   );
-
-  console.log(currentPage);
 
   const pageCount = useSelector((state: RootState) => state.getData.pageCount);
 
@@ -148,10 +160,24 @@ const Explore = () => {
     return <span>Error: {error.message}</span>;
   }
 
+  // 이미지 로드 상태에 따라 배경 스타일을 동적으로 설정합니다.
+  const bgImageStyle = isImageLoaded
+    ? {
+        backgroundImage: `url(http://localhost:8080/assets/1.1.jpg)`,
+        backgroundSize: "cover", // 배경 이미지가 로드된 경우에만 추가합니다.
+        width: "100vw",
+        height: "100vh",
+      }
+    : {
+        backgroundColor: "#0a1527", // 이미지 로드 전에는 기본 배경색을 사용합니다.
+        width: "100vw",
+        height: "100vh",
+      };
+
   return (
     <>
       {/* <Header /> */}
-      <div className="flex">
+      <div className="flex ">
         <Sidebar />
         <div className=" flex  justify-center items-center w-full h-5/5 ">
           <div className="middleBox ">
@@ -247,12 +273,12 @@ const Explore = () => {
                             className="profileImg rounded-full "
                             alt={
                               t.profile === null
-                                ? `/assets/회색.png`
+                                ? `/assets/사람.png`
                                 : `http://localhost:1234/static/uploads/${t.profile}`
                             }
                             src={
                               t.profile === null
-                                ? `/assets/회색.png`
+                                ? `/assets/사람.png`
                                 : `http://localhost:1234/static/uploads/${t.profile}`
                             }
                           />

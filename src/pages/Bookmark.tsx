@@ -23,7 +23,6 @@ const Bookmark = () => {
       retry: 0, // 실패시 재호출 몇번 할지
 
       onSuccess: (res: any) => {
-        console.log(res.data);
         setBookmarkData(res.data);
       },
       onError: (e: any) => {

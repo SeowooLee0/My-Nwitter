@@ -1,6 +1,3 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-
 import React, { useState } from "react";
 import { useQueryClient } from "react-query";
 import { useDispatch } from "react-redux";
@@ -41,8 +38,6 @@ const Pagination = ({ count }: any) => {
               key={number}
               onClick={() => {
                 dispatch(changeCurrentPage(number));
-                console.log(number);
-                queryClient.invalidateQueries(["selectExploreData"]);
               }}
             >
               {number}
