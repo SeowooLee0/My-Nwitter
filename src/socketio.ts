@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { createContext } from "react";
 
-export const socket = io("http://localhost:1234/", {
+export const socket = io(`${process.env.BACKEND_URL}`, {
   transports: ["websocket"],
   withCredentials: true,
 });

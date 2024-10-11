@@ -247,12 +247,12 @@ const Message = () => {
                                     alt={
                                       t.profile === null
                                         ? `/assets/사람.png`
-                                        : `http://localhost:1234/static/uploads/${t.profile}`
+                                        : `${process.env.BACKEND_URL}static/uploads/${t.profile}`
                                     }
                                     src={
                                       t.profile === null
                                         ? `/assets/사람.png`
-                                        : `http://localhost:1234/static/uploads/${t.profile}`
+                                        : `${process.env.BACKEND_URL}static/uploads/${t.profile}`
                                     }
                                   />
                                 </div>

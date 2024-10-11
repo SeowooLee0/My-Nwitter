@@ -17,7 +17,6 @@ interface saveTweets {
 }
 
 const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
-
   const id = useSelector((state: RootState) => state.getData.id);
   const getTotalPageNumber = useSelector(
     (state: RootState) => state.getData.totalPosts
@@ -91,8 +90,8 @@ const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
       formData.append("tweet", tweet);
       formData.append("tag", saveTag);
 
-      axios
-        .post("http://localhost:1234/upload/tweets", formData, {
+      customAxios
+        .post("upload/tweets", formData, {
           headers: {
             "content-type": "multipart/form-data",
           },
@@ -116,12 +115,12 @@ const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
               alt={
                 profile === null
                   ? `/assets/사람.png`
-                  : `http://localhost:1234/static/uploads/${profile}`
+                  : `${process.env.BACKEND_URL}static/uploads/${profile}`
               }
               src={
                 profile === null
                   ? `/assets/사람.png`
-                  : `http://localhost:1234/static/uploads/${profile}`
+                  : `${process.env.BACKEND_URL}static/uploads/${profile}`
               }
             />
             <div className="w-full">

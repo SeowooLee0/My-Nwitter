@@ -330,12 +330,12 @@ const TweetBox = (prop: any) => {
                     alt={
                       t.profile === null
                         ? `${optimizedProfileUrl}`
-                        : `http://localhost:1234/static/uploads/${t.profile}`
+                        : `${process.env.BACKEND_URL}static/uploads/${t.profile}`
                     }
                     src={
                       t.profile === null
                         ? `${optimizedProfileUrl}`
-                        : `http://localhost:1234/static/uploads/${t.profile}`
+                        : `${process.env.BACKEND_URL}static/uploads/${t.profile}`
                     }
                   />
                   <div className="info">
@@ -373,8 +373,8 @@ const TweetBox = (prop: any) => {
                     {t.upload_file && (
                       <img
                         className=" background "
-                        alt={`http://localhost:1234/static/tweets/${t.upload_file}`}
-                        src={`http://localhost:1234/static/tweets/${t.upload_file}`}
+                        alt={`${process.env.BACKEND_URL}static/tweets/${t.upload_file}`}
+                        src={`${process.env.BACKEND_URL}static/tweets/${t.upload_file}`}
                         key={t.tweet_id}
                       />
                     )}

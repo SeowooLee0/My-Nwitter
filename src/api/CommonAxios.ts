@@ -12,7 +12,7 @@ import { useEffect } from "react";
 axios.defaults.withCredentials = true;
 
 const customAxios = axios.create({
-  baseURL: "http://localhost:1234/",
+  baseURL: process.env.BACKEND_URL,
   // headers: {
   //   Authorization: `Bearer ${accessToken}`,
   // },

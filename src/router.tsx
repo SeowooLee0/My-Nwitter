@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Navigate,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Auth from "./pages/Auth";
 import Tweets from "./pages/Tweets";
 import Profile from "./pages/Profile";
@@ -16,9 +12,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import Message from "./pages/Message";
 import Bookmark from "./pages/Bookmark";
+import Example from "./pages/Example";
 
 function AppRouter() {
-  const isLogin = useSelector( 
+  const isLogin = useSelector(
     (state: RootState) => state.changeIsLogin.isLogin
   );
   return (
@@ -32,6 +29,7 @@ function AppRouter() {
           <Route path="tag" element={<Tag />} />
           <Route path="message" element={<Message />} />
           <Route path="bookmark" element={<Bookmark />} />
+          <Route path="example" element={<Example />} />
         </>
       ) : (
         <>

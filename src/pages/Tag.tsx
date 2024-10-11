@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
+import customAxios from "../api/CommonAxios";
 // import "./Tweets.scss";
 
 const Tag = () => {
@@ -16,8 +17,8 @@ const Tag = () => {
 
   const [tagData, setTagData] = useState<Tweet[]>([]);
   useEffect(() => {
-    axios
-      .get(`http://localhost:1234/tag/${tagId}`, {
+    customAxios
+      .get(`tag/${tagId}`, {
         params: { tagId },
       })
       .then((res) => {

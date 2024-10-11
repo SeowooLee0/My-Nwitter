@@ -98,6 +98,8 @@ interface saveTweets {
   tag: any;
 }
 
+console.time("측정");
+
 const Tweets = () => {
   const [optimizedBgImgUrl, setOptimizedBgImgUrl] = useState<string>("");
 
@@ -283,5 +285,7 @@ const Tweets = () => {
     </>
   );
 };
+
+console.timeEnd("측정");
 
 export default Tweets;
