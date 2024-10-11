@@ -99,27 +99,27 @@ const TweetBox = (prop: any) => {
 
         // 프로필 이미지 최적화 및 표시
         await optimizeImage(
-          "http://localhost:8080/assets/사람.png",
+          `${process.env.BACKEND_URL}assets/사람.png`,
           setOptimizedProfileUrl
         );
         // Heart 아이콘 최적화 및 표시
         await optimizeImage(
-          "http://localhost:8080/assets/heart.png",
+          `${process.env.BACKEND_URL}assets/heart.png`,
           setOptimizedHeartUrl
         );
         // EmptyHeart 아이콘 최적화 및 표시
         await optimizeImage(
-          "http://localhost:8080/assets/EmptyHeart.png",
+          `${process.env.BACKEND_URL}assets/EmptyHeart.png`,
           setOptimizedEmptyHeartUrl
         );
         // Bookmark 아이콘 최적화 및 표시
         await optimizeImage(
-          "http://localhost:8080/assets/bookmark.png",
+          `${process.env.BACKEND_URL}assets/bookmark.png`,
           setOptimizedBookmarkUrl
         );
         // BookmarkBefore 아이콘 최적화 및 표시
         await optimizeImage(
-          "http://localhost:8080/assets/bookmark_before.png",
+          `${process.env.BACKEND_URL}assets/bookmark_before.png`,
           setOptimizedBookmarkBeforeUrl
         );
       } catch (error) {

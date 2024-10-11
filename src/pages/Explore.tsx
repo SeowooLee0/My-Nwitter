@@ -69,7 +69,7 @@ const Explore = () => {
       // 이미지 로드가 완료되면 상태를 true로 업데이트합니다.
       setIsImageLoaded(true);
     };
-    image.src = "http://localhost:8080/assets/1.1.jpg";
+    image.src = `${process.env.BACKEND_URL}assets/1.1.jpg`;
   }, []);
   const [Focus, setFocus] = useState("top");
   const dispatch = useDispatch();
@@ -163,7 +163,7 @@ const Explore = () => {
   // 이미지 로드 상태에 따라 배경 스타일을 동적으로 설정합니다.
   const bgImageStyle = isImageLoaded
     ? {
-        backgroundImage: `url(http://localhost:8080/assets/1.1.jpg)`,
+        backgroundImage: `${process.env.BACKEND_URL}assets/1.1.jpg`,
         backgroundSize: "cover", // 배경 이미지가 로드된 경우에만 추가합니다.
         width: "100vw",
         height: "100vh",
