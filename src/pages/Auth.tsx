@@ -46,10 +46,14 @@ const Auth = () => {
 
   const onLogin = (data: any) => {
     customAxios
-      .post("/login", {
-        email: data.email,
-        password: data.password,
-      })
+      .post(
+        "/login",
+        {
+          email: data.email,
+          password: data.password,
+        },
+        { withCredentials: true }
+      )
       .then(async (response) => {
         // dispatch(changeAccessState(response);
         // console.log(token);

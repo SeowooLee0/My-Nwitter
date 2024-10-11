@@ -12,7 +12,7 @@ import { useEffect } from "react";
 axios.defaults.withCredentials = true;
 
 const customAxios = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: `${process.env.REACT_APP_BACKEND_URL}`,
   // headers: {
   //   Authorization: `Bearer ${accessToken}`,
   // },
@@ -65,7 +65,6 @@ customAxios.interceptors.response.use(
 
   function (error: any) {
     console.log(error.response.data);
-
     console.log(error.response.status);
 
     if (error.response.status === 419) {

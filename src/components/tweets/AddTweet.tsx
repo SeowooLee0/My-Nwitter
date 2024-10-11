@@ -115,12 +115,12 @@ const AddTweet = ({ profile, count, nowData, closeModal }: any) => {
               alt={
                 profile === null
                   ? `/assets/사람.png`
-                  : `${process.env.BACKEND_URL}static/uploads/${profile}`
+                  : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${profile}`
               }
               src={
                 profile === null
                   ? `/assets/사람.png`
-                  : `${process.env.BACKEND_URL}static/uploads/${profile}`
+                  : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${profile}`
               }
             />
             <div className="w-full">

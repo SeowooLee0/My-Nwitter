@@ -99,27 +99,27 @@ const TweetBox = (prop: any) => {
 
         // 프로필 이미지 최적화 및 표시
         await optimizeImage(
-          `${process.env.BACKEND_URL}assets/사람.png`,
+          `${process.env.REACT_APP_BACKEND_URL}assets/사람.png`,
           setOptimizedProfileUrl
         );
         // Heart 아이콘 최적화 및 표시
         await optimizeImage(
-          `${process.env.BACKEND_URL}assets/heart.png`,
+          `${process.env.REACT_APP_BACKEND_URL}assets/heart.png`,
           setOptimizedHeartUrl
         );
         // EmptyHeart 아이콘 최적화 및 표시
         await optimizeImage(
-          `${process.env.BACKEND_URL}assets/EmptyHeart.png`,
+          `${process.env.REACT_APP_BACKEND_URL}assets/EmptyHeart.png`,
           setOptimizedEmptyHeartUrl
         );
         // Bookmark 아이콘 최적화 및 표시
         await optimizeImage(
-          `${process.env.BACKEND_URL}assets/bookmark.png`,
+          `${process.env.REACT_APP_BACKEND_URL}assets/bookmark.png`,
           setOptimizedBookmarkUrl
         );
         // BookmarkBefore 아이콘 최적화 및 표시
         await optimizeImage(
-          `${process.env.BACKEND_URL}assets/bookmark_before.png`,
+          `${process.env.REACT_APP_BACKEND_URL}assets/bookmark_before.png`,
           setOptimizedBookmarkBeforeUrl
         );
       } catch (error) {
@@ -330,12 +330,12 @@ const TweetBox = (prop: any) => {
                     alt={
                       t.profile === null
                         ? `${optimizedProfileUrl}`
-                        : `${process.env.BACKEND_URL}static/uploads/${t.profile}`
+                        : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${t.profile}`
                     }
                     src={
                       t.profile === null
                         ? `${optimizedProfileUrl}`
-                        : `${process.env.BACKEND_URL}static/uploads/${t.profile}`
+                        : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${t.profile}`
                     }
                   />
                   <div className="info">
@@ -373,8 +373,8 @@ const TweetBox = (prop: any) => {
                     {t.upload_file && (
                       <img
                         className=" background "
-                        alt={`${process.env.BACKEND_URL}static/tweets/${t.upload_file}`}
-                        src={`${process.env.BACKEND_URL}static/tweets/${t.upload_file}`}
+                        alt={`${process.env.REACT_APP_BACKEND_URL}static/tweets/${t.upload_file}`}
+                        src={`${process.env.REACT_APP_BACKEND_URL}static/tweets/${t.upload_file}`}
                         key={t.tweet_id}
                       />
                     )}

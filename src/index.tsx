@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 import { QueryClientProvider, QueryClient } from "react-query";
 import store from "./redux/store";
 
-axios.defaults.baseURL = process.env.BACKEND_URL;
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
 axios.defaults.withCredentials = true;
 
 const queryClient = new QueryClient();

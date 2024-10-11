@@ -93,12 +93,12 @@ const Profile = () => {
                   alt={
                     userInfo === null
                       ? `/assets/회색.png`
-                      : `${process.env.BACKEND_URL}static/uploads/${userInfo}`
+                      : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${userInfo}`
                   }
                   src={
                     userInfo === null
                       ? `/assets/회색.png`
-                      : `${process.env.BACKEND_URL}static/uploads/${userInfo}`
+                      : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${userInfo}`
                   }
                 />
                 <div className="relative ">
@@ -107,12 +107,12 @@ const Profile = () => {
                     alt={
                       userInfo === null
                         ? `/assets/사람.png`
-                        : `${process.env.BACKEND_URL}static/uploads/${userInfo}`
+                        : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${userInfo}`
                     }
                     src={
                       userInfo === null
                         ? `/assets/사람.png`
-                        : `${process.env.BACKEND_URL}static/uploads/${userInfo}`
+                        : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${userInfo}`
                     }
                   />
                 </div>
@@ -148,12 +148,12 @@ const Profile = () => {
                             alt={
                               userInfo === null
                                 ? `/assets/사람.png`
-                                : `${process.env.BACKEND_URL}static/uploads/${userInfo}`
+                                : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${userInfo}`
                             }
                             src={
                               userInfo === null
                                 ? `/assets/사람.png`
-                                : `${process.env.BACKEND_URL}static/uploads/${userInfo}`
+                                : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${userInfo}`
                             }
                           />
 
@@ -163,12 +163,12 @@ const Profile = () => {
                               alt={
                                 userInfo === null
                                   ? `/assets/사람.png`
-                                  : `${process.env.BACKEND_URL}static/uploads/${userInfo}`
+                                  : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${userInfo}`
                               }
                               src={
                                 userInfo === null
                                   ? `/assets/사람.png`
-                                  : `${process.env.BACKEND_URL}static/uploads/${userInfo}`
+                                  : `${process.env.REACT_APP_BACKEND_URL}static/uploads/${userInfo}`
                               }
                             />
                           </div>
